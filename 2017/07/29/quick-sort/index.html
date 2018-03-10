@@ -1,0 +1,788 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Javascript,Algorithm," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.1" />
+
+
+
+
+
+
+<meta name="description" content="亲爱的观众老婆们大家好，欢迎大家欢迎来到一可的昆特牌馆小白的地盘（看在我为你宣传的份上，跪求别告我侵权台词啊T.T）。相信大家都直面过被人要求手写排序算法的恐惧，尤其对于转行的小前端来说，简直就是噩梦。网上其实有蛮多资料的，虽然为了面试背下来也未尝不可，但作为志愿刷遍LeetCode Easy难度的男人而言，知其然不知其所以然是绝对不行，接下来，我会用最小白的方式解释快速排序算法到底是怎么一回事。">
+<meta name="keywords" content="Javascript,Algorithm">
+<meta property="og:type" content="article">
+<meta property="og:title" content="大白话说快速排序">
+<meta property="og:url" content="http://yoursite.com/2017/07/29/quick-sort/index.html">
+<meta property="og:site_name" content="小白丰的Blog~">
+<meta property="og:description" content="亲爱的观众老婆们大家好，欢迎大家欢迎来到一可的昆特牌馆小白的地盘（看在我为你宣传的份上，跪求别告我侵权台词啊T.T）。相信大家都直面过被人要求手写排序算法的恐惧，尤其对于转行的小前端来说，简直就是噩梦。网上其实有蛮多资料的，虽然为了面试背下来也未尝不可，但作为志愿刷遍LeetCode Easy难度的男人而言，知其然不知其所以然是绝对不行，接下来，我会用最小白的方式解释快速排序算法到底是怎么一回事。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2017-07-29T07:18:25.951Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="大白话说快速排序">
+<meta name="twitter:description" content="亲爱的观众老婆们大家好，欢迎大家欢迎来到一可的昆特牌馆小白的地盘（看在我为你宣传的份上，跪求别告我侵权台词啊T.T）。相信大家都直面过被人要求手写排序算法的恐惧，尤其对于转行的小前端来说，简直就是噩梦。网上其实有蛮多资料的，虽然为了面试背下来也未尝不可，但作为志愿刷遍LeetCode Easy难度的男人而言，知其然不知其所以然是绝对不行，接下来，我会用最小白的方式解释快速排序算法到底是怎么一回事。">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2017/07/29/quick-sort/"/>
+
+
+
+
+
+  <title>大白话说快速排序 | 小白丰的Blog~</title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">小白丰的Blog~</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">虽然我学的是心理学，但我会编程啊</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-tags " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/07/29/quick-sort/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Sea_ljf">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="小白丰的Blog~">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">大白话说快速排序</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-07-29T11:16:41+08:00">
+                2017-07-29
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/日常小结/" itemprop="url" rel="index">
+                    <span itemprop="name">日常小结</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>亲爱的观众老婆们大家好，欢迎大家欢迎来到<del>一可的昆特牌馆</del>小白的地盘（看在我为你宣传的份上，跪求别告我侵权台词啊T.T）。相信大家都直面过被人要求手写排序算法的恐惧，尤其对于转行的小前端来说，简直就是噩梦。网上其实有蛮多资料的，虽然为了面试背下来也未尝不可，但作为志愿刷遍LeetCode <del>Easy难度</del>的男人而言，知其然不知其所以然是绝对不行，接下来，我会用最小白的方式解释快速排序算法到底是怎么一回事。</p>
+<p>注意：以下教程全是小白的，老鸟基本可以跳过，但如果你愿意鞭笞我，那也是极好的（手动滑稽）。</p>
+<a id="more"></a>
+<h2 id="快速排序"><a href="#快速排序" class="headerlink" title="快速排序"></a>快速排序</h2><p>先贴纯代码：</p>
+<pre><code>function quickSort(arr) {
+   if (arr.length &lt; 2) {
+     return arr;
+   }
+   const firstItem = arr[0];
+   const lessThanNum = [];
+   const moreThanNum = [];
+   for (let i = 1, len = arr.length; i &lt; len; i++) {
+     let item = arr[i];
+     if (item &lt; firstItem) {
+       lessThanNum.push(item);
+     } else {
+       moreThanNum.push(item);
+     }
+   }
+   return [...quickSort(lessThanNum), num, ...quickSort(moreThanNum)];
+ }
+ quickSort([5, 4, 3, 21,])  //[1,2,3,4,5]
+</code></pre><p> 这是我自己实现的快速排序，接下来，我将具体拆解每一步，希望能让观众老爷看懂其中的原理。</p>
+<p> 首先请看这：</p>
+<pre><code>const firstItem = arr[0];  
+const lessThanNum = [];
+const moreThanNum = [];
+</code></pre><p>  在函数内，创建了三个新的变量，首先获取传入数组首项的值（其实其他项都可以，只是我为了循环方便所以用首项）。另外两个两个变量是一个空数组，估计看名字就大概猜出有什么用。</p>
+<p>  断点此处，此时执行完时<code>firstItem</code>的值为<code>5</code>，<code>lessThanNum</code>与<code>moreThanNum</code>暂时还是空数据。</p>
+<p>  之后循环：</p>
+<pre><code>for (let i = 1, len = arr.length; i &lt; len; i++) {
+  const item = arr[i];
+  if (item &lt; num) {
+    lessThanNum.push(item);
+  } else {
+    moreThanNum.push(item);
+  }
+}
+</code></pre><p> 这个估计不用我多做解释了，就是循环传入数组除首项外的每一项，小于首项的塞进去<code>lessThanNum</code>，反之塞进去<code>moreThanNum</code>。也是蛮好懂的对吧？那么想一下，执行完之后，<code>lessThanNum</code>与<code>moreThanNum</code>数组是什么呢？</p>
+<p> 此时<code>lessThanNum</code>为<code>[4, 3, 2, 1]</code>,<code>moreThanNum</code>为<code>[]</code>。</p>
+<p> 在之后，就是最后一步，也可能是第一次接触递归的同学最懵的一步：</p>
+<p> <code>return [...quickSort(lessThanNum), num, ...quickSort(moreThanNum)];</code></p>
+<p> 估计有同学会感觉，每个字母我都看得懂，语法我也认识，但为啥就能排序啊？没关系，我们慢慢看一下到底是个什么鬼。</p>
+<p> 首先我们先转个弯，假设最后一步是：</p>
+<p> <code>return [...lessThanNum.sort((a, b) =&gt; a - b), num, ...moreThanNum.sort((a, b) =&gt; a - b)]</code></p>
+<p> 这样，是不是很好理解？<code>num</code>就是中间的数嘛，小于它的数的集合被排序了，大于它的数的集合也被排序了，它们再整成个数组，不就是得到一个完全排好序的集合了么？</p>
+<p> OK，那我们想下，两个不同其实就在于快速排序里，调用的是<code>quickSort()</code>而不是<code>sort((a, b) =&gt; a - b)</code>，只要我们确认<code>quickSort()</code>是可以得到排序后的数组，就可以了。</p>
+<p>那么，我们脑补一下吧，我们最后一步执行的是什么呢？其实就是<code>return [...quickSort([4, 3, 2, 1]), 5, ...quickSort([])];</code>。空数组暂时忽略，先研究<code>quickSort([4, 3, 2, 1])</code>，聪明的你估计能想得到，执行完之后会得到<code>return [...quickSort([3, 2, 1]), 4, ...quickSort([])];</code>。如此类推，我们聚焦到最后执行<code>quickSort([2, 1])</code>的时候。</p>
+<p>此时，我们知道最后的结果肯定是<code>return [...quickSort([1]), 2, ...quickSort([])];</code>，那么我们执行<code>quickSort([1])</code>。如果<code>quickSort</code>内判断，当数组长度小于等于1时，返回数组本身，那么你肯定能推出<code>return [...quickSort([1]), 2, ...quickSort([])];</code>其实就是<code>return [...[1], 2, ...[]];</code>。这就是个数组解构嘛，也就是<code>rturn [1, 2]</code>。啦啦啦，得到排序好的数组啦。</p>
+<p>那么，此时你可以记下<code>quickSort([2, 1])</code>的值为<code>[1, 2]</code>.那么<code>quickSort([3, 2, 1])</code>的值为<code>[...quickSort([2, 1]), 3, ...quickSort([])];</code>。也就是<code>[...[1, 2], 3, ...[]];</code>，是不是感觉到有点打开了新世界的大门了？其实也就是说，<code>quickSort(arr)</code>是会返回排序后的数组的，稍微抽象一下，不就是<code>return [...quickSort(lessThanNum), num, ...quickSort(moreThanNum)];</code>，现在再看这句话：<strong><code>num</code>就是中间的数嘛，小于它的数的集合被排序了，大于它的数的集合也被排序了，它们再整成个数组，不就是得到一个完全排好序的集合了么？</strong> 是不是很好理解了？</p>
+<h2 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h2><p>so，返回去看看我刚开始的代码，是不是有点感觉了？有没有感觉其实就是绕圈圈？之后，请尝试理解这句充满恶意的话：</p>
+<blockquote>
+<p>要理解递归,你先要理解递归。</p>
+</blockquote>
+<p>这句话其实就是递归的，只是它差了个边界，也就是快速排序代码里面的：</p>
+<pre><code>if (arr.length &lt; 2) {
+   return arr;
+ }
+</code></pre><p> 那么，如果这句话是这样呢：要理解递归,你先要理解递归，直至看到小白的教程就能理解递归。我知道这比较<del>无耻</del>，但其实递归就是这样的。理解了那句充满恶意的话，你对递归，已经有一定的掌握了，也就不用去背算法，只要知道原理，自己实现即可。</p>
+<p> 文章到此为止，感谢阅读，希望没有浪费你的时间，也对你有点帮助，谢谢！</p>
+<p> （最后的最后，其实本来打算把归并也写了的，后面吃了个饭就懒了。有兴趣的话可以告诉我一下，我会用差不多<del>逗比</del>的文风写归并排序。）</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Javascript/" rel="tag"># Javascript</a>
+          
+            <a href="/tags/Algorithm/" rel="tag"># Algorithm</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/07/22/subtle-difference-between-es6-Class-and-es5-prototype/" rel="next" title="构造函数与ES6 class之间的一点微妙区别">
+                <i class="fa fa-chevron-left"></i> 构造函数与ES6 class之间的一点微妙区别
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/08/12/why-not-try-to-use-MutationObserver/" rel="prev" title="当你想监听DOM时，不尝试用一下 MutationObserver 吗？">
+                当你想监听DOM时，不尝试用一下 MutationObserver 吗？ <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.jpg"
+               alt="Sea_ljf" />
+          <p class="site-author-name" itemprop="name">Sea_ljf</p>
+           
+              <p class="site-description motion-element" itemprop="description"></p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">24</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">4</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">15</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/ljf0113" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#快速排序"><span class="nav-number">1.</span> <span class="nav-text">快速排序</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#小结"><span class="nav-number">2.</span> <span class="nav-text">小结</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Sea_ljf</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.1"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

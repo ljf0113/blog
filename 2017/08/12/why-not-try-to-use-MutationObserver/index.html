@@ -1,0 +1,857 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Javascript,DOM," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.1" />
+
+
+
+
+
+
+<meta name="description" content="亲爱的观众老婆们大家好，欢迎大家欢迎来到一可的昆特牌馆小白的地盘（看在我为你宣传的份上，跪求别告我侵权台词啊T.T）。作为某浏览器的小前端，最近接到一个需求：某境外视频网站在我们浏览器打开后是白屏，希望帮忙定位原因并提出解决方案。 经过Fiddler各种抓包替换文件后，定位出问题是自家浏览器严格模式上的bug。然而浏览器发版太久，依靠商务推动对方修改代码也不是一时半刻就能解决问题，于是皮球又踢回给">
+<meta name="keywords" content="Javascript,DOM">
+<meta property="og:type" content="article">
+<meta property="og:title" content="当你想监听DOM时，不尝试用一下 MutationObserver 吗？">
+<meta property="og:url" content="http://yoursite.com/2017/08/12/why-not-try-to-use-MutationObserver/index.html">
+<meta property="og:site_name" content="小白丰的Blog~">
+<meta property="og:description" content="亲爱的观众老婆们大家好，欢迎大家欢迎来到一可的昆特牌馆小白的地盘（看在我为你宣传的份上，跪求别告我侵权台词啊T.T）。作为某浏览器的小前端，最近接到一个需求：某境外视频网站在我们浏览器打开后是白屏，希望帮忙定位原因并提出解决方案。 经过Fiddler各种抓包替换文件后，定位出问题是自家浏览器严格模式上的bug。然而浏览器发版太久，依靠商务推动对方修改代码也不是一时半刻就能解决问题，于是皮球又踢回给">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://yoursite.com/images/why-not-try-to-use-MutationObserver/1.jpg">
+<meta property="og:image" content="http://yoursite.com/images/why-not-try-to-use-MutationObserver/2.jpg">
+<meta property="og:updated_time" content="2017-08-12T08:52:00.231Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="当你想监听DOM时，不尝试用一下 MutationObserver 吗？">
+<meta name="twitter:description" content="亲爱的观众老婆们大家好，欢迎大家欢迎来到一可的昆特牌馆小白的地盘（看在我为你宣传的份上，跪求别告我侵权台词啊T.T）。作为某浏览器的小前端，最近接到一个需求：某境外视频网站在我们浏览器打开后是白屏，希望帮忙定位原因并提出解决方案。 经过Fiddler各种抓包替换文件后，定位出问题是自家浏览器严格模式上的bug。然而浏览器发版太久，依靠商务推动对方修改代码也不是一时半刻就能解决问题，于是皮球又踢回给">
+<meta name="twitter:image" content="http://yoursite.com/images/why-not-try-to-use-MutationObserver/1.jpg">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2017/08/12/why-not-try-to-use-MutationObserver/"/>
+
+
+
+
+
+  <title>当你想监听DOM时，不尝试用一下 MutationObserver 吗？ | 小白丰的Blog~</title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">小白丰的Blog~</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">虽然我学的是心理学，但我会编程啊</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-tags " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/08/12/why-not-try-to-use-MutationObserver/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Sea_ljf">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="小白丰的Blog~">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">当你想监听DOM时，不尝试用一下 MutationObserver 吗？</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-08-12T11:29:44+08:00">
+                2017-08-12
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/日常小结/" itemprop="url" rel="index">
+                    <span itemprop="name">日常小结</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>亲爱的观众老婆们大家好，欢迎大家欢迎来到<del>一可的昆特牌馆</del>小白的地盘（看在我为你宣传的份上，跪求别告我侵权台词啊T.T）。作为某浏览器的小前端，最近接到一个需求：某境外视频网站在我们浏览器打开后是白屏，希望帮忙定位原因并提出解决方案。</p>
+<p>经过Fiddler各种抓包替换文件后，定位出问题是自家浏览器严格模式上的bug。然而浏览器发版太久，依靠商务推动对方修改代码也不是一时半刻就能解决问题，于是皮球又踢回给可怜的小前端。既然浏览器是自家的，那可不可以通过在对方页面中使用注入功能解决这问题呢？</p>
+<a id="more"></a>
+<p>示例代码大致如下：</p>
+<pre><code>&lt;!doctype html&gt;
+ &lt;html lang=&quot;en&quot;&gt;
+ &lt;head&gt;
+    &lt;meta charset=&quot;UTF-8&quot;&gt;
+    &lt;meta name=&quot;viewport&quot;
+          content=&quot;width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0&quot;&gt;
+    &lt;meta http-equiv=&quot;X-UA-Compatible&quot; content=&quot;ie=edge&quot;&gt;
+    &lt;title&gt;Document&lt;/title&gt;
+ &lt;/head&gt;
+ &lt;body&gt;
+    &lt;script src=&quot;1.js&quot;&gt;&lt;/script&gt;
+    &lt;script src=&quot;2.js&quot;&gt;&lt;/script&gt;
+    &lt;script src=&quot;error.js&quot;&gt;&lt;/script&gt;
+ &lt;/body&gt;
+ &lt;/html&gt;
+</code></pre><p>根据这样的情况，可以想到的解决方案是在页面替换<code>error.js</code>为我们上传到CDN的<code>ok.js</code>，这样页面就没有问题啦。然而注入不是银弹，客户端提供的注入功能是有限制的，只能在<code>&lt;head&gt;</code>中注入JS文件，无法直接修改DOM内容，这就意味着我们无法直接修改<code>src</code>指向，只通过在<code>&lt;head&gt;</code>文件中注入JS，真的能完成这个需求吗？至此似乎陷入了僵局。然而，我们一起回顾一下浏览器的渲染过程，在不添加<code>defer</code>与<code>async</code>属性的前提下，浏览器碰到<code>&lt;script&gt;</code>标签是会停下来等待JS文件下载下来，执行完毕后再继续解析渲染其他内容。如果我们有能力监测到DOM节点的添加并能对其进行干预，之前的需求就有解决方案了。幸运的是，我们拥有这样的能力，它就是<code>MutationObserver</code>。</p>
+<h2 id="MutationObserver-简介"><a href="#MutationObserver-简介" class="headerlink" title="MutationObserver 简介"></a>MutationObserver 简介</h2><blockquote>
+<p>MutationObserver给开发者们提供了一种能在某个范围内的DOM树发生变化时作出适当反应的能力.该API设计用来替换掉在DOM3事件规范中引入的Mutation事件.</p>
+</blockquote>
+<p>其实<a href="https://developer.mozilla.org/zh-CN/docs/Web/API/MutationObserver" target="_blank" rel="noopener">MDN</a>对<code>MutationObserver</code>的介绍是十分清晰的，但其中有些细节可能不太好理解。初看之下感觉这个API其实挺复杂的，但别急，先记住两个东东就好。首先是通过一个构造函数<code>MutationObserver()</code>创建一个观察实例，构造函数接受一个函数作为唯一参数，即<code>const observer = MutationObserver(function(){})</code>。其次要一个配置对象<code>MutationObserverInit</code>,即<code>const option = {}</code>，别担心是什么高大上的东西，其实就是一个配置。之后调用实例，传入参数观察对象：<code>observer.observe(targetElement, option)</code>就好了。看吧看吧，是不是挺简单的？</p>
+<p>不过，对于前端来说，不谈兼容性就使用API，那是耍流氓，因此我们需要瞧瞧<code>MutationObserver</code>在浏览器的的兼容性如何：</p>
+<p><img src="/images/why-not-try-to-use-MutationObserver/1.jpg" alt=""></p>
+<p>看到的基本都是<del>原谅绿</del>的，尤其移动端，可以放心使用。<strong>要注意的是</strong>版本比较旧浏览器是需要前缀的，即<code>WebKitMutationObserver</code>或<code>MozMutationObserver</code>。由于自家浏览器是支持这个API的，我就不添加前缀了。不然可以参考MDN的的例子：</p>
+<pre><code>var observer = window.MutationObserver || window.WebKitMutationObserver || window.MozMutationObserver;
+</code></pre><p>   这样可以确保兼容性。</p>
+<h2 id="MutationObserverInit-对象简析"><a href="#MutationObserverInit-对象简析" class="headerlink" title="MutationObserverInit 对象简析"></a>MutationObserverInit 对象简析</h2><p>原本应该是先介绍构造函数及其传入的函数的，但想了想，发现先介绍这个配置对象会比较好理解。如之前所说，<code>MutationObserver</code>是可以监测DOM变化的，然而大家想一下，DOM变化其实有挺多类型的，比如改下文本，改下属性等等。如果这个API是监测全部变化的话，是不是有点浪费浏览器资源？监测范围可控，才是最佳实践，因而有<code>MutationObserverInit</code>这个配置对象。</p>
+<p><code>MutationRecord</code>可配置的挺多，初看还真会懵逼，但好好归纳之后，发现其实是十分清晰的。我们从主到次过一次。首先是监测的类型，分三类，分别是：</p>
+<p><code>childList</code>，代表观察目标节点子节点的变化；<br><code>attributes</code>，代表观察目标节点属性的变化；<br><code>characterData</code>，代表观察目标节点是文本节点、注释节点时的变化。</p>
+<p>值得一提的是<code>characterData</code>，感觉用得不多，必须将观察的目标节点指定为文本、注释等节点时才会生效（补充一下：业务可能用到不多，但可能会有极为精彩的hack！如Vue源码中的用法。）。</p>
+<p>举个栗子：</p>
+<pre><code>const p = document.querySelector(&apos;p&apos;);
+const childListBtn = document.querySelector(&apos;.childList&apos;);
+const characterDataBtn = document.querySelector(&apos;.characterData&apos;);
+childListBtn.addEventListener(&apos;click&apos;, function() {
+  p.innerHTML = &apos;childList&apos;;
+})
+characterDataBtn.addEventListener(&apos;click&apos;, function() {
+  p.firstChild.data = &apos;characterDataBtn&apos;;
+})
+//...观察相关代码
+</code></pre><p>如果你观察的目标节点是<code>p</code>标签，它的文本发生变化时，触发的是<code>childList</code>类型的变化，即触发的是子节点变化。只有将观察的目标节点设置为<code>p.firstChild</code>，且改变了<code>p.firstChild</code>里面的属性时，才会触发<code>characterData</code>类型的变化。希望大家注意这个细节。</p>
+<p>分完类型之后，剩下的几个选项就是增强上面三个类型了：</p>
+<p><code>subtree</code>，代表不但观察子节点，还会观察目标节点所有的子孙节点，三种类型均可增强；<br><code>attributeOldValue</code>，代表是否需要将发生变化的属性节点之前的属性值记录下来，这是用于增强<code>attributes</code>的；<br><code>attributeFilter</code>，唯一一个值不是布尔值而是数组的选项，如果设置了该值，则只有该数组中包含的属性名发生变化时才会被观察到，也是增强<code>attributes</code>的；<br><code>characterDataOldValue</code>，代表是否需要将发生变化的characterData节点之前的文本内容记录下来，这是用于增强<code>attributes</code>的。</p>
+<p>值得注意的是，无论是三个大类还是增强的选项，默认值都是<code>undefined</code>，而增强选项必须在对应的选项设置为<code>true</code>的情况下才可使用，不然浏览器会报错。</p>
+<p><code>MutationObserverInit</code>这个配置对象就介绍完了，之后我们来看看<code>MutationObserver</code>的构造函数及其关键的回调函数。</p>
+<h2 id="构造函数-MutationObserver"><a href="#构造函数-MutationObserver" class="headerlink" title="构造函数 MutationObserver"></a>构造函数 <code>MutationObserver</code></h2><p>其实我说<code>MutationObserver</code>的构造函数重要，是骗你的。重要的是构造函数是理解它接受的那个参数，即回调函数。回调函数执行时会被传入两个参数。先说最好理解的第二个参数，传入的是<code>new</code>出来的那个实例。第一个参数则是一个数组，由数组中的每一项都是一个对象：<code>MutationRecord</code>，接下来我们将好好看一看这个对象。</p>
+<p><code>MutationRecord</code>对象包含很多属性，主要是用于展示DOM节点发生了什么变化：</p>
+<p><img src="/images/why-not-try-to-use-MutationObserver/2.jpg" alt=""></p>
+<p>这里我偷个懒，直接上了<a href="https://developer.mozilla.org/zh-CN/docs/Web/API/MutationObserver#MutationObserverInit" target="_blank" rel="noopener">MDN</a>文档上的说明。文档写的很详细，但这里说一些需要注意的细节。<code>addedNodes</code>和<code>removedNodes</code>的类型是<a href="https://developer.mozilla.org/zh-CN/docs/Web/API/NodeList" target="_blank" rel="noopener">NodeList</a>，也就意味着它不是一个真正的数组，使用数组方法时需要谨慎。另外，更重要的是理解为什么回调函数的第一个参数是数组。按照逻辑，某一个节点产生变化，一个<code>MutationRecord</code>对象应该是足够描述它的变化的。我认为，这句话在<code>MutationObserver</code>中既对也不对，接下来的理解只是我个人的见解，还请dalao们指教。</p>
+<p><code>MutationObserver</code>所做到的，并不是在一个函数执行完后，比较DOM前后的变化，监测到变化后给回调函数传入相关的变化，而是记录DOM的变化“记录”。这看起来很绕，但请看如下例子：</p>
+<pre><code>&lt;p&gt;1111&lt;/p&gt;
+&lt;button&gt;click&lt;/button&gt;
+
+&lt;script&gt;
+    function obFn(changeArr) {
+      console.log(changeArr.length)
+    }
+
+    const observer = new MutationObserver(obFn);
+
+    const option = {
+      childList: true,
+      subtree: true,
+    };
+    const p = document.querySelector(&apos;p&apos;);
+    observer.observe(p, option);
+
+    const btn = document.querySelector(&apos;button&apos;);
+    btn.addEventListener(&apos;click&apos;, function() {
+      p.innerHTML = &apos;&lt;span&gt;1&lt;/span&gt;&lt;span&gt;2&lt;/span&gt;&lt;span&gt;3&lt;/span&gt;&apos;;
+    })
+&lt;/script&gt;
+</code></pre><p>当点击按钮后，控制台会打印出<code>1</code>。但当<code>btn</code>的事件绑定改为：</p>
+<pre><code>btn.addEventListener(&apos;click&apos;, function() {
+  const a = document.createElement(&apos;a&apos;);
+  a.innerHTML = &apos;&lt;span&gt;123&lt;/span&gt;&apos;;
+  const a1 = a.cloneNode();
+  const a2 = a.cloneNode();
+  p.appendChild(a);
+  p.appendChild(a1);
+  p.appendChild(a2);
+})
+</code></pre><p>点击按钮，控制台打印出<code>3</code>！第一例中，对<code>&lt;p&gt;</code>的操作记录只有一次：<code>p.innerHTML = &#39;&lt;span&gt;1&lt;/span&gt;&lt;span&gt;2&lt;/span&gt;&lt;span&gt;3&lt;/span&gt;&#39;;</code>，因而变化数组的长度是1，变化对象<code>MutationRecord</code>中<code>addedNodes</code>的长度是3 。第二例中，对<code>&lt;p&gt;</code>的操作记录有3次，因而变化数组的长度是3，数组每项的变化对象<code>MutationRecord</code>中<code>addedNodes</code>的长度是1 。</p>
+<p>通过这样的对比，能理解我为何说<code>MutationObserver</code>是记录DOM的变化“记录”，因而回调函数的第一个参数是一个数组，而不是一个只记录了前后变化的对象！</p>
+<p>最后，<code>MutationObserver</code>的构造函数生成的实例有三个方法：<code>observe</code>，接受两个参数，第一个是观察DOM节点，第二个是<code>MutationObserverInit</code>配置对象；<code>disconnect</code>，停止观察DOM节点；<code>takeRecords</code>，清空观察者对象的记录队列,并返回里面的内容。</p>
+<h2 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h2><p>写了半天，感觉好像偏题了，最后附上解决问题写的代码：</p>
+<pre><code>&lt;!doctype html&gt;
+&lt;html lang=&quot;en&quot;&gt;
+&lt;head&gt;
+    &lt;meta charset=&quot;UTF-8&quot;&gt;
+    &lt;meta name=&quot;viewport&quot;
+          content=&quot;width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0&quot;&gt;
+    &lt;meta http-equiv=&quot;X-UA-Compatible&quot; content=&quot;ie=edge&quot;&gt;
+    &lt;title&gt;Document&lt;/title&gt;
+    &lt;script&gt;
+    function observerFn(changeArr, observer) {
+      changeArr.forEach((obj) =&gt; {
+        const addNodes = [...obj.addedNodes];
+        addNodes.forEach((node) =&gt; {
+          if (node.nodeName === &apos;SCRIPT&apos; &amp;&amp; /error/.test(node.src)) {
+            node.src = &apos;ok.js&apos;;
+            observer.disconnect();
+          }
+        })
+      })
+    }
+
+    const observer = new MutationObserver(observerFn);
+    const option = {
+      childList: true,
+      subtree: true,
+    }
+    observer.observe(document.documentElement, option);
+    &lt;/script&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;script src=&quot;1.js&quot;&gt;&lt;/script&gt;
+    &lt;script src=&quot;2.js&quot;&gt;&lt;/script&gt;
+    &lt;script src=&quot;error.js&quot;&gt;&lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+</code></pre><p>上述代码稍微修改一下，其实能阻止某些劫持的。只要不是白名单内的JS文件，全部改变它的<code>src</code>，并上传到自己的服务器，这样可以记录下来到底是什么劫持了我们的网页，也算是个拓展了思路。除此之外，<code>MutationObserver</code>可以记录DOM变化，这个能力实在是太强大了，还有数之不尽的应用场景等待着我们研究与开发。</p>
+<p>以上就是我对<code>MutationObserver</code>的一些归纳，希望能帮到大家。不当之处还请不吝赐教！</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Javascript/" rel="tag"># Javascript</a>
+          
+            <a href="/tags/DOM/" rel="tag"># DOM</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/07/29/quick-sort/" rel="next" title="大白话说快速排序">
+                <i class="fa fa-chevron-left"></i> 大白话说快速排序
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/08/26/why-should-font-end-use-framework/" rel="prev" title="为何前端需要框架？（小白向）">
+                为何前端需要框架？（小白向） <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.jpg"
+               alt="Sea_ljf" />
+          <p class="site-author-name" itemprop="name">Sea_ljf</p>
+           
+              <p class="site-description motion-element" itemprop="description"></p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">24</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">4</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">15</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/ljf0113" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#MutationObserver-简介"><span class="nav-number">1.</span> <span class="nav-text">MutationObserver 简介</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#MutationObserverInit-对象简析"><span class="nav-number">2.</span> <span class="nav-text">MutationObserverInit 对象简析</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#构造函数-MutationObserver"><span class="nav-number">3.</span> <span class="nav-text">构造函数 MutationObserver</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#小结"><span class="nav-number">4.</span> <span class="nav-text">小结</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Sea_ljf</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.1"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

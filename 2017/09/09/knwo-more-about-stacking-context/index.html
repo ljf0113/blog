@@ -1,0 +1,1039 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Web,CSS," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.1" />
+
+
+
+
+
+
+<meta name="description" content="亲爱的观众老爷们大家好～我发现我写文章都是因为工作碰到问题才写，什么探索最前沿的最讨厌了（其实是力有所不及）！言归正传，最近碰到的问题是这个：准备开发一个平台，随手写导航栏组件之时，发现层级错乱，无论如何调z-index都无法达到预想的效果，大致代码如下： &amp;lt;nav&amp;gt;     //背景遮盖，绝对定位     &amp;lt;section class=&amp;quot;mask&amp;quot;&amp;gt;&amp;">
+<meta name="keywords" content="Web,CSS">
+<meta property="og:type" content="article">
+<meta property="og:title" content="CSS 层叠相关知识指北">
+<meta property="og:url" content="http://yoursite.com/2017/09/09/knwo-more-about-stacking-context/index.html">
+<meta property="og:site_name" content="小白丰的Blog~">
+<meta property="og:description" content="亲爱的观众老爷们大家好～我发现我写文章都是因为工作碰到问题才写，什么探索最前沿的最讨厌了（其实是力有所不及）！言归正传，最近碰到的问题是这个：准备开发一个平台，随手写导航栏组件之时，发现层级错乱，无论如何调z-index都无法达到预想的效果，大致代码如下： &amp;lt;nav&amp;gt;     //背景遮盖，绝对定位     &amp;lt;section class=&amp;quot;mask&amp;quot;&amp;gt;&amp;">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://user-gold-cdn.xitu.io/2017/9/7/1f8a0c88d8213901bd0223fa0facbe45">
+<meta property="og:image" content="https://user-gold-cdn.xitu.io/2017/9/7/d29932036128b3af34f1dbc1d015a479">
+<meta property="og:image" content="https://user-gold-cdn.xitu.io/2017/9/8/7d0dff2f9a9f002286b67eaf5f4b4e20">
+<meta property="og:updated_time" content="2017-09-09T12:35:49.372Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="CSS 层叠相关知识指北">
+<meta name="twitter:description" content="亲爱的观众老爷们大家好～我发现我写文章都是因为工作碰到问题才写，什么探索最前沿的最讨厌了（其实是力有所不及）！言归正传，最近碰到的问题是这个：准备开发一个平台，随手写导航栏组件之时，发现层级错乱，无论如何调z-index都无法达到预想的效果，大致代码如下： &amp;lt;nav&amp;gt;     //背景遮盖，绝对定位     &amp;lt;section class=&amp;quot;mask&amp;quot;&amp;gt;&amp;">
+<meta name="twitter:image" content="https://user-gold-cdn.xitu.io/2017/9/7/1f8a0c88d8213901bd0223fa0facbe45">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2017/09/09/knwo-more-about-stacking-context/"/>
+
+
+
+
+
+  <title>CSS 层叠相关知识指北 | 小白丰的Blog~</title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">小白丰的Blog~</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">虽然我学的是心理学，但我会编程啊</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-tags " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/09/09/knwo-more-about-stacking-context/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Sea_ljf">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="小白丰的Blog~">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">CSS 层叠相关知识指北</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-09-09T20:31:47+08:00">
+                2017-09-09
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/日常小结/" itemprop="url" rel="index">
+                    <span itemprop="name">日常小结</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>亲爱的观众老爷们大家好～我发现我写文章都是因为工作碰到问题才写，什么探索最前沿的最讨厌了（其实是力有所不及）！言归正传，最近碰到的问题是这个：准备开发一个平台，随手写导航栏组件之时，发现层级错乱，无论如何调<code>z-index</code>都无法达到预想的效果，大致代码如下：</p>
+<pre><code>&lt;nav&gt;
+    //背景遮盖，绝对定位
+    &lt;section class=&quot;mask&quot;&gt;&lt;/section&gt;
+    &lt;ul&gt;
+        &lt;li&gt;
+            balabala..
+            //次级列表,绝对定位
+            &lt;ul class=&quot;menu&quot;&gt;
+                &lt;li&gt;1&lt;/li&gt;
+                &lt;li&gt;2&lt;/li&gt;
+                &lt;li&gt;3&lt;/li&gt;
+            &lt;/ul&gt;
+        &lt;/li&gt;
+    &lt;/ul&gt;
+&lt;/nav&gt;
+</code></pre><p>大致想要的效果就和<a href="http://openplatform.dev.uae.uc.cn/" target="_blank" rel="noopener">这平台</a>的导航差不多。CSS代码就不贴了，我写的时候碰到的问题就是无法将<code>mask</code>绝对定位后的层级置于<code>li</code>文本之下，又在使用了最对定位的<code>menu</code>之上。当时为了赶需求，征询了产品的意见，改了实现的方式。但本着碰到问题不回避的态度，通过两天闲时废（shi）寝（mian）忘（duo）食（meng）地查阅资料与疯狂写demo后，小结了点知识，在此分享给大家，希望对大家有所帮助。</p>
+<p>本文主要是关于层叠上下文和层叠顺序的相关知识，如果看官大人已经通晓，可能这篇文章帮不了你什么，但你能帮我看下写得有木有问题（手动滑稽）。</p>
+<p>（友情提示，我写这篇文章时，为了让看官们更好地理解，写得挺罗嗦的，如果直接想看结论，可以跳到最后～）</p>
+<a id="more"></a>
+<h2 id="层叠上下文"><a href="#层叠上下文" class="headerlink" title="层叠上下文"></a>层叠上下文</h2><p>先来点简单的，我们先看”stacking context”，也就是层叠上下文。</p>
+<blockquote>
+<p>层叠上下文是HTML元素的三维概念，这些HTML元素在一条假想的相对于面向（电脑屏幕的）视窗或者网页的用户的z轴上延伸，HTML元素依据其自身属性按照优先级顺序占用层叠上下文的空间。</p>
+</blockquote>
+<p>上面的描述来自于<a href="https://developer.mozilla.org/zh-CN/docs/Web/Guide/CSS/Understanding_z_index/The_stacking_context" target="_blank" rel="noopener">MDN</a>，简单地说，就是几个元素叠在一起，哪个放在“上面”。一般而言，某个元素一旦生成了层叠上下文，它会置于其他元素的上方，<strong>但这并不是绝对的</strong>，暂时请先记住这点。</p>
+<p>根据<a href="https://developer.mozilla.org/zh-CN/docs/Web/Guide/CSS/Understanding_z_index/The_stacking_context" target="_blank" rel="noopener">MDN</a>文档与自我试验，生成层叠上下文的方式有以下几种：</p>
+<ul>
+<li>根元素 (HTML),</li>
+<li><code>z-index</code> 值不为 “auto”的 绝对/相对定位，</li>
+<li>一个 <code>z-index</code> 值不为 <code>auto</code> 的 <code>flex</code> 项目 (flex item)，即：父元素 <code>display: flex|inline-flex;</code>，</li>
+<li><code>opacity</code> 属性值小于 1 的元素，</li>
+<li><code>transform</code> 属性值不为 <code>none</code> 的元素，</li>
+<li><code>mix-blend-mode</code> 属性值不为 <code>normal</code> 的元素，</li>
+<li><code>filter</code>值不为 <code>none</code> 的元素，</li>
+<li><code>perspective</code>值不为 <code>none</code> 的元素，</li>
+<li><code>isolation</code> 属性被设置为 <code>isolate</code> 的元素，</li>
+<li><code>position: fixed</code>，</li>
+<li>在 <code>will-change</code> 中指定了任意 CSS 属性，即便你没有直接指定上述属性的值，</li>
+<li><code>-webkit-overflow-scrolling</code> 属性被设置 <code>touch</code> 的元素。</li>
+</ul>
+<p>代码描述如下：</p>
+<pre><code>&lt;!--HTML结构--&gt;
+&lt;div class=&quot;div1&quot;&gt;&lt;/div&gt;
+&lt;div class=&quot;div2&quot;&gt;&lt;/div&gt;
+
+/*css代码*/
+div {
+  width: 100px;
+  height: 100px;
+}
+
+.div1 {
+  background: red;
+}
+
+.div2 {
+  background: blue;
+  margin-top: -50px;
+}
+</code></pre><p>这个时候画风是这样的：</p>
+<p><img src="https://user-gold-cdn.xitu.io/2017/9/7/1f8a0c88d8213901bd0223fa0facbe45" alt=""></p>
+<p>没毛病吧？</p>
+<p>跟着你往<code>div1</code>的CSS中加入上述随意一个条件之一，比如<code>opacity： .9;</code>，画风就会变成：</p>
+<p><img src="https://user-gold-cdn.xitu.io/2017/9/7/d29932036128b3af34f1dbc1d015a479" alt=""></p>
+<p>也就是说由于红色的<code>div</code>生成了层叠上下文，从原来置于蓝色的<code>div</code>下方变为上方了。其他条件各位看官可以自行实现。</p>
+<h2 id="层叠水平"><a href="#层叠水平" class="headerlink" title="层叠水平"></a>层叠水平</h2><p>看起来还是蛮简单的对吧？那现在来理解下一个概念：层叠水平。每个元素其实都有自己的层叠水平，不单是受<code>z-index</code>影响的元素，不同元素之间其实是通过对比层叠水平来确定哪个在上面的。然而，层叠上下文除了让元素的层级更高之外，还会生成一个独立的上下文，它的子元素的层叠水平只在当前上下文生效。</p>
+<p>简单说，你要确定两个元素哪个在上面，要先确定它们是否在同一个层叠上下文中，如果不在同一个上下文，那就找到在同一层叠上下文的祖先元素去“拼爹”。层叠水平的对比只在同一层叠上下文中才有意义。</p>
+<p>看着还是蛮复杂，上代码感受下可能更清楚：</p>
+<pre><code>&lt;!--HTML结构--&gt;
+&lt;div class=&quot;div1&quot;&gt;
+    &lt;div class=&quot;div1Child&quot;&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class=&quot;div2&quot;&gt;
+    &lt;div class=&quot;div2Child&quot;&gt;&lt;/div&gt;
+&lt;/div&gt;
+
+/*css代码*/
+.div1 {
+  /*isolation: isolate;*/
+}
+
+.div1Child {
+  background: red;
+  position: absolute;
+  z-index: 10;
+}
+
+.div2 {
+  margin-top: -50px;
+  /*isolation: isolate;*/
+}
+
+.div2Child {
+  background: blue;
+  position: absolute;
+  z-index: 1;
+}
+</code></pre><p>先来这样的代码，复制到浏览器跑一下，可以看出是红色在上面的。这很科学，因为红色的<code>z-index</code>更大嘛。跟着解除对<code>isolation: isolate;</code>的注释，可以看到蓝色跑到红色上面去了。那是因为<code>.div1</code>与<code>.div2</code>都生成了层叠上下文，它们的子元素<code>z-index</code>再大也不会作用于上下文以外的元素。但如果子元素位置重叠了，那怎么确定哪个在上面呢？那就去找它们的爸爸，直到找到处于同一层叠上下文（此例中的上下文是根元素形成的）的祖先元素（此例中是<code>.div1</code>与<code>.div2</code>），让两个祖先元素对比一下哪个位于上面就好了。不同层叠上下文的子元素进行对比一定是通过“拼爹”来确定的。</p>
+<p>当然，也存在不是“拼爹”的情况，看看这么一种情景：</p>
+<pre><code>&lt;!--HTML结构--&gt;
+&lt;div class=&quot;div1&quot;&gt;
+    &lt;div class=&quot;div1Child&quot;&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class=&quot;div2&quot;&gt;
+    &lt;div class=&quot;div2Child&quot;&gt;&lt;/div&gt;
+&lt;/div&gt;
+
+/*css代码*/
+.div1 {
+  /*没有形成层叠上下文*/
+  /*isolation: isolate;*/
+}
+
+.div1Child {
+  background: red;
+  position: absolute;
+  z-index: 10;
+}
+
+.div2 {
+  margin-top: -50px;
+  /*形成层叠上下文*/
+  isolation: isolate;
+}
+
+.div2Child {
+  background: blue;
+  position: absolute;
+  /*改动*/
+  z-index: 100;
+}
+</code></pre><p>思考一下这时候谁在上面？答案是红色在上面。这是由于<code>.div1</code>没有形成层叠上下文，也就意味着<code>.div1Child</code>形成了自己的层叠上下文，而且是在根元素的层叠上下文中起作用的，而<code>.div2</code>也形成了自己的层叠上下文，所以<code>.div2Child</code>不与外面的元素作对比层叠水平。此时上下关系对比的是<code>.div1Child</code>与<code>.div2</code>在根元素层叠上下文中层叠水平的对比。所以，要确认两个元素哪个在上面，需要把它们拉到最近的一个层叠上下文中，和函数的作用域类似，只能向上找，不能往下找。</p>
+<p>好像说得不太清楚，那就来个不恰当的比喻吧。想象整个根元素是一个大箱子，里面有各种杂七杂八的子孙元素，但他们没装箱。它的每一个子孙元素，一旦形成了层叠上下文，那么连上它的子元素，都就会被装入一个小一点箱子（上述过程可以无限次执行，小箱子中有元素形成了层叠上下文，会独立包成一个更小的箱子）。而且这些箱子都有黑科技加持，无论里面的东西（层叠水平）多高，箱子看上都都是扁扁的（影响不了箱子外面）。同一个箱子内，哪个东西放最上面，那就看它的层叠水平咯。不同箱子中的东西想对比吗？也可以啊，不过只能通过比较两个箱子哪个放得高来决定了。希望这个比喻能帮你更好地理解上述概念。</p>
+<p>暂时来说，我们可以得到的结论有这么几条：</p>
+<ul>
+<li>通过添加某些CSS条件，可以形成层叠上下文。</li>
+<li>形成层叠上下文的元素，层级高于其他元素。</li>
+<li>层叠水平的对比，在相同的层叠上下文下才有意义。</li>
+</ul>
+<p>有了上面的铺垫，下面将迎来重头戏：在同一层叠上下文中，不同箱子是按照什么规则进行摆放的呢？就只有<code>z-index</code>会产生影响吗？箱子内杂七杂八那些东西，就没个摆放顺序吗？</p>
+<h2 id="层叠顺序"><a href="#层叠顺序" class="headerlink" title="层叠顺序"></a>层叠顺序</h2><p>最后就是重头戏啦，各种东西怎么摆放的，都是有规则的，这就是层叠顺序了。</p>
+<p>先不谈其他规则，其实根据之前的例子，已经能总结出最基本的规则：如果两个元素在层叠顺序中所在的位置一样，那么后来者居上。</p>
+<p>比如这个：</p>
+<pre><code>&lt;!--HTML结构--&gt;
+&lt;div class=&quot;div1&quot;&gt;&lt;/div&gt;
+&lt;div class=&quot;div2&quot;&gt;&lt;/div&gt;
+
+/*css代码*/
+.div1 {
+  isolation: isolate;
+  background: red;
+}
+
+.div2 {
+  margin-top: -50px;
+  isolation: isolate;
+  background: blue;
+}
+</code></pre><p>蓝色在上面，简单易懂清晰明了～</p>
+<p>而另一条基本规律，<code>z-index</code>生效的情况下，值更大的排在上面，不用我贴代码了吧？相信看官大人已经实现了无数次这样的场景了。</p>
+<p>然而，思考这个如何：</p>
+<pre><code>&lt;!--HTML结构--&gt;
+&lt;div class=&quot;div1&quot;&gt;&lt;/div&gt;
+&lt;div class=&quot;div2&quot;&gt;&lt;/div&gt;
+
+/*css代码*/
+.div1 {
+  isolation: isolate;
+  background: red;
+}
+
+.div2 {
+  margin-top: -50px;
+  /*改变*/
+  position: relative;
+  background: blue;
+}
+</code></pre><p>还是蓝色在上面哦！会不会觉得有点诧异呢？还记得我之前提到的：“一般而言，某个元素一旦生成了层叠上下文，它会置于其他元素的上方，<strong>但这并不是绝对的</strong>”这句话么？这就是体现！结合刚才的规律，只有两个情况可以解释这个现象，要么<code>.div1</code>和<code>.div2</code>处于同一位置，因此后来居上。要么后者<code>z-index</code>高于前者，然而我们没有设置<code>z-index</code>，也就是说不可能出现这情况。所以，规律是：某个元素形成了层叠上下文，那么它在层叠顺序中的位置与<code>z-index</code>为<code>0</code>或者<code>auto</code>的元素相同。</p>
+<p>然而这里其实有点小坑的，我就掉进去了，也希望大家掉进去一次再爬出来，请看：</p>
+<pre><code>&lt;!--HTML结构--&gt;
+&lt;div class=&quot;div1&quot;&gt;
+    &lt;div class=&quot;div1Child&quot;&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class=&quot;div2&quot;&gt;&lt;/div&gt;
+
+/*css代码*/
+.div1 {
+  background: red;
+  position: relative;
+}
+
+.div1Child {
+  background: yellow;
+  position: relative;
+  z-index: 1;
+}
+
+.div2 {
+  margin-top: -50px;
+  isolation: isolate;
+  background: blue;
+}
+</code></pre><p>你觉得什么颜色会在最上面呢？</p>
+<p>其实是黄色。依次的话是黄色-&gt;蓝色-&gt;红色。有没有同学认为，既然你说某个元素形成了层叠上下文，那么它在层叠顺序中的位置与<code>z-index</code>为<code>0</code>或者<code>auto</code>的元素相同；而且如果两个元素在层叠顺序中所在的位置一样，那么后来者居上。因此应该蓝色最上面？我的傻孩子啊，其实你也对，你看，蓝色不久在红色上面吗？完美对应这条规则。然而<code>.div1Child</code>形成了自己的层叠上下文，是一个独立的“小箱子”啊，在同一层叠上下文中，<code>z-index</code>生效的情况下，值更大的排在上面，对吧？</p>
+<p>踩进去又跳出来之后，后面的事情好办不少了，考虑到篇幅问题，直接给大家说“箱子”内没形成箱子的顺序吧。</p>
+<p>依次是<code>display: line-block|inline|flex</code>的元素 -&gt; 浮动元素 -&gt; 块状元素 -&gt; <code>z-index</code>小于0的元素。</p>
+<p>因而，结合全部规则，总体的排序如下面的代码实现（渣排版见谅）：</p>
+<pre><code>&lt;!--HTML结构--&gt;
+&lt;div class=&quot;zIndexMoreThanZero&quot;&gt;
+    &lt;p&gt;z-index`大于0的元素&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class=&quot;zIndexZero&quot;&gt;
+    &lt;p&gt;等价于或本身就是`z-index`等于`0`或者`auto`的元素&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class=&quot;inlineBlock&quot;&gt;
+    &lt;p&gt;display: line-block|inline|flex 的元素&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class=&quot;float&quot;&gt;
+    &lt;p&gt;浮动元素&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class=&quot;block&quot;&gt;
+    &lt;p&gt;块状元素&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class=&quot;zIndexLessThanZero&quot;&gt;
+    &lt;p&gt;z-index 小于0的元素&lt;/p&gt;
+&lt;/div&gt;
+
+/*css代码*/
+div {
+  width: 300px;
+  height: 100px;
+  margin-top: -30px;
+  box-shadow: 3px 3px 1px #999;
+}
+
+div p {
+  padding-top: 60px;
+  font-size: 8px;
+}
+
+.zIndexMoreThanZero {
+  margin-top: 0;
+  position: relative;
+  z-index: 1;
+  background: lightblue;
+}
+
+.zIndexZero {
+  isolation: isolate;
+  background: lightcoral;
+}
+
+.inlineBlock {
+  margin-left: -300px;
+  display: inline-block;
+  background: lightcyan;
+}
+
+.float {
+  margin-top: 40px;
+  float: left;
+  background: lightgoldenrodyellow;
+}
+
+.block {
+  margin-top: 40px;
+  background: lightgray;
+}
+
+.zIndexLessThanZero {
+  position: relative;
+  z-index: -1;
+  background: lightgreen;
+}
+</code></pre><p>浏览器页面如图：</p>
+<p><img src="https://user-gold-cdn.xitu.io/2017/9/8/7d0dff2f9a9f002286b67eaf5f4b4e20" alt=""></p>
+<p>事实上，还有最后一种顺序的，有比<code>z-index</code>小于0的元素更低的情况，那就是某元素形成了层叠上下文，它自己在自己形成的层叠上下文中，就是个垫底的存在了。代码例子如下：</p>
+<pre><code>&lt;!--HTML结构--&gt;
+&lt;div class=&quot;div1&quot;&gt;
+    &lt;div class=&quot;div1Child&quot;&gt;&lt;/div&gt;
+&lt;/div&gt;
+
+/*css代码*/
+.div1 {
+  background: red;
+  position: relative;
+  z-index: 10;
+}
+
+.div1Child1 {
+  background: yellow;
+  position: relative;
+  z-index: -1;
+  margin-left: 50px;
+}
+</code></pre><p>结果是黄色在上的。<code>z-index</code>只作用于元素所处的层叠上下文，不作用于自己形成的层叠上下文。</p>
+<p>至此，我了解到关于CSS 层叠相关的知识，就全部分享给大家啦。</p>
+<h2 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h2><p>文章太长，直接看这其实也行，小结下来，关于CSS 层叠相关知识的规矩有这么几个：</p>
+<ul>
+<li>由于某些CSS条件，会生成层叠上下文。</li>
+<li>所有元素都有它的层叠水平，而层叠水平的对比只在同一层叠上下文中才有意义。</li>
+<li>处于相同层叠顺序的，后来居上，不相同的按序排放。</li>
+</ul>
+<p>事实而言，相关的知识倒不是特别重要，就算不懂也不会导致无法交功课的状况。只是，不希望自己把回避问题变为习惯，而且了解下来还是蛮有趣的，之后再出现类似的状况时，不至于束手无策。</p>
+<p>感谢各位看官看到这里，文章太长了～希望对大家有所帮助，我对层叠水平与层叠顺序感觉不是特别透彻。如有不当之处，还请不吝赐教！</p>
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><p><a href="http://www.zhangxinxu.com/wordpress/2016/01/understand-css-stacking-context-order-z-index/" target="_blank" rel="noopener">深入理解CSS中的层叠上下文和层叠顺序</a></p>
+<p><a href="https://developer.mozilla.org/zh-CN/docs/Web/CSS/Cascade" target="_blank" rel="noopener">CSS层叠</a></p>
+<p><a href="https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Positioning/Understanding_z_index/The_stacking_context" target="_blank" rel="noopener">The stacking context</a></p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Web/" rel="tag"># Web</a>
+          
+            <a href="/tags/CSS/" rel="tag"># CSS</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/08/26/why-should-font-end-use-framework/" rel="next" title="为何前端需要框架？（小白向）">
+                <i class="fa fa-chevron-left"></i> 为何前端需要框架？（小白向）
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/09/24/how-css-and-js-block-dom/" rel="prev" title="原来 CSS 与 JS 是这样阻塞 DOM 解析和渲染的">
+                原来 CSS 与 JS 是这样阻塞 DOM 解析和渲染的 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.jpg"
+               alt="Sea_ljf" />
+          <p class="site-author-name" itemprop="name">Sea_ljf</p>
+           
+              <p class="site-description motion-element" itemprop="description"></p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">24</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">4</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">15</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/ljf0113" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#层叠上下文"><span class="nav-number">1.</span> <span class="nav-text">层叠上下文</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#层叠水平"><span class="nav-number">2.</span> <span class="nav-text">层叠水平</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#层叠顺序"><span class="nav-number">3.</span> <span class="nav-text">层叠顺序</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#小结"><span class="nav-number">4.</span> <span class="nav-text">小结</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考资料"><span class="nav-number">5.</span> <span class="nav-text">参考资料</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Sea_ljf</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.1"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

@@ -1,0 +1,864 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Javascript,Webpack," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.1" />
+
+
+
+
+
+
+<meta name="description" content="hello~亲爱的看官老爷们大家好~ 最近一直在学习 webpack 的相关知识，当清晰地领悟到 webpack 就是不同 loader 和 plugin 组合起来打包之后，只作为工具使用而言，算是入门了。当然，在过程中碰到数之不尽的坑，也产生了想要深入一点了解 webpack 的原理（主要是掉进坑能靠自己爬出来）。因而就从简单的入手，先看看使用 webpack 打包后的 JS">
+<meta name="keywords" content="Javascript,Webpack">
+<meta property="og:type" content="article">
+<meta property="og:title" content="简单易懂的 webpack 打包后 JS 的运行过程">
+<meta property="og:url" content="http://yoursite.com/2017/12/09/how-webpack-load-js-file/index.html">
+<meta property="og:site_name" content="小白丰的Blog~">
+<meta property="og:description" content="hello~亲爱的看官老爷们大家好~ 最近一直在学习 webpack 的相关知识，当清晰地领悟到 webpack 就是不同 loader 和 plugin 组合起来打包之后，只作为工具使用而言，算是入门了。当然，在过程中碰到数之不尽的坑，也产生了想要深入一点了解 webpack 的原理（主要是掉进坑能靠自己爬出来）。因而就从简单的入手，先看看使用 webpack 打包后的 JS">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://user-gold-cdn.xitu.io/2017/12/3/1601b890b97b0edd?w=272&h=310&f=jpeg&s=14475">
+<meta property="og:updated_time" content="2017-12-09T02:55:25.715Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="简单易懂的 webpack 打包后 JS 的运行过程">
+<meta name="twitter:description" content="hello~亲爱的看官老爷们大家好~ 最近一直在学习 webpack 的相关知识，当清晰地领悟到 webpack 就是不同 loader 和 plugin 组合起来打包之后，只作为工具使用而言，算是入门了。当然，在过程中碰到数之不尽的坑，也产生了想要深入一点了解 webpack 的原理（主要是掉进坑能靠自己爬出来）。因而就从简单的入手，先看看使用 webpack 打包后的 JS">
+<meta name="twitter:image" content="https://user-gold-cdn.xitu.io/2017/12/3/1601b890b97b0edd?w=272&h=310&f=jpeg&s=14475">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2017/12/09/how-webpack-load-js-file/"/>
+
+
+
+
+
+  <title>简单易懂的 webpack 打包后 JS 的运行过程 | 小白丰的Blog~</title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">小白丰的Blog~</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">虽然我学的是心理学，但我会编程啊</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-tags " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/12/09/how-webpack-load-js-file/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Sea_ljf">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="小白丰的Blog~">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">简单易懂的 webpack 打包后 JS 的运行过程</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-12-09T10:53:32+08:00">
+                2017-12-09
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/日常小结/" itemprop="url" rel="index">
+                    <span itemprop="name">日常小结</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>hello~亲爱的看官老爷们大家好~ 最近一直在学习 webpack 的相关知识，当清晰地领悟到 <code>webpack</code> 就是不同 <code>loader</code> 和 <code>plugin</code> 组合起来打包之后，只作为工具使用而言，算是入门了。当然，在过程中碰到数之不尽的坑，也产生了想要深入一点了解 <code>webpack</code> 的原理（主要是掉进坑能靠自己爬出来）。因而就从简单的入手，先看看使用 <code>webpack</code> 打包后的 <code>JS</code> </p>
+<a id="more"></a>
+<p>友情提示，本文简单易懂，就算没用过 <code>webpack</code> 问题都不大。如果已经了解过相关知识的朋友，不妨快速阅读一下，算是温故知新 ，<del>其实是想请你告诉我哪里写得不对</del>。</p>
+<h2 id="简单配置"><a href="#简单配置" class="headerlink" title="简单配置"></a>简单配置</h2><p>既然需要用到 <code>webpack</code>，还是需要简单配置一下的，这里就简单贴一下代码，首先是 <code>webpack.config.js</code>:</p>
+<pre><code>const path = require(&apos;path&apos;);
+const webpack = require(&apos;webpack&apos;);
+//用于插入html模板
+const HtmlWebpackPlugin = require(&apos;html-webpack-plugin&apos;);
+//清除输出目录，免得每次手动删除
+const CleanWebpackPlugin = require(&apos;clean-webpack-plugin&apos;);
+
+module.exports = {
+  entry: {
+    index: path.join(__dirname, &apos;index.js&apos;),
+  },
+  output: {
+    path: path.join(__dirname, &apos;/dist&apos;),
+    filename: &apos;js/[name].[chunkhash:4].js&apos;
+  },
+  module: {},
+  plugins: [
+    new CleanWebpackPlugin([&apos;dist&apos;]),
+    new HtmlWebpackPlugin({
+      filename: &apos;index.html&apos;,
+      template: &apos;index.html&apos;,
+    }),
+    //持久化moduleId，主要是为了之后研究加载代码好看一点。
+    new webpack.HashedModuleIdsPlugin(),
+    new webpack.optimize.CommonsChunkPlugin({
+      name: &apos;manifest&apos;,
+    })
+  ]
+};
+</code></pre><p>这是我能想到近乎最简单的配置，用到的两个额外下载的插件都是十分常用的，也已经在注释中简单说明了。</p>
+<p>之后是两个简单的 <code>js</code> 文件：</p>
+<pre><code>// test.js
+const str = &apos;test is loaded&apos;;
+module.exports = str;
+
+// index.js
+const test = require(&apos;./src/js/test&apos;);
+console.log(test);
+</code></pre><p>这个就不解释了，贴一下打包后，项目的目录结构应该是这样的：</p>
+<p><img src="https://user-gold-cdn.xitu.io/2017/12/3/1601b890b97b0edd?w=272&amp;h=310&amp;f=jpeg&amp;s=14475" alt=""></p>
+<p>至此，我们的配置就完成了。</p>
+<h2 id="从-index-js-开始看代码"><a href="#从-index-js-开始看代码" class="headerlink" title="从 index.js 开始看代码"></a>从 <code>index.js</code> 开始看代码</h2><p>先从打包后的 <code>index.html</code> 文件看看两个 <code>JS</code> 文件的加载顺序：</p>
+<pre><code>&lt;body&gt;
+    &lt;script type=&quot;text/javascript&quot; src=&quot;js/manifest.2730.js&quot;&gt;&lt;/script&gt;
+    &lt;script type=&quot;text/javascript&quot; src=&quot;js/index.5f4f.js&quot;&gt;&lt;/script&gt;
+&lt;/body&gt;
+</code></pre><p>可以看到，打包后 <code>js</code> 文件的加载顺序是先 <code>manifest.js</code>，之后才是 <code>index.js</code>，按理说应该先看 <code>manifest.js</code> 的内容的。然而这里先卖个关子，我们先看看 <code>index.js</code> 的内容是什么，这样可以带着问题去了解 <code>manifest.js</code>,也就是主流程的逻辑到底是怎样的，为何能做到模块化。</p>
+<pre><code>// index.js
+
+webpackJsonp([0], {
+  &quot;JkW7&quot;: (function(module, exports, __webpack_require__) {
+    const test = __webpack_require__(&quot;zFrx&quot;);
+    console.log(test);
+  }),
+  &quot;zFrx&quot;: (function(module, exports) {
+    const str = &apos;test is loaded&apos;;
+    module.exports = str;
+  })
+}, [&quot;JkW7&quot;]);
+</code></pre><p>删去各种奇怪的注释后剩下这么点内容，首先应该关注到的是 <code>webpackJsonp</code> 这个函数，可以看见是不在任何命名空间下的，也就是 <code>manifest.js</code> 应该定义了一个挂在 <code>window</code> 下的全局函数，<code>index.js</code> 往这个函数传入三个参数并调用。</p>
+<p>第一个参数是数组，现在暂时还不清楚这个数组有什么作用。</p>
+<p>第二个参数是一个对象，对象内都是方法，这些方法看起来至少接受两个参数（名为 <code>zFrx</code> 的方法只有两个形参）。看一眼这两个方法的内部，其实看见了十分熟悉的东西， <code>module.exports</code>，尽管看不见 <code>require</code>， 但有一个样子类似的 <code>__webpack_require__</code>，这两个应该是模块化的关键，先记下这两个函数。</p>
+<p>第三个参数也是一个数组，也不清楚是有何作用的，但我们观察到它的值是 <code>JkW7</code>，与参数2中的某个方法的键是一致的，这可能存在某种逻辑关联。</p>
+<p>至此，<code>index.js</code> 的内容算是过了一遍，接下来应当带着问题在 <code>manifest.js</code> 中寻找答案。</p>
+<h2 id="manifest-js-代码阅读"><a href="#manifest-js-代码阅读" class="headerlink" title="manifest.js 代码阅读"></a><code>manifest.js</code> 代码阅读</h2><p>由于没有配置任何压缩 <code>js</code> 的选项，因此 <code>manifest.js</code> 的源码大约在 150 行左右，简化后为 28 行（已经跑过代码，实测没问题）。鉴于精简后的代码真的不多，因而先贴代码，大家带着刚才提出的问题，先看看能找到几个答案：</p>
+<pre><code>(function(modules) {
+  window[&quot;webpackJsonp&quot;] = function webpackJsonpCallback(chunkIds, moreModules, executeModules) {
+    var moduleId, result;
+    for (moduleId in moreModules) {
+      if (Object.prototype.hasOwnProperty.call(moreModules, moduleId)) {
+        modules[moduleId] = moreModules[moduleId];
+      }
+    }
+    if (executeModules) {
+      for (i = 0; i &lt; executeModules.length; i++) {
+        result = __webpack_require__(executeModules[i]);
+      }
+    }
+    return result;
+  };
+  var installedModules = {};
+
+  function __webpack_require__(moduleId) {
+    if (installedModules[moduleId]) {
+      return installedModules[moduleId].exports;
+    }
+    var module = installedModules[moduleId] = {
+      exports: {}
+    };
+    modules[moduleId].call(module.exports, module, module.exports, __webpack_require__);
+    return module.exports;
+  }
+})([]);
+</code></pre><p>首先应该看到的是，<code>manifest.js</code> 内部是一个 <code>IIFE</code>，就是自执行函数咯，这个函数会接受一个空数组作为参数，该数组被命名为 <code>modules</code>。之后看到我们在 <code>index.js</code> 中的猜想，果然在 <code>window</code> 上挂了一个名为 <code>webpackJsonp</code> 的函数。它接受的三个参数，分别名为<code>chunkIds</code>, <code>moreModules</code>, <code>executeModules</code>。对应了 <code>index.js</code> 中调用 <code>webpackJsonp</code> 时传入的三个参数。而 <code>webpackJsonp</code> 内究竟是有怎样的逻辑呢？</p>
+<p>先不管定义的参数，<code>webpackJsonp</code> 先是 <code>for in</code> 遍历了一次 <code>moreModules</code>,将 <code>moreModules</code> 内的所有方法都存在 <code>modules</code>， 也就是自执行函数执行时传入的数组。</p>
+<p>之后是一个条件判断：</p>
+<pre><code>if (executeModules) {
+  for (i = 0; i &lt; executeModules.length; i++) {
+    result = __webpack_require__(executeModules[i]);
+  }
+}
+</code></pre><p>判断 <code>executeModules</code>， 也就是第三个参数是否存在，如存在即执行 <code>__webpack_require__</code> 方法。在 <code>index.js</code> 调用 <code>webpackJsonp</code> 方法时，这个参数当然是存在的，因而要看看 <code>__webpack_require__</code> 方法是什么了。</p>
+<p><code>__webpack_require__</code> 接受一个名为 <code>moduleId</code> 的参数。方法内部首先是一个条件判断，先不管。接下来看到赋值逻辑</p>
+<pre><code>var module = installedModules[moduleId] = {
+  exports: {}
+};
+</code></pre><p>结合刚才的条件判断，可以推测出 <code>installedModules</code> 是一个缓存的容器，那么前面的代码意思就是如果缓存中有对应的 <code>moduleId</code>,那么直接返回它的 <code>exports</code>，不然就定义并赋值一个吧。接着先偷看一下 <code>__webpack_require__</code> 的最后的返回值，可以看到函数返回的是 <code>module.exports</code>，那么 <code>module.exports</code> 又是如何被赋值的呢？ 看看之后的代码：</p>
+<pre><code>modules[moduleId].call(module.exports, module, module.exports, __webpack_require__);
+</code></pre><p>刚才我们知道 <code>modules[moduleId]</code> 就是 <code>moreModules</code> 中的方法，此处就是将 <code>this</code> 指定为 <code>module.exports</code>，再把<code>module</code>, <code>module.exports</code>, <code>__webpack_require__</code> 传入去作为参数调用。这三个参数是不是很熟悉？之前我们看 <code>index.js</code> 里面代码时，有一个疑问就是模块化是如何实现的。这里我们已经看出了眉目。</p>
+<p>其实 <code>webpack</code> 就是将每一个 <code>js</code> 文件封装成一个函数，每个文件中的 <code>require</code> 方法对应的就是 <code>__webpack_require__</code>， <code>__webpack_require__</code> 会根据传入的 <code>moduleId</code> 再去加载对应的代码。而当我们想导出 <code>js</code> 文件的值时，要么用 <code>module.exports</code>，要么用 <code>exports</code>，这就对应了<code>module</code>, <code>module.exports</code>两个参数。少接触这块的童鞋，应该就能理解为何导出值时，直接使用 <code>exports = xxx</code> 会导出失败了。简单举个例子：</p>
+<pre><code>const module = {
+  exports: {}
+};
+
+function demo1(module) {
+  module.exports = 1;
+}
+
+demo1(module);
+console.log(module.exports); // 1
+
+function demo2(exports) {
+  exports = 2;
+}
+
+demo2(module.exports);
+console.log(module.exports); // 1
+</code></pre><p>粘贴这段代码去浏览器跑一下，可以发现两次打印出来都是1。这和 <code>wenpack</code> 打包逻辑是一模一样的。</p>
+<p>梳理一下打包后代码执行的流程，首先 <code>minifest.js</code> 会定义一个 <code>webpackJsonp</code> 方法，待其他打包后的文件（也可称为 <code>chunk</code>）调用。当调用 <code>chunk</code> 时，会先将该 <code>chunk</code> 中所有的 <code>moreModules</code>， 也就是每一个依赖的文件也可称为 <code>module</code> （如 <code>test.js</code>）存起来。之后通过 <code>executeModules</code> 判断这个文件是不是入口文件，决定是否执行第一次  <code>__webpack_require__</code>。而 <code>__webpack_require__</code> 的作用，就是根据这个 <code>module</code> 所 <code>require</code> 的东西，不断递归调用 <code>__webpack_require__</code>，<code>__webpack_require__</code>函数返回值后供 <code>require</code> 使用。当然，模块是不会重复加载的，因为 <code>installedModules</code> 记录着 <code>module</code> 调用后的 <code>exports</code> 的值，只要命中缓存，就返回对应的值而不会再次调用 <code>module</code>。<code>webpack</code> 打包后的文件，就是通过一个个函数隔离 <code>module</code> 的作用域，以达到不互相污染的目的。</p>
+<h2 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h2><p>以上就是 <code>webpack</code> 打包后 <code>js</code> 文件是加载过程的简单描述，其实还是有很多细节没有说完的，比如如何异步加载对应模块， <code>chunkId</code> 有什么作用等，但由于篇幅所限 <del>（还没研究透）</del>，不再详述。相关代码会放置 <a href="https://github.com/ljf0113/how-webpack-load-js-file" target="_blank" rel="noopener">github</a> 中，欢迎随时查阅顺便点<code>star</code>。</p>
+<p>感谢各位看官大人看到这里，知易行难，希望本文对你有所帮助~谢谢！</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Javascript/" rel="tag"># Javascript</a>
+          
+            <a href="/tags/Webpack/" rel="tag"># Webpack</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/11/19/know-more-about-webpack-s-CommonsChunkPlugin/" rel="next" title="知多一点 webpack 的 CommonsChunkPlugin">
+                <i class="fa fa-chevron-left"></i> 知多一点 webpack 的 CommonsChunkPlugin
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/12/16/how-webpack-load-js-file-2/" rel="prev" title="简单易懂的 webpack 打包后 JS 的运行过程（二）">
+                简单易懂的 webpack 打包后 JS 的运行过程（二） <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.jpg"
+               alt="Sea_ljf" />
+          <p class="site-author-name" itemprop="name">Sea_ljf</p>
+           
+              <p class="site-description motion-element" itemprop="description"></p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">24</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">4</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">15</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/ljf0113" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#简单配置"><span class="nav-number">1.</span> <span class="nav-text">简单配置</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#从-index-js-开始看代码"><span class="nav-number">2.</span> <span class="nav-text">从 index.js 开始看代码</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#manifest-js-代码阅读"><span class="nav-number">3.</span> <span class="nav-text">manifest.js 代码阅读</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#小结"><span class="nav-number">4.</span> <span class="nav-text">小结</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Sea_ljf</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.1"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

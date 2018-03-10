@@ -1,0 +1,826 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Web,Node.js," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.1" />
+
+
+
+
+
+
+<meta name="description" content="原文链接：https://blog.risingstack.com/mastering-the-nodejs-core-modules-file-system-fs-module/ 在这篇文章中，我们会看一下（Node.js的）文件系统模块，文件流和一些可选的文件模块。  想象一下这样的场景，你必须使用Node.js去完成一项任务….. 通过查官方文档，Google搜索解决方案或者在npm找一个可">
+<meta name="keywords" content="Web,Node.js">
+<meta property="og:type" content="article">
+<meta property="og:title" content="掌握Node.js核心模块 - 文件系统 &amp; 文件模块 | @RisingStack">
+<meta property="og:url" content="http://yoursite.com/2017/05/07/Mastering-the-Node-js-Core-Modules-The-File-System-amp-the-fs-module/index.html">
+<meta property="og:site_name" content="小白丰的Blog~">
+<meta property="og:description" content="原文链接：https://blog.risingstack.com/mastering-the-nodejs-core-modules-file-system-fs-module/ 在这篇文章中，我们会看一下（Node.js的）文件系统模块，文件流和一些可选的文件模块。  想象一下这样的场景，你必须使用Node.js去完成一项任务….. 通过查官方文档，Google搜索解决方案或者在npm找一个可">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2017-06-04T03:27:38.938Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="掌握Node.js核心模块 - 文件系统 &amp; 文件模块 | @RisingStack">
+<meta name="twitter:description" content="原文链接：https://blog.risingstack.com/mastering-the-nodejs-core-modules-file-system-fs-module/ 在这篇文章中，我们会看一下（Node.js的）文件系统模块，文件流和一些可选的文件模块。  想象一下这样的场景，你必须使用Node.js去完成一项任务….. 通过查官方文档，Google搜索解决方案或者在npm找一个可">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2017/05/07/Mastering-the-Node-js-Core-Modules-The-File-System-amp-the-fs-module/"/>
+
+
+
+
+
+  <title>掌握Node.js核心模块 - 文件系统 & 文件模块 | @RisingStack | 小白丰的Blog~</title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">小白丰的Blog~</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">虽然我学的是心理学，但我会编程啊</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-tags " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/05/07/Mastering-the-Node-js-Core-Modules-The-File-System-amp-the-fs-module/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Sea_ljf">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="小白丰的Blog~">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">掌握Node.js核心模块 - 文件系统 & 文件模块 | @RisingStack</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-05-07T18:20:33+08:00">
+                2017-05-07
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/翻译/" itemprop="url" rel="index">
+                    <span itemprop="name">翻译</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>原文链接：<a href="https://blog.risingstack.com/mastering-the-nodejs-core-modules-file-system-fs-module/" target="_blank" rel="noopener">https://blog.risingstack.com/mastering-the-nodejs-core-modules-file-system-fs-module/</a></p>
+<p><strong>在这篇文章中，我们会看一下（Node.js的）文件系统模块，文件流和一些可选的文件模块。</strong></p>
+<hr>
+<p>想象一下这样的场景，你必须使用Node.js去完成一项任务…..</p>
+<p>通过查<a href="https://nodejs.org/dist/latest-v6.x/docs/api/" target="_blank" rel="noopener">官方文档</a>，Google搜索解决方案或者在npm找一个可以解决这问题的模块，这任务看起来还是挺容易完成的。</p>
+<blockquote>
+<p>嘛，这当然是可以的，但有时候核心模块就可以轻松地帮你完成工作（而不需要去查资料）。</p>
+</blockquote>
+<p>通过<strong>《掌握Node.js核心模块》</strong>系列文章，你可以学习到核心模块中一些隐藏和不为人知的特性。我们也会推荐一些拓展核心模块功能的模块，对你日常的开发有极大的帮助。</p>
+<a id="more"></a>
+<h1 id="Node-js-文件-模块"><a href="#Node-js-文件-模块" class="headerlink" title="Node.js 文件 模块"></a>Node.js <code>文件</code> 模块</h1><p><strong>文件 I/O 是由简单封装的标准 POSIX 函数提供的。</strong> 通过<code>require(&#39;fs&#39;)</code>使用该模块。 所有的方法都有异步和同步两种形式。</p>
+<h2 id="异步的API"><a href="#异步的API" class="headerlink" title="异步的API"></a>异步的API</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">// the async api</span><br><span class="line">const fs = require(&apos;fs&apos;)</span><br><span class="line"></span><br><span class="line">fs.unlink(&apos;/tmp/hello&apos;, (err) =&gt; &#123;  </span><br><span class="line">  if (err) &#123;</span><br><span class="line">    return console.log(err)</span><br><span class="line">  &#125;</span><br><span class="line">  console.log(&apos;successfully deleted /tmp/hello&apos;)</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+<p>当你开发生产代码的时候，你应该使用异步的API，因为这不会阻止<a href="https://blog.risingstack.com/node-js-at-scale-understanding-node-js-event-loop/" target="_blank" rel="noopener">事件循环</a>，使程序更加高效。</p>
+<h2 id="同步的API"><a href="#同步的API" class="headerlink" title="同步的API"></a>同步的API</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">// the sync api</span><br><span class="line">const fs = require(&apos;fs&apos;)</span><br><span class="line"></span><br><span class="line">try &#123;  </span><br><span class="line">  fs.unlinkSync(&apos;/tmp/hello&apos;)</span><br><span class="line">&#125; catch (ex) &#123;</span><br><span class="line">  console.log(err)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">console.log(&apos;successfully deleted /tmp/hello&apos;);</span><br></pre></td></tr></table></figure>
+<p>你只应该在写demo或者小的CLI时才使用同步API。</p>
+<h1 id="Node-js文件流"><a href="#Node-js文件流" class="headerlink" title="Node.js文件流"></a>Node.js文件流</h1><p>我们很少看到程序员使用文件流。</p>
+<p><a href="https://twitter.com/share?text=Streams%20in%20%40nodejs%20are%20powerful%20concepts%20-%20with%20them%20you%20can%20achieve%20small%20memory%20footprint%20of%20your%20applications.;url=https://blog.risingstack.com/mastering-the-nodejs-core-modules-file-system-fs-module" target="_blank" rel="noopener">（然而）流在Node.js中是一件强大的武器，可以使程序占用更少的内存。</a></p>
+<p><a href="https://twitter.com/share?text=Streams%20in%20%40nodejs%20are%20powerful%20concepts%20-%20with%20them%20you%20can%20achieve%20small%20memory%20footprint%20of%20your%20applications.;url=https://blog.risingstack.com/mastering-the-nodejs-core-modules-file-system-fs-module" target="_blank" rel="noopener">来看推特</a></p>
+<blockquote>
+<p><strong>在Node.js中什么是文件流？</strong></p>
+<p>若要处理数据，流在Node.js中是最好的。你需要理解这三个概念:</p>
+<ul>
+<li><strong>source</strong> - 数据来源对象（译者注：理解为水的来源），</li>
+</ul>
+<ul>
+<li><strong>pipeline</strong> - 数据流向的过程（你可以在这过滤或者更新数据。译者注：理解为水管），</li>
+</ul>
+<ul>
+<li><strong>sink</strong> - 数据最后存放的地方（译者注：理解为开了水龙头后接水的容器）。</li>
+</ul>
+<p>如果需要知道更多知识，可以看下Substack的<a href="https://github.com/substack/stream-handbook" target="_blank" rel="noopener">Stream Handbook</a>.</p>
+</blockquote>
+<p><strong>你可以轻松地使用流复制文件，尽管文件模块不提供相应的功能:</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">// copy a file</span><br><span class="line">const fs = require(&apos;fs&apos;)  </span><br><span class="line">const readableStream = fs.createReadStream(&apos;original.txt&apos;)  </span><br><span class="line">var writableStream = fs.createWriteStream(&apos;copy.txt&apos;)</span><br><span class="line"></span><br><span class="line">readableStream.pipe(writableStream)</span><br></pre></td></tr></table></figure>
+<p>你可能会问：为什么我要这么做，不就是一个<code>cp</code>命令吗？</p>
+<p>使用流去处理文件，<strong>最大的好处是在此过程中你可以轻松地加工文件</strong>，下面是一个压缩文件的例子:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">const fs = require(&apos;fs&apos;)  </span><br><span class="line">const zlib = require(&apos;zlib&apos;)</span><br><span class="line"></span><br><span class="line">fs.createReadStream(&apos;original.txt.gz&apos;)  </span><br><span class="line">  .pipe(zlib.createGunzip())</span><br><span class="line">  .pipe(fs.createWriteStream(&apos;original.txt&apos;))</span><br></pre></td></tr></table></figure>
+<p>Node.js支持</p>
+<p>需要从npm中得到相应模块的帮助吗？</p>
+<p><a href="https://risingstack.com/nodejs-support?utm_source=rsblog&amp;utm_medium=roadblock-new&amp;utm_campaign=trace" title="Expert Node.js Support" target="_blank" rel="noopener">Learn more</a> </p>
+<h2 id="什么时候不要使用fs-access"><a href="#什么时候不要使用fs-access" class="headerlink" title="什么时候不要使用fs.access"></a>什么时候不要使用<code>fs.access</code></h2><p>使用<code>fs.access</code>的目的是为了检查指定文件或者目录的用户权限，例子如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">fs.access(&apos;/etc/passwd&apos;, fs.constants.R_OK | fs.constants.W_OK, (err) =&gt; &#123;  </span><br><span class="line">  if (err) &#123;</span><br><span class="line">    return console.error(&apos;no access&apos;)</span><br><span class="line">  &#125;</span><br><span class="line">  console.log(&apos;access for read/write&apos;)</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p><strong>可供权限检查的常量</strong>:</p>
+<ul>
+<li><code>fs.constants.F_OK</code> - 检查该文件在进程中是否可见，</li>
+</ul>
+<ul>
+<li><code>fs.constants.R_OK</code> - 检查该文件在进程中是否可读，</li>
+</ul>
+<ul>
+<li><code>fs.constants.W_OK</code> - 检查该文件在进程中是否可写，</li>
+</ul>
+<ul>
+<li><code>fs.constants.X_OK</code> - 检查该文件在进程中是否可执行。</li>
+</ul>
+</blockquote>
+<p><strong>在使用<code>fs.open</code>之前，可使用<code>fs.access</code>去检查文件的可访问性，但 <code>fs.readFile</code>和<code>fs.writeFile</code>不推荐（使用<code>fs.access</code>去检查）。</strong> </p>
+<p>理由很简单，如果你这么做，就会引入了一个竞态条件。在查询权限和操作文件中相互竞争，另外的进程可能已经修改了那个文件。 </p>
+<p><strong>相反，你应该直接打开这文件并在这处理可能出现的错误。</strong></p>
+<h1 id="慎用fs-watch"><a href="#慎用fs-watch" class="headerlink" title="慎用fs.watch"></a>慎用<code>fs.watch</code></h1><p>通过使用<code>fs.watch</code>，当（被监听的）文件或者目录有变化时，你会收到通知。</p>
+<p>然而，<strong><code>fs.watch</code>这个API无法跨平台百分百一致，在某些系统中根本就不可用。</strong></p>
+<ul>
+<li><p>在Linux系统中, 它使用<a href="http://man7.org/linux/man-pages/man7/inotify.7.html" target="_blank" rel="noopener">inotify</a>，</p>
+</li>
+<li><p>在BSD系统中，它使用<a href="https://www.freebsd.org/cgi/man.cgi?kqueue" target="_blank" rel="noopener">kqueue</a>，</p>
+</li>
+<li><p>在OS X中，文件使用<a href="https://www.freebsd.org/cgi/man.cgi?kqueue" target="_blank" rel="noopener">kqueue</a> ,目录使用<a href="https://developer.apple.com/library/mac/documentation/Darwin/Conceptual/FSEvents_ProgGuide/Introduction/Introduction.html#//apple_ref/doc/uid/TP40005289-CH1-SW1" target="_blank" rel="noopener">FSEvents</a>,</p>
+</li>
+<li><p>在SunOS中（包括Solaris和SmartOS），API是<a href="http://illumos.org/man/port_create" target="_blank" rel="noopener">event ports</a>，</p>
+</li>
+<li><p>在Windows系统中, 这功能依赖于<a href="https://msdn.microsoft.com/en-us/library/windows/desktop/aa365465%28v=vs.85%29.aspx" target="_blank" rel="noopener">ReadDirectoryChangesW</a>。</p>
+</li>
+</ul>
+<p><strong>注意：只有OS X和Windows系统支持递归选项，Linux不支持。</strong></p>
+<p>还有，回调函数中的<code>fileName</code>参数只在Linux和Windows系统中提供，因此你应该准备好相应的回退机制以防止它是<code>undefined</code>。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">fs.watch(&apos;some/path&apos;, (eventType, fileName) =&gt; &#123;  </span><br><span class="line">  if (!filename) &#123;</span><br><span class="line">    //filename is missing, handle it gracefully</span><br><span class="line">  &#125; </span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+<h1 id="npm中有用的文件模块"><a href="#npm中有用的文件模块" class="headerlink" title="npm中有用的文件模块"></a>npm中有用的文件模块</h1><p>社区中维护着一些拓展了文件系统功能的模块。</p>
+<h2 id="graceful-fs"><a href="#graceful-fs" class="headerlink" title="graceful-fs"></a><code>graceful-fs</code></h2><p><code>graceful-fs</code>是文件系统模块的替代模块，它优化了以下内容（译者注：由于存在太多专业名词，下面的不作翻译，请见谅）：</p>
+<ul>
+<li><p>queues up <code>open</code> and <code>readdir</code> calls, and retries them once something closes if there is an EMFILE error from too many file descriptors,</p>
+</li>
+<li><p>ignores <code>EINVAL</code> and <code>EPERM</code> errors in <code>chown</code>, <code>fchown</code> or <code>lchown</code> if the user isn’t root,</p>
+</li>
+<li><p>makes <code>lchmod</code> and <code>lchown</code> become noops, if not available,</p>
+</li>
+<li><p>retries reading a file if read results in <code>EAGAIN</code> error.</p>
+</li>
+</ul>
+<p>你可以像使用文件模块一样使用它，或者都引入它们，根据需要二选一使用。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">// use as a standalone module</span><br><span class="line">const fs = require(&apos;graceful-fs&apos;)</span><br><span class="line"></span><br><span class="line">// patching the global one</span><br><span class="line">const originalFs = require(&apos;fs&apos;)  </span><br><span class="line">const gracefulFs = require(&apos;graceful-fs&apos;)  </span><br><span class="line">gracefulFs.gracefulify(originalFs)</span><br></pre></td></tr></table></figure>
+<h2 id="mock-fs"><a href="#mock-fs" class="headerlink" title="mock-fs"></a><code>mock-fs</code></h2><p><code>mock-fs</code>可以在文件系统模块中模拟数据，<strong>这可以让你使用模拟的文件或者目录进行测试。</strong></p>
+<p>用起来非常简单，请看下面的示例：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">const mock = require(&apos;mock-fs&apos;)  </span><br><span class="line">const fs = require(&apos;fs&apos;)</span><br><span class="line"></span><br><span class="line">mock(&#123;  </span><br><span class="line">  &apos;path/to/fake/dir&apos;: &#123;</span><br><span class="line">    &apos;some-file.txt&apos;: &apos;file content here&apos;,</span><br><span class="line">    &apos;empty-dir&apos;: &#123;&#125;</span><br><span class="line">  &#125;,</span><br><span class="line">  &apos;path/to/some.png&apos;: new Buffer([8, 6, 7, 5, 3, 0, 9])</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line">fs.exists(&apos;path/to/fake/dir&apos;, function (exists) &#123;  </span><br><span class="line">  console.log(exists)</span><br><span class="line">  // will output true</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+<h2 id="lockfile"><a href="#lockfile" class="headerlink" title="lockfile"></a><code>lockfile</code></h2><p><strong>文件锁定是在同一时间只允许一个进程去操作文件。</strong>这可以避免产生竞态条件。</p>
+<p>通过<a href="https://github.com/npm/lockfile" target="_blank" rel="noopener"><code>lockfile</code></a>添加文件锁是非常简单的：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">const lockFile = require(&apos;lockfile&apos;)</span><br><span class="line"></span><br><span class="line">lockFile.lock(&apos;some-file.lock&apos;, function (err) &#123;  </span><br><span class="line">  // if the err happens, then it failed to acquire a lock.</span><br><span class="line">  // if there was not an error, then the file was created,</span><br><span class="line">  // and won&apos;t be deleted until we unlock it.</span><br><span class="line"></span><br><span class="line">  // then, some time later, do:</span><br><span class="line">  lockFile.unlock(&apos;some-file.lock&apos;, function (err) &#123;</span><br><span class="line"></span><br><span class="line">  &#125;)</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>我希望这篇文章对Node.js的文件系统讲解对你有用。</p>
+<p>如果你对这方面内容有问题，请在下面的评论中告诉我。</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Web/" rel="tag"># Web</a>
+          
+            <a href="/tags/Node-js/" rel="tag"># Node.js</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/04/23/5-React-Native-Open-Source-Projects-To-Learn-From/" rel="next" title="5个值得学习的React Native开源项目">
+                <i class="fa fa-chevron-left"></i> 5个值得学习的React Native开源项目
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/05/20/head-Cheat-Sheet/" rel="prev" title="head 速查表">
+                head 速查表 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.jpg"
+               alt="Sea_ljf" />
+          <p class="site-author-name" itemprop="name">Sea_ljf</p>
+           
+              <p class="site-description motion-element" itemprop="description"></p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">24</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">4</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">15</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/ljf0113" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Node-js-文件-模块"><span class="nav-number">1.</span> <span class="nav-text">Node.js 文件 模块</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#异步的API"><span class="nav-number">1.1.</span> <span class="nav-text">异步的API</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#同步的API"><span class="nav-number">1.2.</span> <span class="nav-text">同步的API</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Node-js文件流"><span class="nav-number">2.</span> <span class="nav-text">Node.js文件流</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#什么时候不要使用fs-access"><span class="nav-number">2.1.</span> <span class="nav-text">什么时候不要使用fs.access</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#慎用fs-watch"><span class="nav-number">3.</span> <span class="nav-text">慎用fs.watch</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#npm中有用的文件模块"><span class="nav-number">4.</span> <span class="nav-text">npm中有用的文件模块</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#graceful-fs"><span class="nav-number">4.1.</span> <span class="nav-text">graceful-fs</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#mock-fs"><span class="nav-number">4.2.</span> <span class="nav-text">mock-fs</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#lockfile"><span class="nav-number">4.3.</span> <span class="nav-text">lockfile</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#总结"><span class="nav-number">5.</span> <span class="nav-text">总结</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Sea_ljf</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.1"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

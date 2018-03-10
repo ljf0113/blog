@@ -1,0 +1,794 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="HTTP," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.1" />
+
+
+
+
+
+
+<meta name="description" content="hello~亲爱的观众老爷们大家好！惯例先说说为何写这个主题，缘起于其次后端同事的一次抓包分享。当然咯，当时对于网络编程的术语各种不明觉厉，只能尴尬地笑着。对于最基础的 OSI模型，只知道由七层组成，但每一层是什么，有什么用途，有什么协议完全是不清楚的。因而知耻而后，通过看书与查资料补充了相关的知识，也就有了这篇文章。 可能有观众老爷会问，前端知道这个有什么用，平时基本用不上不是么？这个倒是事实，">
+<meta name="keywords" content="HTTP">
+<meta property="og:type" content="article">
+<meta property="og:title" content="或许这样能帮你了解  OSI 七层模型">
+<meta property="og:url" content="http://yoursite.com/2017/10/21/you-may-know-more-about-osi-model/index.html">
+<meta property="og:site_name" content="小白丰的Blog~">
+<meta property="og:description" content="hello~亲爱的观众老爷们大家好！惯例先说说为何写这个主题，缘起于其次后端同事的一次抓包分享。当然咯，当时对于网络编程的术语各种不明觉厉，只能尴尬地笑着。对于最基础的 OSI模型，只知道由七层组成，但每一层是什么，有什么用途，有什么协议完全是不清楚的。因而知耻而后，通过看书与查资料补充了相关的知识，也就有了这篇文章。 可能有观众老爷会问，前端知道这个有什么用，平时基本用不上不是么？这个倒是事实，">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://user-gold-cdn.xitu.io/2017/10/20/ac3ea7262b3c4525d784722dc0f46634">
+<meta property="og:image" content="https://user-gold-cdn.xitu.io/2017/10/21/f117da35365a7b869c5ba3d52438e28a">
+<meta property="og:image" content="https://user-gold-cdn.xitu.io/2017/10/21/63e3c50c9d75dd521be86921a3715f34">
+<meta property="og:image" content="https://user-gold-cdn.xitu.io/2017/10/21/582d6e6540bb2ab8ca58566fe070c2d1">
+<meta property="og:image" content="https://user-gold-cdn.xitu.io/2017/10/21/9040cb27a7fc7f75f749f4928653ada9">
+<meta property="og:image" content="https://user-gold-cdn.xitu.io/2017/10/21/52fbe5b28bd36b31618f59316ece7132">
+<meta property="og:image" content="https://user-gold-cdn.xitu.io/2017/10/21/b1da31fda546362f1622f35918bfebed">
+<meta property="og:image" content="https://user-gold-cdn.xitu.io/2017/10/21/981a59733f3d4e1a92ae7db56cba3df9">
+<meta property="og:updated_time" content="2017-10-21T06:22:28.815Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="或许这样能帮你了解  OSI 七层模型">
+<meta name="twitter:description" content="hello~亲爱的观众老爷们大家好！惯例先说说为何写这个主题，缘起于其次后端同事的一次抓包分享。当然咯，当时对于网络编程的术语各种不明觉厉，只能尴尬地笑着。对于最基础的 OSI模型，只知道由七层组成，但每一层是什么，有什么用途，有什么协议完全是不清楚的。因而知耻而后，通过看书与查资料补充了相关的知识，也就有了这篇文章。 可能有观众老爷会问，前端知道这个有什么用，平时基本用不上不是么？这个倒是事实，">
+<meta name="twitter:image" content="https://user-gold-cdn.xitu.io/2017/10/20/ac3ea7262b3c4525d784722dc0f46634">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2017/10/21/you-may-know-more-about-osi-model/"/>
+
+
+
+
+
+  <title>或许这样能帮你了解  OSI 七层模型 | 小白丰的Blog~</title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">小白丰的Blog~</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">虽然我学的是心理学，但我会编程啊</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-tags " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/10/21/you-may-know-more-about-osi-model/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Sea_ljf">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="小白丰的Blog~">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">或许这样能帮你了解  OSI 七层模型</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-10-21T14:20:02+08:00">
+                2017-10-21
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/日常小结/" itemprop="url" rel="index">
+                    <span itemprop="name">日常小结</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>hello~亲爱的观众老爷们大家好！惯例先说说为何写这个主题，缘起于其次后端同事的一次抓包分享。当然咯，当时对于网络编程的术语各种不明觉厉，只能尴尬地笑着。对于最基础的 <code>OSI模型</code>，只知道由七层组成，但每一层是什么，有什么用途，有什么协议完全是不清楚的。因而知耻而后，通过看书与查资料补充了相关的知识，也就有了这篇文章。</p>
+<p>可能有观众老爷会问，前端知道这个有什么用，平时基本用不上不是么？这个倒是事实，我们平时一般只接触应用层的<code>HTTP</code>协议， 底层的协议我们可以毫不关心。但有些场景还是需要一些底层知识的。比如前端一般优化有一条原则是，尽量少发请求，那么为何少发请求就能优化加载，它的开销到底是什么？又比如最近产品希望uv打点同一计算机唯一，但很可能用户会采用不同客户端使用该产品，研发该如何啪啪啪打产品脸。仔细思考一下，其实不少情景也需要一点底层知识，因而不要书到用时方恨少啊~</p>
+<p>本文会介绍七层模型中每层相关的协议，也会通过快递公司的比喻形容每层的作用。希望大家有所收获。</p>
+<a id="more"></a>
+<h2 id="基础知识"><a href="#基础知识" class="headerlink" title="基础知识"></a>基础知识</h2><blockquote>
+<p>OSI（Open System Interconnect），即开放式系统互联。 一般都叫OSI参考模型，是ISO（国际标准化组织）组织在1985年研究的网络互联模型。该体系结构标准定义了网络互连的七层框架（物理层、数据链路层、网络层、传输层、会话层、表示层和应用层），即ISO开放系统互连参考模型。在这一框架下进一步详细规定了每一层的功能，以实现开放系统环境中的互连性、互操作性和应用的可移植性。</p>
+</blockquote>
+<p>以上是百度 <code>OSI 模型</code> 的概括，此处暂时只需要记住模型有7层，首层是物理层，最后是应用层即可。那么，不同层之间是如何组织和通信的呢？且看下图：</p>
+<p><img src="https://user-gold-cdn.xitu.io/2017/10/20/ac3ea7262b3c4525d784722dc0f46634" alt=""></p>
+<p>发送方从最高层开始，从上到下按顺序传输数据，每一层接收到由上层处理的数据时，添加该层的首部并可能会对数据进行处理（如表示层）。而接收端则将顺序反过来，从首层开始，将数据的内容与该层对应的首部拆开，传给上一层。看起来很绕对吧？简单理解可以这样，想象A将要寄一个易碎品寄给B，A所在的快递站寄件时有由七个人组成的打包流程，每个人只管接收上一个人的打包好的物件，并在外面套一个大一点盒子，传给下一个人。当物件寄到B所在的快递站时，同样也有七个人负责拆盒子，每个人只拆一个，最后将物件给到B手上。这样是不是简单易懂了？</p>
+<p>当时我看到这里时，不知道看官大人是否与我有一样的疑问：其实这么分层，不同层之间肯定有差不多的处理逻辑，处理也麻烦，有必要分层吗？然而这个问题也很好理解，分层后，如若某层产生变化，也不会波及整个系统。我们也知道，每一层其实都有不同的协议，如果各层混合在一起，切换协议就无从谈起，每次更换某一层，都需要改造整个系统。这和前端为何要使用框架，让我们按 <code>MVC</code> 或 <code>MVVM</code> 分层组织代码是一个道理的。明确界定各层的作用，有助于系统的健壮性。</p>
+<p>那么每一层到底有什么协议，又有什么作用呢？先从最高层往下看。</p>
+<h2 id="应用层"><a href="#应用层" class="headerlink" title="应用层"></a>应用层</h2><p><img src="https://user-gold-cdn.xitu.io/2017/10/21/f117da35365a7b869c5ba3d52438e28a" alt=""></p>
+<blockquote>
+<p>作为前端，应用层肯定是最熟悉的。它的作用是为应用程序提供服务并规定应用程序中通讯相关的细节，也就是为应用提供服务。常见的协议有 <code>HTTP</code>，<code>FTP</code>，<code>TELNET</code>、<code>SMTP</code> 等。</p>
+</blockquote>
+<p>我们日常开发中，接触的协议主要以 <code>HTTP</code> 为主，那么把浏览器看作一个应用，当用户发起请求时，通过 <code>HTTP协议</code>获得数据以供浏览器使用，这就是应用层的用途。而请求时发生错误，对错误进行处理，也是应用层需要负责的。</p>
+<p>这一层可以想象成快递公司的收件员，当客户（应用）打电话（发起请求）给收件员（应用层）时，收件员可以根据用户的不同需求提供不同的服务（不同协议），比如隔天送达、指定时间送达等等。</p>
+<h2 id="表示层"><a href="#表示层" class="headerlink" title="表示层"></a>表示层</h2><p><img src="https://user-gold-cdn.xitu.io/2017/10/21/63e3c50c9d75dd521be86921a3715f34" alt=""></p>
+<blockquote>
+<p>表示层的作用是将应用处理的信息转换为适合网络传输的格式，或者将来自下一层的数据转换为上层能处理的格式。它主要负责数据格式的转换。具体来说，就是讲设备固有的数据格式转换为网络标准格式。常见的协议有 <code>ASCII</code>、<code>SSL/TLS</code> 等。</p>
+</blockquote>
+<p>作用看起来可能比较绕，但其实是挺好理解的。我只会说中文，而日本友人只会说日文，那么我们两个是无法交流的。但如果我们都会说英文，交流时我先在心里想好要说的话是什么，再用英语说出来，日本友人听到英文，在心里转换为日语，他就能弄懂我的意思，此时表示层就是各自在心里转化语言。而浏览器请求回一堆数据，是解析成文本还是图片，就由表示层决定。数据的压缩、加密、打包等功能也都在这层完成。</p>
+<p>这一层相当于快递公司的打包员。如果快递（数据）太臃肿，他会在不破坏快递的情况下压扁（压缩）它。如果客户注重安全线，全能的快递公司还能用密码箱（ <code>SSL/TLS</code>）打包快递再快送。当然，打包员会确定，目的地快递站的拆包员，能无损地拆开包裹，将快递交给用户。</p>
+<h2 id="会话层"><a href="#会话层" class="headerlink" title="会话层"></a>会话层</h2><p><img src="https://user-gold-cdn.xitu.io/2017/10/21/582d6e6540bb2ab8ca58566fe070c2d1" alt=""></p>
+<blockquote>
+<p>会话层作用是负责建立和断开通信连接（数据流动的逻辑通路），以及数据的分割等数据传输相关的管理。常见的协议有 <code>ADSP</code>、<code>RPC</code> 等。</p>
+</blockquote>
+<p>会话层可看作是快递公司的调度员。他管理着这次快递的相关的信息。例如这次客户要发100吨沙土（数据），发到哪，到底是一车一车发、还是用轮船一次运过去。这些都是他的职责。而运完之后，相关信息（连接）也可以被销毁了，这也是调度员的职责。</p>
+<h2 id="传输层"><a href="#传输层" class="headerlink" title="传输层"></a>传输层</h2><p><img src="https://user-gold-cdn.xitu.io/2017/10/21/9040cb27a7fc7f75f749f4928653ada9" alt=""></p>
+<blockquote>
+<p>传输层起着可靠传输的作用。只在通信双方节点进行处理，而不需在路由器上处理。此层有两个具有代表性的协议： <code>TCP</code> 与 <code>UDP</code>。</p>
+</blockquote>
+<p><code>TCP</code> 协议提供可靠的通信传输，简单说就是确认目标能通信的情况下才会传输数据（因此需要三次握手），传输过程如果丢了数据，也会重发。而 <code>UDP</code> 协议则不然，不会确认目标能否通信，只会根据协议发到对方地址的端口。至于对方收不收到，丢不丢包，一概不管。</p>
+<p>传输层有一个重要作用，就是指定通信端口。以请求服务器数据为例，服务器有处理多种协议的能力，如之前应用层所说的<code>HTTP</code>，<code>FTP</code>，<code>TELNET</code> 等，但到底你是用什么协议呢？服务器并不知道。但如果你指定了端口，如 <code>80</code>，服务器就会知道你是想用 <code>HTTP</code> 协议的，自然会转给对应协议的处理程序进行处理。</p>
+<p>作比喻的话，可以将传输层看作是快递公司的跟单员。负责任的跟单员（使用 <code>TCP</code> 协议）会保证快递送到客户手上，如果送不到就让公司再发一次。不负责任的跟单员（使用 <code>UDP</code> 协议）层只管将快递送到客户指定的地方，不管快递是否送到客户手上。</p>
+<h2 id="网络层"><a href="#网络层" class="headerlink" title="网络层"></a>网络层</h2><p><img src="https://user-gold-cdn.xitu.io/2017/10/21/52fbe5b28bd36b31618f59316ece7132" alt=""></p>
+<blockquote>
+<p>网络层负责将数据传输到目标地址。目标地址可以使多个网络通过路由器连接而成的某一个地址。因此这一层主要负责寻址和路由选择。主要由 <code>IP</code>、<code>ICMP</code> 两个协议组成。</p>
+</blockquote>
+<p>网络层将数据从发送端的主机发送到接收端的主机，两台主机间可能会存在很多数据链路，但网络层就是负责找出一条相对顺畅的通路将数据传递过去。传输的地址使用的是IP地址。IP地址和我们的住址有点相似，我们的住址可以从省到市再到街逐步缩小范围，直至我们住址。IP地址也有这样的能力，通过不断转发到更近的IP地址，最终可以到达目标地址。如何选择这条路，就看网络层了。</p>
+<p>这好比是快递公司的路线规划者。快递公司有很多集散中心，根据集散中心的情况（是否拥堵），找出一条经过n个集散中心的路径将货物（数据）沿路运过去。</p>
+<h2 id="数据链路层"><a href="#数据链路层" class="headerlink" title="数据链路层"></a>数据链路层</h2><p><img src="https://user-gold-cdn.xitu.io/2017/10/21/b1da31fda546362f1622f35918bfebed" alt=""></p>
+<blockquote>
+<p>该层负责物理层面上互连的节点之间的通信传输。例如与1个以太网相连的两个节点间的通讯。常见的协议有 <code>HDLC</code>、<code>PPP</code>、<code>SLIP</code> 等。</p>
+</blockquote>
+<p>数据链路层会将0、1序列划分为具有意义的数据帧传送给对端（数据帧的生成与接收）。举个例子可能会更好理解，暂且把需要传输的数据看作为不同来源的水，如果直接倒入池子中时，是无法重新分辨出不同来源的水的。但如果将不同来源的灌入瓶子中并打上记号，那就能区分出不同来源的水。这也就是为什么要划分为具有意义的数据帧传送给对端。同时要注意的是，数据链路层只负责将数据运送给物理相连的两端，并不负责直接发送到最终地址。</p>
+<p>数据链路层可以看作是快递公司的司机，他们驾驶着汽车，将打包好的货物（数据帧）从一个城市（物理节点）运输到另一个城市。</p>
+<h2 id="物理层"><a href="#物理层" class="headerlink" title="物理层"></a>物理层</h2><p><img src="https://user-gold-cdn.xitu.io/2017/10/21/981a59733f3d4e1a92ae7db56cba3df9" alt=""></p>
+<blockquote>
+<p>物理层负责0、1比特流（0、1序列）与电压高低、光的闪灭之间的互换。典型的协议有 <code>RS 232C</code>、<code>RS 449/422/423</code>、<code>V.24</code> 和 <code>X.21</code>、<code>X.21bis</code> 等。</p>
+</blockquote>
+<p>看着高大上，其实是将数据的0、1转换成电信号或者光信号。通过光纤、双绞线甚至是无限电波等介质传输到指定的地址。而传输过程中的集线器、中继器、调制解调器等，也属于物理层的传输介质。物理层是 <code>OSI</code> 七层模型的物理基础，没有它就谈不上数据传输了。</p>
+<p>物理层就是由实物所承载的，所以作比喻的话，公路、汽车和飞机等承载货物（数据）的交通工具，就是物理层的象征。</p>
+<p>至此，<code>OSI</code> 七层模型的功能与协议就简单地介绍完了~</p>
+<h2 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h2><p>上文只是 <code>OSI</code> 七层模型一些粗浅的介绍，希望能帮到你更好地理解它。然而由于篇幅所限与本人能力不足，七层模型中有很多细节仍未涉及，如需深入了解，还应该仔细阅读相关资料，加深对各层模型的认识。</p>
+<p>感谢各位看官大人看到这里~希望本文对你有所帮助。由于我对这方面的知识接触不深，因而难免有错漏，希望各位dalao打我脸，让我知道哪里的理解有误，保证很快更正哦~谢谢！</p>
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><p><a href="https://book.douban.com/subject/24737674/" target="_blank" rel="noopener">图解TCP/IP</a></p>
+<p><a href="http://www.ruanyifeng.com/blog/2012/05/internet_protocol_suite_part_i.html" target="_blank" rel="noopener">互联网协议入门（一）</a></p>
+<p><a href="https://baike.baidu.com/item/%E5%BC%80%E6%94%BE%E7%B3%BB%E7%BB%9F%E4%BA%92%E8%BF%9E%E5%8F%82%E8%80%83%E6%A8%A1%E5%9E%8B/8851889?fr=aladdin&amp;fromid=9763441&amp;fromtitle=OSI%E4%B8%83%E5%B1%82%E6%A8%A1%E5%9E%8B" target="_blank" rel="noopener">开放系统互连参考模型</a></p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/HTTP/" rel="tag"># HTTP</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/10/08/scrollIntoView-and-scrollIntoViewIfNeeded-introduction/" rel="next" title="scrollIntoView 与 scrollIntoViewIfNeeded API 介绍">
+                <i class="fa fa-chevron-left"></i> scrollIntoView 与 scrollIntoViewIfNeeded API 介绍
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/11/12/how-to-make-a-Promise/" rel="prev" title="实现一个玩具 Promise ~">
+                实现一个玩具 Promise ~ <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.jpg"
+               alt="Sea_ljf" />
+          <p class="site-author-name" itemprop="name">Sea_ljf</p>
+           
+              <p class="site-description motion-element" itemprop="description"></p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">24</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">4</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">15</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/ljf0113" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#基础知识"><span class="nav-number">1.</span> <span class="nav-text">基础知识</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#应用层"><span class="nav-number">2.</span> <span class="nav-text">应用层</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#表示层"><span class="nav-number">3.</span> <span class="nav-text">表示层</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#会话层"><span class="nav-number">4.</span> <span class="nav-text">会话层</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#传输层"><span class="nav-number">5.</span> <span class="nav-text">传输层</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#网络层"><span class="nav-number">6.</span> <span class="nav-text">网络层</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#数据链路层"><span class="nav-number">7.</span> <span class="nav-text">数据链路层</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#物理层"><span class="nav-number">8.</span> <span class="nav-text">物理层</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#小结"><span class="nav-number">9.</span> <span class="nav-text">小结</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考资料"><span class="nav-number">10.</span> <span class="nav-text">参考资料</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Sea_ljf</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.1"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

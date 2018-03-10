@@ -1,0 +1,824 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Javascript,DOM," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.1" />
+
+
+
+
+
+
+<meta name="description" content="Hello~亲爱的观众老爷们大家好！国庆中秋长假快放完了，是时候收拾心（ti）情（zhong）好好学习与工作啦。这次为大家带来的是两个好用 API 的介绍，其实也是偷懒神器。 根据 MDN的描述，Element.scrollIntoView()方法让当前的元素滚动到浏览器窗口的可视区域内。 而Element.scrollIntoViewIfNeeded（）方法也是用来将不在浏览器窗口的可见区域内的">
+<meta name="keywords" content="Javascript,DOM">
+<meta property="og:type" content="article">
+<meta property="og:title" content="scrollIntoView 与 scrollIntoViewIfNeeded API 介绍">
+<meta property="og:url" content="http://yoursite.com/2017/10/08/scrollIntoView-and-scrollIntoViewIfNeeded-introduction/index.html">
+<meta property="og:site_name" content="小白丰的Blog~">
+<meta property="og:description" content="Hello~亲爱的观众老爷们大家好！国庆中秋长假快放完了，是时候收拾心（ti）情（zhong）好好学习与工作啦。这次为大家带来的是两个好用 API 的介绍，其实也是偷懒神器。 根据 MDN的描述，Element.scrollIntoView()方法让当前的元素滚动到浏览器窗口的可视区域内。 而Element.scrollIntoViewIfNeeded（）方法也是用来将不在浏览器窗口的可见区域内的">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://user-gold-cdn.xitu.io/2017/10/6/fe81e231a974d45ac878b2c0c63ecb5d">
+<meta property="og:image" content="https://user-gold-cdn.xitu.io/2017/10/6/0f1344a4895d70a52954ed92f58ffcb9">
+<meta property="og:updated_time" content="2017-10-08T12:34:45.834Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="scrollIntoView 与 scrollIntoViewIfNeeded API 介绍">
+<meta name="twitter:description" content="Hello~亲爱的观众老爷们大家好！国庆中秋长假快放完了，是时候收拾心（ti）情（zhong）好好学习与工作啦。这次为大家带来的是两个好用 API 的介绍，其实也是偷懒神器。 根据 MDN的描述，Element.scrollIntoView()方法让当前的元素滚动到浏览器窗口的可视区域内。 而Element.scrollIntoViewIfNeeded（）方法也是用来将不在浏览器窗口的可见区域内的">
+<meta name="twitter:image" content="https://user-gold-cdn.xitu.io/2017/10/6/fe81e231a974d45ac878b2c0c63ecb5d">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2017/10/08/scrollIntoView-and-scrollIntoViewIfNeeded-introduction/"/>
+
+
+
+
+
+  <title>scrollIntoView 与 scrollIntoViewIfNeeded API 介绍 | 小白丰的Blog~</title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">小白丰的Blog~</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">虽然我学的是心理学，但我会编程啊</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-tags " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/10/08/scrollIntoView-and-scrollIntoViewIfNeeded-introduction/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Sea_ljf">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="小白丰的Blog~">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">scrollIntoView 与 scrollIntoViewIfNeeded API 介绍</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-10-08T20:32:59+08:00">
+                2017-10-08
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/API介绍/" itemprop="url" rel="index">
+                    <span itemprop="name">API介绍</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>Hello~亲爱的观众老爷们大家好！国庆中秋长假快放完了，是时候收拾心（ti）情（zhong）好好学习与工作啦。这次为大家带来的是两个好用 API 的介绍，其实也是偷懒神器。</p>
+<p>根据 <a href="https://developer.mozilla.org/zh-CN/docs/Web/API/Element/scrollIntoView" target="_blank" rel="noopener">MDN</a>的描述，<code>Element.scrollIntoView()</code>方法让当前的元素滚动到浏览器窗口的可视区域内。</p>
+<p>而<code>Element.scrollIntoViewIfNeeded（）</code>方法也是用来将不在浏览器窗口的可见区域内的元素滚动到浏览器窗口的可见区域。但如果该元素已经在浏览器窗口的可见区域内，则不会发生滚动。此方法是标准的Element.scrollIntoView()方法的专有变体。</p>
+<p>因而再有什么回到顶部、去到置顶位置和键盘弹出挡住输入框之类的需求，都可以简单解决了。</p>
+<a id="more"></a>
+<p>然而，面对好用的 API，前端们第一个反映都是，看兼容性！</p>
+<p>先看<code>scrollIntoView</code>的：</p>
+<p><img src="https://user-gold-cdn.xitu.io/2017/10/6/fe81e231a974d45ac878b2c0c63ecb5d" alt=""></p>
+<p>看到一片黄黄绿绿的，基本可以安心，不支持的只是某个属性的取值而已，下面会有介绍~</p>
+<p>之后看看<code>scrollIntoViewIfNeeded</code>：</p>
+<p><img src="https://user-gold-cdn.xitu.io/2017/10/6/0f1344a4895d70a52954ed92f58ffcb9" alt=""></p>
+<p><code>IE</code>和<code>FireFox</code>全红，如果<code>PC</code>端想用的话，基本只能内部项目了，略为可惜。但移动端还是绿悠悠的，基本都OK，可以安心使用~</p>
+<p>由于本文是介绍向~因而每个属性我都写了点小<code>demo</code>，点进去就可以体验一下哦！</p>
+<h2 id="scrollIntoView"><a href="#scrollIntoView" class="headerlink" title="scrollIntoView"></a>scrollIntoView</h2><p>先介绍<code>scrollIntoView</code>,使用起来其实很简单，获取某个元素后，直接调用<code>scrollIntoViewIfNeeded()</code>即可，简单的<code>demo</code><a href="https://ljf0113.github.io/scrollIntoView-and-scrollIntoView/scrollIntoView-1" target="_blank" rel="noopener">点这就好</a>，点一下侧边的小绿块，页面就会滚上去。<code>demo</code>代码大概长这样：</p>
+<pre><code>&lt;body&gt;
+    &lt;div class=&quot;chunk&quot;&gt;&lt;/div&gt;
+    &lt;div class=&quot;btn&quot;&gt;click&lt;/div&gt;
+    &lt;script&gt;
+    const btn = document.querySelector(&apos;.btn&apos;);
+    const test = document.querySelector(&apos;.chunk&apos;);
+    btn.addEventListener(&apos;click&apos;, function() {
+      test.scrollIntoView();
+    })
+    &lt;/script&gt;
+&lt;/body&gt;
+</code></pre><p>是不是很简单~不过可能有同学就有疑问了，这不就和锚点定位一样吗？感觉毫无意义啊！先别急，当你调用<code>scrollIntoView</code>的时候，其实是可以传参数进去的。<code>scrollIntoView</code>只接受一个参数，但接受两种类型的参数，分别是<code>Boolean</code>型参数和<code>Object</code>型参数。</p>
+<p>先说<code>Boolean</code>型参数，顾名思义，参数可以使<code>true</code>和<code>false</code>。如果为<code>true</code>，元素的顶端将和其所在滚动区的可视区域的顶端对齐。若为<code>false</code>，元素的底端将和其所在滚动区的可视区域的底端对齐。简单的例子<a href="https://ljf0113.github.io/scrollIntoView-and-scrollIntoView/scrollIntoView-2" target="_blank" rel="noopener">可以点这里</a>。主要代码如下：</p>
+<pre><code>&lt;body&gt;
+    &lt;div class=&quot;chunk&quot;&gt;&lt;/div&gt;
+    &lt;div class=&quot;btn-top&quot;&gt;up&lt;/div&gt;
+    &lt;div class=&quot;btn-bottom&quot;&gt;down&lt;/div&gt;
+    &lt;script&gt;
+    const up = document.querySelector(&apos;.btn-top&apos;);
+    const down = document.querySelector(&apos;.btn-bottom&apos;);
+    const test = document.querySelector(&apos;.chunk&apos;);
+    up.addEventListener(&apos;click&apos;, function() {
+      test.scrollIntoView(true);
+    });
+    down.addEventListener(&apos;click&apos;, function() {
+      test.scrollIntoView(false);
+    });
+    &lt;/script&gt;
+&lt;/body&gt;
+</code></pre><p>如你所见到的，当传入参数为分别为<code>true</code>与<code>false</code>时，当点击右侧的按钮时，红色的<code>div</code>会贴近可视区域的顶部或底部。</p>
+<p>之后是<code>Object</code>型参数，这个对象有两个选项，也就是对象里面的<code>key</code>。<code>block</code>与之前的<code>Boolean</code>型参数一致，不过值不再是<code>true</code>和<code>false</code>，是更语义化的<code>start</code>和<code>end</code>。</p>
+<p>另一个选项是<code>behavior</code>,MDN上给出三个可取的值，分别是<code>auto</code>、<code>instant</code>与<code>smooth</code>。这个选项决定页面是如何滚动的，实测<code>auto</code>与<code>instant</code>都是瞬间跳到相应的位置，查阅<code>W3C</code>后发现了这么一句:”The instant value of scroll-behavior was renamed to auto.”。因而基本可以确定两者表现是一致的。而<code>smooth</code>就是有动画的过程，可惜的是之前提及兼容性时说过，黄色其实不支持某个属性，就是不支持<code>behavior</code>取值为<code>smooth</code>。而且，实测了IE及移动端的UC浏览器后发现，它们根本就不支持<code>Object</code>型参数，因而在调用<code>scrollIntoView({...})</code>时，只有默认的结果，即<code>scrollIntoView(true)</code>。简单的例子<a href="https://ljf0113.github.io/scrollIntoView-and-scrollIntoView/scrollIntoView-3" target="_blank" rel="noopener">看这里</a>，如果想体验<code>smooth</code>的效果，需要使用Chrome或者Firefox哦！主要代码如下：</p>
+<pre><code>&lt;body&gt;
+    &lt;div class=&quot;chunk&quot;&gt;&lt;/div&gt;
+    &lt;div class=&quot;btn-top&quot;&gt;up&lt;/div&gt;
+    &lt;div class=&quot;btn-bottom&quot;&gt;down&lt;/div&gt;
+    &lt;script&gt;
+    const up = document.querySelector(&apos;.btn-top&apos;);
+    const down = document.querySelector(&apos;.btn-bottom&apos;);
+    const test = document.querySelector(&apos;.chunk&apos;);
+    up.addEventListener(&apos;click&apos;, function() {
+      test.scrollIntoView({
+        block: &apos;start&apos;,
+        behavior: &apos;smooth&apos;
+      });
+    });
+    down.addEventListener(&apos;click&apos;, function() {
+      test.scrollIntoView({
+        block: &apos;end&apos;,
+        behavior: &apos;smooth&apos;
+      });
+    });
+    &lt;/script&gt;
+&lt;/body&gt;
+</code></pre><h2 id="scrollIntoViewIfNeeded"><a href="#scrollIntoViewIfNeeded" class="headerlink" title="scrollIntoViewIfNeeded"></a>scrollIntoViewIfNeeded</h2><p>介绍完<code>scrollIntoView</code>，是时候介绍一下它的变体<code>scrollIntoViewIfNeeded</code>了。两者主要区别有两个。首先是<code>scrollIntoViewIfNeeded</code>是比较懒散的，如果元素在可视区域，那么调用它的时候，页面是不会发生滚动的。其次是<code>scrollIntoViewIfNeeded</code>只有<code>Boolean</code>型参数，也就是说，都是瞬间滚动，没有动画的可能了。</p>
+<p><code>scrollIntoViewIfNeeded</code>可以接受一个<code>Boolean</code>型参数，和<code>scrollIntoView</code>不同，<code>true</code>为默认值，但不是滚动到顶部，而是让元素在可视区域中居中对齐；<code>false</code>时元素可能顶部或底部对齐，视乎元素靠哪边更近。简单的例子<a href="https://ljf0113.github.io/scrollIntoView-and-scrollIntoView/scrollIntoViewIfNeeded" target="_blank" rel="noopener">可以点这里</a>。大致代码如下：</p>
+<pre><code>&lt;body&gt;
+    &lt;div class=&quot;chunk&quot;&gt;&lt;/div&gt;
+    &lt;div class=&quot;scrollIntoView&quot;&gt;scrollIntoView top&lt;/div&gt;
+    &lt;div class=&quot;scrollIntoViewIfNeeded-top&quot;&gt;scrollIntoViewIfNeeded top&lt;/div&gt;
+    &lt;div class=&quot;scrollIntoViewIfNeeded-bottom&quot;&gt;scrollIntoViewIfNeeded botom&lt;/div&gt;
+    &lt;script&gt;
+    const scrollIntoView = document.querySelector(&apos;.scrollIntoView&apos;);
+    const scrollIntoViewIfNeededTop = document.querySelector(&apos;.scrollIntoViewIfNeeded-top&apos;);
+    const scrollIntoViewIfNeededBottom = document.querySelector(&apos;.scrollIntoViewIfNeeded-bottom&apos;);
+    const test = document.querySelector(&apos;.chunk&apos;);
+    scrollIntoView.addEventListener(&apos;click&apos;, function() {
+      test.scrollIntoView(true);
+    });
+    scrollIntoViewIfNeededTop.addEventListener(&apos;click&apos;, function() {
+      test.scrollIntoViewIfNeeded(true);
+    });
+    scrollIntoViewIfNeededBottom.addEventListener(&apos;click&apos;, function() {
+      test.scrollIntoViewIfNeeded(false);
+    });
+    &lt;/script&gt;
+&lt;/body&gt;
+</code></pre><p>如文档所说，当红色的<code>div</code>完全在可视区域的情况下，调用<code>scrollIntoView()</code>是会发生滚动，而调用<code>scrollIntoViewIfNeeded()</code>则不会。而我实践后发现了一些文档没有的细节。当元素处于可视区域，但不是全部可见的情况下，调用<code>scrollIntoViewIfNeeded()</code>时，无论参数是<code>true</code>还是<code>false</code>，都会发生滚动，而且效果是滚动到元素与可视区域顶部或底部对齐，视乎元素离哪端更近。这个大家需要注意一下~</p>
+<h2 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h2><p>其实这个API并不是必须的，有很多其他方法可以达到它的效果。然而在条件许可的情况下，使用一下是能节省下好多的<code>JS</code>代码或是一堆锚点，还是很爽的。</p>
+<p>感谢各位看官大人看到这里~希望本文对你有所帮助，记得使用一下这两个API哦！</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Javascript/" rel="tag"># Javascript</a>
+          
+            <a href="/tags/DOM/" rel="tag"># DOM</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/09/24/how-css-and-js-block-dom/" rel="next" title="原来 CSS 与 JS 是这样阻塞 DOM 解析和渲染的">
+                <i class="fa fa-chevron-left"></i> 原来 CSS 与 JS 是这样阻塞 DOM 解析和渲染的
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/10/21/you-may-know-more-about-osi-model/" rel="prev" title="或许这样能帮你了解  OSI 七层模型">
+                或许这样能帮你了解  OSI 七层模型 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.jpg"
+               alt="Sea_ljf" />
+          <p class="site-author-name" itemprop="name">Sea_ljf</p>
+           
+              <p class="site-description motion-element" itemprop="description"></p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">24</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">4</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">15</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/ljf0113" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#scrollIntoView"><span class="nav-number">1.</span> <span class="nav-text">scrollIntoView</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#scrollIntoViewIfNeeded"><span class="nav-number">2.</span> <span class="nav-text">scrollIntoViewIfNeeded</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#小结"><span class="nav-number">3.</span> <span class="nav-text">小结</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Sea_ljf</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.1"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

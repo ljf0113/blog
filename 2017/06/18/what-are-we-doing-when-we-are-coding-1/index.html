@@ -1,0 +1,816 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Web,前端," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.1" />
+
+
+
+
+
+
+<meta name="description" content="本系列是关于《代码大全》的读书笔记，也会结合工作中的经历来印证书中的内容，也算是对过往工作的总结吧，所以别奇怪为何看着看着就没了书的内容，全是工作例子了（手动滑稽）。 友情提示，本文可能比较适合菜鸟阅读，也求大神多给意见。期待与大家共同进步，与诸君共勉！">
+<meta name="keywords" content="Web,前端">
+<meta property="og:type" content="article">
+<meta property="og:title" content="当我们在写代码时，我们究竟在做什么？ 《代码大全》读书笔记 （一）">
+<meta property="og:url" content="http://yoursite.com/2017/06/18/what-are-we-doing-when-we-are-coding-1/index.html">
+<meta property="og:site_name" content="小白丰的Blog~">
+<meta property="og:description" content="本系列是关于《代码大全》的读书笔记，也会结合工作中的经历来印证书中的内容，也算是对过往工作的总结吧，所以别奇怪为何看着看着就没了书的内容，全是工作例子了（手动滑稽）。 友情提示，本文可能比较适合菜鸟阅读，也求大神多给意见。期待与大家共同进步，与诸君共勉！">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2017-06-18T13:11:19.650Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="当我们在写代码时，我们究竟在做什么？ 《代码大全》读书笔记 （一）">
+<meta name="twitter:description" content="本系列是关于《代码大全》的读书笔记，也会结合工作中的经历来印证书中的内容，也算是对过往工作的总结吧，所以别奇怪为何看着看着就没了书的内容，全是工作例子了（手动滑稽）。 友情提示，本文可能比较适合菜鸟阅读，也求大神多给意见。期待与大家共同进步，与诸君共勉！">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2017/06/18/what-are-we-doing-when-we-are-coding-1/"/>
+
+
+
+
+
+  <title>当我们在写代码时，我们究竟在做什么？ 《代码大全》读书笔记 （一） | 小白丰的Blog~</title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">小白丰的Blog~</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">虽然我学的是心理学，但我会编程啊</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-tags " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/06/18/what-are-we-doing-when-we-are-coding-1/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Sea_ljf">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="小白丰的Blog~">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">当我们在写代码时，我们究竟在做什么？ 《代码大全》读书笔记 （一）</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-06-18T14:27:57+08:00">
+                2017-06-18
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/读书笔记/" itemprop="url" rel="index">
+                    <span itemprop="name">读书笔记</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>本系列是关于《代码大全》的读书笔记，也会结合工作中的经历来印证书中的内容，也算是对过往工作的总结吧，所以别奇怪为何看着看着就没了书的内容，全是工作例子了（手动滑稽）。</p>
+<p>友情提示，本文可能比较适合菜鸟阅读，也求大神多给意见。期待与大家共同进步，与诸君共勉！</p>
+<a id="more"></a>
+<hr>
+<h3 id="写作背景"><a href="#写作背景" class="headerlink" title="写作背景"></a>写作背景</h3><p>写文章其实是挺烦的一件事情，至于为何还要开坑写系列文章，那就更奇怪了。总的来说，有这么两个原因：</p>
+<blockquote>
+<p>“学成文武艺，货与帝王家。”</p>
+</blockquote>
+<p>这是最基本的原因，我不写，公司怎么知道我水平去到哪，怎么会对我有兴趣呢？这是可以解决生存的基本问题呢！说出来也没啥可耻的。</p>
+<blockquote>
+<p>“纸上得来终觉浅，绝知此事要躬行。”</p>
+</blockquote>
+<p>我是一个“聪明的人”，学东西很快，自学半年能静心啃下十多本书，前端知识我都会一点，过得了面试也应付得了工作。但我又是个愚蠢的人，前端知识，无一精通，这导致我心中充满了焦虑。我这个半路出家的和尚，之前学的还是不搭边的心理学，总怀疑着会不会被淘汰，处于一种极其不安的状态。虽然工作中感觉内容我都会，但就是比同事差一点，问别人问题也经常傻傻说不清，也感觉工作进入“瓶颈期”，一直写着业务代码但水平却毫无进步。静心思考后，其实这是因为自己基础不稳固，这很可能就是你和他人之间的差别了。即使知识接受得很快，但只通过阅读是无法真正掌握知识的，很容易看过就忘。他人说出的解决方案，好像我也会啊，但我忘记了，这也许是不少同学的状态。“好记性不如烂笔头”，既然脑袋不够，那就手指来凑吧！</p>
+<hr>
+<h3 id="当我们在写代码时，我们究竟在做什么？"><a href="#当我们在写代码时，我们究竟在做什么？" class="headerlink" title="当我们在写代码时，我们究竟在做什么？"></a>当我们在写代码时，我们究竟在做什么？</h3><p>也许你不信，我真不断地思考这个问题。学术上说，我们写代码是软件构建过程中的一个环节，整体软件构建包含以下活动：</p>
+<ul>
+<li>定义问题</li>
+<li>需求分析</li>
+<li>规划构建</li>
+<li>软件架构</li>
+<li>详细设计</li>
+<li>编码与测试</li>
+<li>单元测试</li>
+<li>集成测试</li>
+<li>集成</li>
+<li>系统测试</li>
+<li>保障维护</li>
+</ul>
+<p>作为一名前端，我第一次看到这过程时候，我都惊呆了。作为码农，不就应该卷起袖子，就是干吗？为何有这么多环节，不应该是编码与测试就够了，甚至测试都不要吗？某程度上说，这也是对的，对于个人项目或者不太正规的项目而言，都能归为“编程”。但对于正式的项目而言，上述的每一项活动都影响着我们该如何去写代码，都会影响着项目的成败。如果你只能写代码，当然也可以，但你只能成为码农，而隔壁的同事是程序员，你的技术老大是工程师。<strong>你对软件构建的理解程度，决定了你这名程序员的优秀程度</strong>。</p>
+<p>那么，应该怎么去理解软件开发呢？书中给出的建议是，可以尝试用隐喻去理解，也就是类比。</p>
+<blockquote>
+<p>通过把你不太理解的东西和一些你较为理解、且十分类似的东西做比较，你可以对这些不太理解的东西产生更深刻的理解。</p>
+</blockquote>
+<p>用一个高大上但你能秒懂的词做总结：建模。科学界中其实蛮多这种例子，比如气体的运动理论就是一堆小球对撞，从气动理论变成小球对撞，理解起来是不是容易很多了？那么，软件中应该怎么做类比呢？我认为书中有两个例子特别好。</p>
+<ol>
+<li>写信</li>
+<li>建筑</li>
+</ol>
+<p>写信的例子简单易懂，对于个人项目其实十分适合，就是<code>坐下来，拿出文房四宝，从头写到尾就完了。这时候不需要正规做计划，你想到什么把它写出来就是了</code>。</p>
+<p>建筑的类比则复杂的多。<code>首先你要决定准备建一个什么类型的房子 —— 在软件开发里的类似事项被称为问题定义。接下来，你必须和某个建筑师探讨这一总体设计，并得到批准。这跟软件架构设计十分相似。然后你画出详细的蓝图，雇一个承包人。就像软件的详细设计。再然后，你要准备好建筑地点，打好基础，搭建房屋框架，砌好边墙，盖好房顶，通好水、电、煤气等。这就是如同是软件的构建一样。在房子大部分完成之后，庭院设计师、油漆匠和装修工还要来把你新盖的家以及里面的家什美化一番。这就好比软件的优化过程。在整个过程中，还会有各种监察人员来监察工地、地基、框架、布线以及其他需要监察的地方。这相当与软件评审和详查。</code>试想一下，如果开始阶段的设计就错了，建起来的房子就是危房，或者是根本不是所需要的房子，这导致的时间与金钱损失就十分大了。而我们再写代码前，又参与了多少前期设计工作呢？或者说，我们是否对设计有充分的理解，避免写出来的代码“货不对板”？</p>
+<hr>
+<h3 id="前期工作"><a href="#前期工作" class="headerlink" title="前期工作"></a>前期工作</h3><p>大家是否有这样一种体验，当被叫去参加需求评审、项目设计等会议时，心里总是拒绝的。这一方面是由于事情多得做不完，希望安心敲代码，另一方面则觉得那种会议毫无营养，浪费时间。我有段时间也都是这么觉得，直到有次我吃了个大亏。当时需求评审时，我没有认真参与，导致最后的设计对前端非常不友好，后端返回的收据太散，我难以整合。后来再与后端同学沟通时，他们表示无法修改，因为设计已经定下来了，我也无言以对，只好在node端下功夫，多发请求。这是一个典型的忽视前期工作的栗子，还好只是内部项目，对性能要求不高，不然这个项目就失败了。</p>
+<p>编程，也就是写代码是处于项目中期阶段的，试想一下，如果前期的设计有问题，那么中期你怎么优化代码，也于事无补，这是结构性的问题。<code>在你开始构建（写代码）的时候，项目前期工作已经或多或少地为这个项目的成功或失败打下了基础。</code>无数的事实也调查研究都表明，返工改代码的成本会随着项目完成度成正比，也就是越迟改成本越高。换个角度想，前期准备好了，我们写代码时候也更爽，能避免很多压力，这何乐而不为呢？毕竟你唯一有机会反抗的阶段，就是前期啊，定好计划后再反抗，基本不会成功的。那么，前期工作要做什么、怎么做、怎样才算做好呢？</p>
+<h4 id="定义问题"><a href="#定义问题" class="headerlink" title="定义问题"></a>定义问题</h4><p>开发之前，先清除问题是什么。产品或运营经常一拍脑子，想出个点子就要求必须做到，但他们的需求，真的一点合理吗？经常出现的场景是，需求方感觉到产品有优化的空间，但他们不懂技术，导致提出的需求技术上难以实现。所以我们有必要为他们理清思绪，抓住他们到底要的是什么，最后出他们真正的问题是什么。这里举个小栗子：曾经碰到产品经理给我提需求，说新上的图集大受欢迎，但返回数据太慢，要加快，不管如何都要压缩响应时间。然而图集嘛，就是很多图片，不太存在压缩的可能。后面一想，其实这问题就是优化体验，而不时压缩时间，那么我前端给你来个动画就好了，用户体验会好很多，产品也接受这种方案。<strong>所以，问对问题十分重要，如果问题定义不对，你花力气解决的是个假问题，既浪费了时间，也没有解决问题，这是双重惩罚。</strong></p>
+<h4 id="需求相关"><a href="#需求相关" class="headerlink" title="需求相关"></a>需求相关</h4><p>明确的需求有助于确保你做出来的东西，真的是对方需要的，也避免了我们开发过程中去瞎猜对方到底想要的是什么。这点我相信大家都深有体会，我就不详述这方面的内容，但值得主要的是：明确需求，并不代表项目开始时就列出所有需求，开发过程中不作更改。这基本是不可能的，尤其是前端开发节奏相对较快的环境下，需求多变是很正常的，我们并不应该惧怕与抗拒需求的修改，而是应该采取一些措施使得需求修改的影响最小化，以下选取书中其中一部分方式加以说明。</p>
+<ul>
+<li>确保每个人都知道需求变更的代价。</li>
+<li>简历一套变更控制程序。</li>
+<li>使用能适应变更的开发方法。</li>
+</ul>
+<p>（书中方式一共有6个，有兴趣的同学可以自行翻阅，只是这三个是比较好实行的。）产品经理偶尔（经常）是一种拍脑袋之后就想实行的生物，当我们接到新需求时，是不是经常推说你正式提个需求过来我再接呢？也许我们当时只是借口，但这应该成为一种制度。需求的提出不应该是无序的，每个人都应该明白提出需求后，完成它需要多少的成本，可能会耽误工作多少进度，这样许多“必须要有”就会变成“有就最好”了。当然，更多的时候是需求会继续压过来，这时候我们就该建立一套制度去进行需求评审，大家好好PK一下什么是最重要的，什么是次重要的，如何在不影响整体进度的情况下完成需求，明确现在的主要矛盾，这才是正确解决问题的途径。请记住，<strong>充分详尽地描述需求，是项目成功的关键，它很可能比有效的构建技术更重要。</strong></p>
+<h4 id="架构"><a href="#架构" class="headerlink" title="架构"></a>架构</h4><p>对我而言，架构这个词真的是高大上的代名词，但，它究竟是什么呢？相信不少同学也是似懂非懂，书中对此给出了解释。</p>
+<blockquote>
+<p>软件架构是软件设计的高层部分，是用于支撑细节的设计的框架。<br>架构的质量决定了系统的“概念完整性”。后者继而决定了系统的最终质量。一个经过慎重考虑的架构未“从顶层到底层维护系统的概念完整性”提供了必备的结构和体系，它为程序员提供了指引 —— 其细节成都与程序员的技能和手边的工作相配。它将工作氛围几个部分，使多个开发者或者多个开发团队可以独立工作。<br>离开了良好的软件架构，你可能瞄准了正确的问题，但却使用了错误的解决方案，也许完全不可能有成功的构建。</p>
+</blockquote>
+<p>一般而言，架构由以下部分组成。</p>
+<ul>
+<li>程序组织</li>
+<li>主要的类</li>
+<li>数据设计</li>
+<li>业务规则</li>
+<li>用户界面设计</li>
+<li>资源管理</li>
+<li>安全性</li>
+<li>性能</li>
+<li>可伸缩性</li>
+<li>互用性</li>
+<li>国际化/本地化</li>
+<li>输入输出</li>
+<li>错误处理</li>
+<li>容错性</li>
+<li>架构的可行性</li>
+<li>过度工程</li>
+<li>关于“买”还是“造”的决策</li>
+<li>关于复用的决策</li>
+<li>变更策略</li>
+</ul>
+<p>书中有很多概念写的东西，有兴趣的同学可以自行翻阅。我就对其中一些，结合自己的项目经验谈一谈。</p>
+<p>首先是用户界面设计，设计必须简单易懂，不然就算功能再强也毫无用处。这个反例我想举今年广州美院毕设展览上，地铁购票机的设计。整体设计美观，功能完备！但，太复杂了。如果我是第一次使用购票机的人，我觉得我需要花很长时间才能买到票，也不会喜欢这样的体验。不要高估你用户的智商，也<code>Don&#39;t make me think!</code>。</p>
+<p>跟着是错误处理。这点对于前端而言，主要还是该如何提示用户程序跪了，你该如何复活它。我曾经因为赶项目，直接忽视了错误提示，导致一切的bug都会导致静默失败，按F12当然是能看到错误在哪，但用户并无感知，他就认为你的web应用质量糟糕，无法忍受。从此之后，我对于错误都会进行提示，告诉用户如何解决它。某程度上，只要你告诉用户如何解决错误，他是能忍受一定程度上的错误的，体验上提高了程序的可用性。</p>
+<p>最后是关于“买”还是“造”的决策。大家都喜欢造轮子，这个没有问题，但应该正确评估现有的开源程序能否满足设计，你造的轮子会不会成为bug的新来源，你有多少时间去造轮子等。不要为了造轮子而造轮子！</p>
+<h4 id="关键的“构建”决策"><a href="#关键的“构建”决策" class="headerlink" title="关键的“构建”决策"></a>关键的“构建”决策</h4><p>1.选择编程语言</p>
+<p>公司走的是阿里那套大前端方案，有一部分的后端其实也是前端写的，我们基本会采用node作为编程语言。其实后端语言的语言性能上差距都不会特别大，诚如PHP可以支撑Facebook等大流量网站，Python可以撑得起知乎的业务，Java就更不用说了。那么选择语言，可能就只是选择喜好了。选择node，更大的原因是前后端都共用一种语言，不用切换，而且前端同学入门node相对容易一点。这里希望大家知道一点：<strong>对于一个手中只有榔头的人,他所看到的问题都是钉子</strong>。不要被局限在语言这个层面上，选择适合的，团队都能接受的，才是最重要的。</p>
+<p>2.编程约定</p>
+<p>约定是包括多方面的，如变量名称、类的名称、函数名称、格式约定、注释约定等，不少同学认为这是毫无意义的，代码就是怎么爽怎么写，只要不出bug就可以了。但我们不一定都在开发新程序，当你在维护旧程序时，看到风格不一的各种代码，相信我，你会发疯的！维护统一的一种风格，我们阅读代码时就能专注于问题的所在，而不是去理解不同编程风格之间的差异。</p>
+<hr>
+<h3 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h3><p>希望看完这篇文章之后，大家会对前期过程中有更深入的理解，对大家有帮助。其实作为程序员或更进一步的工程师，我们怎样才能被人淘汰，我们的价值在哪，取决于你创造出的产品质量如何，而不单是你代码能力多强（当然，这非常重要，以后的文章会围绕这方面进行叙说）。纯粹会写代码，很容易就被后来的小鲜肉追上，毕竟随着年龄的增长，精力会下降，而纯粹写代码，工作年限的价值不高，远不如医生、律师等。而如何才能做到在团队中自己不可或缺呢，就应该在其他方面（不单是代码能力方面）下功夫，能全面地考虑问题，这才是你的价值所在。</p>
+<p>对我而言，希望有一天我可以做到：<strong>有我，团队会有不同</strong>。</p>
+<p>第一次写文章，不当之处，还请海涵。</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Web/" rel="tag"># Web</a>
+          
+            <a href="/tags/前端/" rel="tag"># 前端</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/06/04/top-11-javascript-libraries-that-are-worth-your-attention-2989-html/" rel="next" title="十一个你值得关注的优秀 Javascript 库">
+                <i class="fa fa-chevron-left"></i> 十一个你值得关注的优秀 Javascript 库
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/07/05/back-to-basics-what-are-callbacks-in-javascript-mdash-sitepoint/" rel="prev" title="回归基础：在JavaScript中回调函数是什么？ — SitePoint">
+                回归基础：在JavaScript中回调函数是什么？ — SitePoint <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.jpg"
+               alt="Sea_ljf" />
+          <p class="site-author-name" itemprop="name">Sea_ljf</p>
+           
+              <p class="site-description motion-element" itemprop="description"></p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">24</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">4</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">15</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/ljf0113" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#写作背景"><span class="nav-number">1.</span> <span class="nav-text">写作背景</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#当我们在写代码时，我们究竟在做什么？"><span class="nav-number">2.</span> <span class="nav-text">当我们在写代码时，我们究竟在做什么？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#前期工作"><span class="nav-number">3.</span> <span class="nav-text">前期工作</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#定义问题"><span class="nav-number">3.1.</span> <span class="nav-text">定义问题</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#需求相关"><span class="nav-number">3.2.</span> <span class="nav-text">需求相关</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#架构"><span class="nav-number">3.3.</span> <span class="nav-text">架构</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#关键的“构建”决策"><span class="nav-number">3.4.</span> <span class="nav-text">关键的“构建”决策</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#小结"><span class="nav-number">4.</span> <span class="nav-text">小结</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Sea_ljf</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.1"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

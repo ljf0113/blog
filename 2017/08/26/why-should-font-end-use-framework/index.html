@@ -1,0 +1,930 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Javascript," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.1" />
+
+
+
+
+
+
+<meta name="description" content="亲爱的观众老婆们好～最近在团队里组织了一次内容关于React的分享，然而后端有同学反映未能理解为何前端需要使用框架，框架究竟解决了什么问题。 回想刚入坑前端的时候，也接触了一些PHP，当了解到其实PHP可以生成HTML模板之后，对前端的信仰几乎崩溃。既然后端就可以渲染前端的话，前端价值到底在哪？感觉页面就是随便切一下就行，根本没必要用框架，当时着实迷茫了很久。 后来对前端领域接触深了，再经过大神的">
+<meta name="keywords" content="Javascript">
+<meta property="og:type" content="article">
+<meta property="og:title" content="为何前端需要框架？（小白向）">
+<meta property="og:url" content="http://yoursite.com/2017/08/26/why-should-font-end-use-framework/index.html">
+<meta property="og:site_name" content="小白丰的Blog~">
+<meta property="og:description" content="亲爱的观众老婆们好～最近在团队里组织了一次内容关于React的分享，然而后端有同学反映未能理解为何前端需要使用框架，框架究竟解决了什么问题。 回想刚入坑前端的时候，也接触了一些PHP，当了解到其实PHP可以生成HTML模板之后，对前端的信仰几乎崩溃。既然后端就可以渲染前端的话，前端价值到底在哪？感觉页面就是随便切一下就行，根本没必要用框架，当时着实迷茫了很久。 后来对前端领域接触深了，再经过大神的">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://user-gold-cdn.xitu.io/2017/8/26/220a40b6e183fc2d57e171639cefd024">
+<meta property="og:image" content="https://user-gold-cdn.xitu.io/2017/8/25/6c25dce17b63d47ae4eb2cf562906ed4">
+<meta property="og:image" content="https://user-gold-cdn.xitu.io/2017/8/25/22e5bf01c6bea66d6a54372e861d9334">
+<meta property="og:updated_time" content="2017-08-26T14:49:45.843Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="为何前端需要框架？（小白向）">
+<meta name="twitter:description" content="亲爱的观众老婆们好～最近在团队里组织了一次内容关于React的分享，然而后端有同学反映未能理解为何前端需要使用框架，框架究竟解决了什么问题。 回想刚入坑前端的时候，也接触了一些PHP，当了解到其实PHP可以生成HTML模板之后，对前端的信仰几乎崩溃。既然后端就可以渲染前端的话，前端价值到底在哪？感觉页面就是随便切一下就行，根本没必要用框架，当时着实迷茫了很久。 后来对前端领域接触深了，再经过大神的">
+<meta name="twitter:image" content="https://user-gold-cdn.xitu.io/2017/8/26/220a40b6e183fc2d57e171639cefd024">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2017/08/26/why-should-font-end-use-framework/"/>
+
+
+
+
+
+  <title>为何前端需要框架？（小白向） | 小白丰的Blog~</title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">小白丰的Blog~</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">虽然我学的是心理学，但我会编程啊</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-tags " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/08/26/why-should-font-end-use-framework/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Sea_ljf">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="小白丰的Blog~">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">为何前端需要框架？（小白向）</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-08-26T21:37:54+08:00">
+                2017-08-26
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/日常小结/" itemprop="url" rel="index">
+                    <span itemprop="name">日常小结</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>亲爱的观众老婆们好～最近在团队里组织了一次内容关于React的分享，然而后端有同学反映未能理解为何前端需要使用框架，框架究竟解决了什么问题。</p>
+<p>回想刚入坑前端的时候，也接触了一些PHP，当了解到其实PHP可以生成HTML模板之后，对前端的信仰几乎崩溃。既然后端就可以渲染前端的话，前端价值到底在哪？感觉页面就是随便切一下就行，根本没必要用框架，当时着实迷茫了很久。</p>
+<p>后来对前端领域接触深了，再经过大神的指点，总算是理解为何前端需要使用框架。根据自己的理解，再结合分享时后端同学的疑问，于是有了这篇文章。本文相对小白向，只是通过虚拟一个项目说明问题，还望各位大神不吝赐教。</p>
+<a id="more"></a>
+<h2 id="开始新项目"><a href="#开始新项目" class="headerlink" title="开始新项目"></a>开始新项目</h2><blockquote>
+<p>产品： 来来来，新项目来啦。最近发现用户喜欢撸猫，我们来个在线云撸猫！页面要求有猫图，点一下计数加一点当撸了一次！多久能上线？？</p>
+</blockquote>
+<p>这个简单啊！<br><img src="https://user-gold-cdn.xitu.io/2017/8/26/220a40b6e183fc2d57e171639cefd024" alt=""></p>
+<p>厉害的我连jQuery都不用，原生上！</p>
+<pre><code>&lt;body&gt;
+    &lt;img src=&quot;1.jpg&quot; alt=&quot;&quot;&gt;
+    &lt;p&gt;0&lt;/p&gt;
+    &lt;script&gt;
+        const img = document.querySelector(&apos;img&apos;);
+        const p = document.querySelector(&apos;p&apos;);
+        let count = 0;
+        img.addEventListener(&apos;click&apos;, function() {
+          count += 1;
+          p.innerHTML = count;
+        })
+    &lt;/script&gt;
+&lt;/body&gt;
+</code></pre><p>简单易懂，对不对！</p>
+<h2 id="需求变更"><a href="#需求变更" class="headerlink" title="需求变更"></a>需求变更</h2><blockquote>
+<p>产品： 线上大受欢迎，然而要改需求了爸爸！现在要两只喵，点击要分开算哦，各自显示就好。你最棒了，我知道你肯定可以的！</p>
+</blockquote>
+<p>看在叫了爸爸的份上，还是给他改一下吧。然而第一个版本多粗糙啊，各种污染全局变量，第二版我要写得棒棒的！</p>
+<pre><code>&lt;body&gt;
+&lt;section class=&quot;catSection&quot;&gt;
+    &lt;img src=&quot;cat1.jpg&quot; alt=&quot;&quot; class=&quot;catImg&quot;&gt;
+    &lt;p class=&quot;catCount&quot;&gt;0&lt;/p&gt;
+&lt;/section&gt;
+&lt;section class=&quot;catSection&quot;&gt;
+    &lt;img src=&quot;cat2.jpg&quot; alt=&quot;&quot; class=&quot;catImg&quot;&gt;
+    &lt;p class=&quot;catCount&quot;&gt;0&lt;/p&gt;
+&lt;/section&gt;
+&lt;script&gt;
+    (function() {
+      const catSection = document.querySelectorAll(&apos;.catSection&apos;);
+      catSection.forEach((section) =&gt; {
+        let count = 0;
+        const catImg = section.querySelector(&apos;.catImg&apos;);
+        const catCount = section.querySelector(&apos;.catCount&apos;);
+        catImg.addEventListener(&apos;click&apos;, () =&gt; {
+          count++;
+          catCount.innerHTML = count;
+        })
+      })
+    })()
+&lt;/script&gt;
+</code></pre><p></p>
+<p>没有污染全局变量，还可以扩展需求，后续产品就算要求再多的猫我都能hold住！<br><img src="https://user-gold-cdn.xitu.io/2017/8/25/6c25dce17b63d47ae4eb2cf562906ed4" alt=""></p>
+<h2 id="再一次需求变更"><a href="#再一次需求变更" class="headerlink" title="再一次需求变更"></a>再一次需求变更</h2><blockquote>
+<p>产品： 父皇，你听我说啊，就最后一次，真的最后一次。现在猫两只不够啊，但太多的话展示又不好看。现在需求做一个列表，列表有N只猫，点那只猫展示那只猫，每次只展示意志，而且猫要有对应的名字哦，点击也要分开统计！其实跟以前差不多？就改改就好了。明天就要哦！</p>
+</blockquote>
+<p>我封装得好好的功能，你跟我说改需求？而且改得面目全非跟我说差不多？</p>
+<p><img src="https://user-gold-cdn.xitu.io/2017/8/25/22e5bf01c6bea66d6a54372e861d9334" alt=""></p>
+<p>然而，吐槽归吐槽，需求还是要做的。而且需求明天就要，代码写得再好也可能马上改功能，代码还是实现功能就算了吧。</p>
+<p>具体代码由各位看官自己实现（建议先停下来，动手去实现这个需求），这里我就不再上代码了。很可能我们这次写的代码，就不会太考虑什么全局变量污染，也不考虑封装的问题，逐渐趋向于实现功能就好了，因为需求太多了，时间和精力限制了去写“好”代码。</p>
+<p>当然了，产品经理说需求最后一次改，都是骗人的。下次可能会有点击到某个值时，自动切换猫，动态添加猫等等的新需求。我们现在这样组织代码的形式，是典型的”意大利面式“代码（简单说，就是各种东西整合在一起，层级不分，难以维护）。这种代码写起来直观，但日后的维护是相当难的。写出上述例子后，不妨隔两天再去看看能否轻易理解那一份代码。自己写的代码尚且如此，他人的更不在话下了。</p>
+<p>那么，这种随着项目越来越复杂，逻辑越来越多，我们该怎么写代码呢？</p>
+<h2 id="更好地组织代码"><a href="#更好地组织代码" class="headerlink" title="更好地组织代码"></a>更好地组织代码</h2><p>前端其实有一种说法：我们现在的”新“东西，都是其他领域玩过的。虽然看起来很气人，但这也是事实。当现状不知如何处理时，不妨参考下其他领域的解决方案。离前端比较近的就是后端了，那么后端是怎么管理的呢？最典型的设计就是MVC了。那么，前端能不能借鉴呢？</p>
+<p>说干就干，以上面的需求为例，我们试着用MVC的方式组织一下代码，看下和你刚才写的有什么不同。</p>
+<p>先来<code>M</code>，也就是Model，数据层，对外提供接口可以获取相关的数据。这么组织的话，是不是蛮好懂的：</p>
+<pre><code>const model = (function() {
+
+  //相关数据
+  const _model = {
+    catLists: [
+      {
+        src: &apos;1.jpg&apos;,
+        name: &apos;cat1&apos;,
+        count: 0
+      },
+      {
+        src: &apos;2.jpg&apos;,
+        name: &apos;cat2&apos;,
+        count: 0
+      }
+    ],
+    targetCatIndex: 0, //目前可被点击的是哪知喵在catLists中的索引
+  };
+
+  //获取getCatLists
+  function getCatLists() {
+    return _model.catLists;
+  }
+
+  //获取目标对象
+  function getTargetCatObj() {
+    return _model.catLists[_model.targetCatIndex];
+  }
+  //修改targetCatIndex
+  function setTargetCatIndex(name) {
+    _model.catLists.some((catObj, index) =&gt; {
+      if (catObj.name === name) {
+        _model.targetCatIndex = index;
+        return true
+      }
+    })
+  }
+
+  //目标对象点击数+1
+  function addTargetCatCount() {
+    const catObj = getTargetCatObj();
+    catObj.count += 1;
+  }
+
+  return {
+    getCatLists,
+    getTargetCatObj,
+    setTargetCatIndex,
+    addTargetCatCount
+  }
+})();
+</code></pre><p>在自执行函数中，设计了一个对象命名为<code>_model</code>，通过闭包存储它。自执行函数返回一个对象，其中包含四个函数。四个函数执行后，可以返回或修改<code>_model</code>中对应的数据。通过注释看其实还是挺清楚的。</p>
+<p>跟着是<code>V</code>，也就是view层，负责页面渲染。这个可能复杂一点，但不想把它弄得太繁琐，不如就两个方法吧。就一个初始化的<code>init()</code>和负责更新视图的<code>render()</code>方法就好啦。</p>
+<p>先确定HTML模板：</p>
+<pre><code>&lt;ul class=&quot;catList&quot;&gt;&lt;/ul&gt;
+&lt;section class=&quot;clickArea&quot;&gt;
+    &lt;img src=&quot;&quot; class=&quot;catImage&quot;&gt;
+    &lt;p class=&quot;catCount&quot;&gt;&lt;/p&gt;
+    &lt;p class=&quot;catName&quot;&gt;&lt;/p&gt;
+&lt;/section&gt;
+</code></pre><p>再组织一下view层的代码：</p>
+<pre><code>const view = (function() {
+
+  //获取各个需要操作的DOM节点
+  const img = document.querySelector(&apos;.catImage&apos;);
+  const name = document.querySelector(&apos;.catName&apos;);
+  const count = document.querySelector(&apos;.catCount&apos;);
+
+  //初始化页面
+  function init(catLists, targetObj) {
+    const list = document.querySelector(&apos;.catList&apos;);
+    const fragment = document.createDocumentFragment();
+    //为ul添加对应的li
+    for (let i = 0, len = catLists.length; i &lt; len; i++) {
+      const li = document.createElement(&apos;li&apos;);
+      const name = catLists[i].name;
+      li.innerHTML = name;
+      li.addEventListener(&apos;click&apos;, function() {
+        //之后会有controller相关的代码，其实就是换一只可点击的喵
+        controller.changeTargetCat(name);
+      });
+      fragment.appendChild(li);
+    }
+    list.appendChild(fragment);
+    img.addEventListener(&apos;click&apos;, function() {
+      //之后会有controller相关的代码，其实就是计数+1
+      controller.addCount(name);
+    });
+    render(targetObj);
+  }
+
+  //重新渲染页面
+  function render(targetObj) {
+    img.src = targetObj.src;
+    name.innerHTML = targetObj.name;
+    count.innerHTML = targetObj.count;
+  }
+
+  return {
+    init,
+    render
+  }
+})();
+</code></pre><p>view层的代码其实也很简单的，和model层的套路差不多，通过自执行函数结合闭包存储之后要操作的节点，对外暴露由两个方法组成的对象，分别是<code>init</code>与<code>render</code>。<code>init</code>用于初始化话页面，<code>render</code>用于重新渲染页面。里面调用了<code>controller</code>，其实就是之后要介绍的controller。</p>
+<p>最后是<code>C</code>层，也就是controller，主要是用于逻辑相关的处理，算是整个设计里面的大脑。不过由于这项目比较简单，所以代码反而是最简单的：</p>
+<pre><code>const controller = {
+  addCount(name) {
+    //通过model的接口增加目标对象的计数
+    model.addTargetCatCount(name);
+    controller.renderView();
+  },
+  changeTargetCat(name) {
+    //通过model的接口修改目标索引
+    model.setTargetCatIndex(name);
+    controller.renderView();
+  },
+  init() {
+    //通过model的接口获取相关数据
+    const { getCatLists, getTargetCatObj } = model;
+    //传参并命令view层初始化
+    view.init(getCatLists(), getTargetCatObj());
+  },
+  renderView() {
+    //传参并命令view层重新渲染
+    view.render(model.getTargetCatObj());
+  }
+};
+</code></pre><p>controller的设计其实是比较简陋的，只是一个包含了四个方法的对象。其中<code>addCount</code>对应点击加一的操作，<code>changeTargetCat</code>对应换猫的操作。上述两个方法其实是改变了数据的，而只要数据发生了变化，一律调用<code>renderView</code>重新渲染。</p>
+<p>至此主要代码已经写完了，之后调用一下<code>controller.init();</code>，就可以开心的撸猫，完成需求了。</p>
+<p>如果之前你动手实现了上述需求的话，不妨对比一下我们设计代码上的差别。也许你写的代码还是之前那种“面条式”代码，但它也是可用的啊，而且还不用这么多代码呢，长得也还算能维护的样子，为何要用这种繁琐的方式去阻止代码呢？</p>
+<p>然而，按照之前说的,产品可能提更多的需求，下次可能会有点击到某个值时，自动切换猫，动态添加猫等等的新需求时，你现在的代码组织形式能否很快地完成需求？当日后修改某些需求时，不小心触发了潜藏的bug（经常有的情况），又是否能快速定位出问题并快速改好呢？</p>
+<p>“面条式”代码经常是数据、视图与处理逻辑耦合起来的，很容易牵一发而动全身，当业务相当复杂的时候，开发可能还好说，维护简直是不可想象的。而你可能已经观察到了，遵循MVC设计的代码，虽然繁琐，但各层是完全分开的，尽管数据与视图可以直接调用对方的接口进行交互，但都是必须通过控制层来做统一处理。数据、视图与处理逻辑解耦之后，代码的可阅读性与可维护性都是一个飞跃。通过牺牲空间（多写代码）来换取代码的可维护性与可拓展性，这是一笔划算的买卖。</p>
+<h2 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h2><p>说了半天，好像还没有说出为何前端需要使用框架。然而在复杂的项目中，你同意我通过MVC组织代码会比“面条式”代码好吗？如果同意的话，将我刚才代码中不变的部分抽象起来（组件通讯、报错处理等），想方设法提高渲染的性能（使用Virtual Dom），如果认为前端和其他不一样，数据和视图还是可以进行受控的交互(即MVVM)，那么整合起来，不就是一个框架了吗？</p>
+<p>其实必须要承认，人的脑力是有限的，一款产品的需求可能是无限的。当这款产品已经让你无法掌握每个细节，每位参与开发的同学只能掌握局部细节，而其他部分只管调用是必然的事实。但是，如何确定其他部分可信，调用不会出bug呢？这时候就该使用框架了。框架较大程度上能约束与规范每位开发者的行为，不按照框架的规定很可能就会报错，这样多人协作就有了基本的保证。</p>
+<p>但是，不是说使用框架就是最佳实践。当项目不复杂的时候（比如一次性的活动页），我们有足够能力去掌握项目的细节，那么使用框架反而不是好的选择。毕竟再好的框架在性能上都会有损失，而被框架的条条框框约束着，也总是令人不喜的。</p>
+<p>简单地说：脑子不够，框架来凑；自己组织不好代码，靠框架来给我们组织。阅读至此殊为不易，感谢各位看官，希望本文对你有一点帮助，谢谢！</p>
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><p><a href="https://cn.udacity.com/course/javascript-design-patterns--ud989" target="_blank" rel="noopener">JavaScript 设计模式</a></p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Javascript/" rel="tag"># Javascript</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/08/12/why-not-try-to-use-MutationObserver/" rel="next" title="当你想监听DOM时，不尝试用一下 MutationObserver 吗？">
+                <i class="fa fa-chevron-left"></i> 当你想监听DOM时，不尝试用一下 MutationObserver 吗？
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/09/09/knwo-more-about-stacking-context/" rel="prev" title="CSS 层叠相关知识指北">
+                CSS 层叠相关知识指北 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.jpg"
+               alt="Sea_ljf" />
+          <p class="site-author-name" itemprop="name">Sea_ljf</p>
+           
+              <p class="site-description motion-element" itemprop="description"></p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">24</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">4</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">15</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/ljf0113" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#开始新项目"><span class="nav-number">1.</span> <span class="nav-text">开始新项目</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#需求变更"><span class="nav-number">2.</span> <span class="nav-text">需求变更</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#再一次需求变更"><span class="nav-number">3.</span> <span class="nav-text">再一次需求变更</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#更好地组织代码"><span class="nav-number">4.</span> <span class="nav-text">更好地组织代码</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#小结"><span class="nav-number">5.</span> <span class="nav-text">小结</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考资料"><span class="nav-number">6.</span> <span class="nav-text">参考资料</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Sea_ljf</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.1"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

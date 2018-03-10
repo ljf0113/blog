@@ -1,0 +1,895 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Javascript,Promise," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.1" />
+
+
+
+
+
+
+<meta name="description" content="hello~亲爱的观众老爷们大家好，有段时间没写文章了，最近主要忙于工作交接，实在没腾出时间进行总结。这次为大家带来 es6 中 Promise 的简单实现。 事实说类似的文章已经不少，不少大神对此都有精彩的实现。然而自己消化了才是最好的，在看文章中其实还是遇到不少坑，如 this 的指向，回调的到底是哪个 Promise 等。本文尽量解释清楚上述问题，力求让大家更好地掌握 Promise。">
+<meta name="keywords" content="Javascript,Promise">
+<meta property="og:type" content="article">
+<meta property="og:title" content="实现一个玩具 Promise ~">
+<meta property="og:url" content="http://yoursite.com/2017/11/12/how-to-make-a-Promise/index.html">
+<meta property="og:site_name" content="小白丰的Blog~">
+<meta property="og:description" content="hello~亲爱的观众老爷们大家好，有段时间没写文章了，最近主要忙于工作交接，实在没腾出时间进行总结。这次为大家带来 es6 中 Promise 的简单实现。 事实说类似的文章已经不少，不少大神对此都有精彩的实现。然而自己消化了才是最好的，在看文章中其实还是遇到不少坑，如 this 的指向，回调的到底是哪个 Promise 等。本文尽量解释清楚上述问题，力求让大家更好地掌握 Promise。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2017-11-12T02:51:53.634Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="实现一个玩具 Promise ~">
+<meta name="twitter:description" content="hello~亲爱的观众老爷们大家好，有段时间没写文章了，最近主要忙于工作交接，实在没腾出时间进行总结。这次为大家带来 es6 中 Promise 的简单实现。 事实说类似的文章已经不少，不少大神对此都有精彩的实现。然而自己消化了才是最好的，在看文章中其实还是遇到不少坑，如 this 的指向，回调的到底是哪个 Promise 等。本文尽量解释清楚上述问题，力求让大家更好地掌握 Promise。">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2017/11/12/how-to-make-a-Promise/"/>
+
+
+
+
+
+  <title>实现一个玩具 Promise ~ | 小白丰的Blog~</title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">小白丰的Blog~</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">虽然我学的是心理学，但我会编程啊</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-tags " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/11/12/how-to-make-a-Promise/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Sea_ljf">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="小白丰的Blog~">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">实现一个玩具 Promise ~</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-11-12T10:50:46+08:00">
+                2017-11-12
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/日常小结/" itemprop="url" rel="index">
+                    <span itemprop="name">日常小结</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>hello~亲爱的观众老爷们大家好，有段时间没写文章了，最近主要忙于工作交接，实在没腾出时间进行总结。这次为大家带来 es6 中 <code>Promise</code> 的简单实现。</p>
+<p>事实说类似的文章已经不少，不少大神对此都有精彩的实现。然而自己消化了才是最好的，在看文章中其实还是遇到不少坑，如 <code>this</code> 的指向，回调的到底是哪个 <code>Promise</code> 等。本文尽量解释清楚上述问题，力求让大家更好地掌握 <code>Promise</code>。</p>
+<a id="more"></a>
+<h2 id="发布-订阅-的简单实现"><a href="#发布-订阅-的简单实现" class="headerlink" title="发布/订阅 的简单实现"></a><code>发布/订阅</code> 的简单实现</h2><p><code>JS</code> 的异步编程相信大家都比较熟悉，在 <code>Promise</code> 出现之前，主要是使用 <code>发布/订阅</code> 模式、回调函数等方式实现异步的。在我的理解中，其实 <code>Promise</code> 特别像 <code>发布/订阅</code> 是在使用 <code>发布/订阅</code> 模式，在合适的时机调用 <code>resolve()</code>，就如发布事件一样，订阅者的回调函数即被注册。因而我们先实现一个简单的 <code>发布/订阅</code> 模式：</p>
+<pre><code>function Promise(fn) {
+  //订阅者回调函数数组
+  this.callBacks = [];
+  //发布信息 调用订阅者的回调函数 使用箭头函数可以保证this的指向是此Promise实例
+  const resolve = val =&gt; {
+    //执行回调
+    this.callBacks.forEach(fn =&gt; {
+      fn(val);
+    })
+  };
+  //将resolve作为实参传入fn中，交由fn决定何时发布信息
+  fn(resolve);
+}
+</code></pre><p>熟悉 <code>发布/订阅</code> 的童鞋，相信看这个代码会感觉特别熟悉，不太熟悉的童鞋可以思考这么个场景：去商城买衣服时，刚好没了你的码数，于是你留下的电话（推入 <code>calBacks</code> 数组中），于是销售小姐姐有货的时候通知我回来买（传入的 <code>fn</code> 调用 <code>resolve</code>， 发布信息）。典型的 <a href="https://baike.baidu.com/item/%E5%A5%BD%E8%8E%B1%E5%9D%9E%E5%8E%9F%E5%88%99/16019700?fr=aladdin" target="_blank" rel="noopener">好莱坞原则</a>实现。</p>
+<p>上述代码还缺少一个销售小姐姐记录电话，也就是将一些函数推入 <code>callBacks</code> 的实现，我们可以添加这样的代码：</p>
+<pre><code>Promise.prototype.then = function(successCallback) {
+  this.callBacks.push(successCallback);
+};
+</code></pre><p>尝试一下玩一下：</p>
+<pre><code>const p = new Promise(function(res) {
+  setTimeout(() =&gt; {
+    res(123);
+  }, 1000);
+});
+
+p.then(function(val) {
+  console.log(val);
+})
+</code></pre><p>在浏览器执行上述代码后，可以看到1s后控制台中打印出 <code>123</code>。</p>
+<h2 id="添加状态"><a href="#添加状态" class="headerlink" title="添加状态"></a>添加状态</h2><p>上面的通过 <code>发布/订阅</code> 实现 <code>Promise</code> 虽然运行良好，然而还是缺了日常使用 <code>Promise</code> 中的状态：如果去买衣服的时候已经有我的码数了，那留电话让销售小姐姐再打电话我是毫无意义的，肯定是当场买走好了啊。因而我们引入状态，为了简单实现，暂时先引入没码数的状态： <code>pending</code> 与可以立即买走的状态： <code>fulfill</code>。</p>
+<p>首先修改 <code>then</code> 方法，如果有码数也就是 <code>fulfill</code> 时立即执行回调：</p>
+<pre><code>Promise.prototype.then = function(successCallback) {
+  //如果promise已经决议 那么久立即执行回调
+  if(this.status === &apos;fulfill&apos;){
+    successCallback();
+  }else{
+    this.callBacks.push(successCallback);
+  }
+};
+</code></pre><p>但我们会发现，此时无法将 <code>Promise</code> 决议后的值传入 <code>successCallback</code> 中，这也好办，在构造函数中再定义一个 <code>_val</code> 记录 <code>Promise</code> 决议后的值就好，完整实现如下：</p>
+<pre><code>function Promise(fn) {
+  //订阅者回调函数数组
+  this.callBacks = [];
+  //promise的状态 一开始时必然是pending
+  this.status = &apos;pending&apos;;
+  //记录决议后的值 一开始默认为null
+  this._val = null;
+  //发布信息 调用订阅者的回调函数 使用箭头函数可以保证this的指向是此Promise实例
+  const resolve = val =&gt; {
+    //切换状态
+    this.status = &apos;fulfill&apos;;
+    //决议赋值
+    this._val = val;
+    //执行回调
+    this.callBacks.forEach(fn =&gt; {
+      fn(val);
+    })
+  };
+  //将resolve作为实参传入fn中，交由fn决定何时发布信息
+  fn(resolve);
+}
+
+Promise.prototype.then = function(successCallback) {
+  //如果promise已经决议 那么久立即执行回调 不然就先推入回调数组中
+  if (this.status === &apos;fulfill&apos;) {
+    successCallback(this._val);
+  } else {
+    this.callBacks.push(successCallback);
+  }
+};
+</code></pre><p>测试一下：</p>
+<pre><code>const p = new Promise(function(res) {
+  setTimeout(() =&gt; {
+    res(123);
+  }, 1000)
+});
+p.then(function(val) {
+  console.log(val);
+});
+
+setTimeout(() =&gt; {
+  p.then(function(val) {
+    console.log(val);
+  });
+}, 2000)
+</code></pre><p>控制台一秒后打印出 <code>123</code> ，再隔一秒后再次打印出 <code>123</code>。So far so good~</p>
+<h2 id="链式调用"><a href="#链式调用" class="headerlink" title="链式调用"></a>链式调用</h2><p>在 <code>es6</code> 中，<code>Promise</code> 是可以链式调用的，而现在还不行。一般而言，为了达成链式调用，最简单直接的方法就是在 <code>then</code> 调用后 <code>return this;</code>，然而在 <code>Promise</code> 的实现中，这是不折不扣的陷阱。试想一下，如果不断通过  <code>return this;</code> 来达到链式调用，那么该如何管理回调函数的数组呢？而根据<a href="https://promisesaplus.com/" target="_blank" rel="noopener">Promise/A+规范</a>,每次调用 <code>then</code> 都会返回一个<strong>新的</strong> <code>Promise</code>。通过不断返回新的 <code>Promise</code>，回调函数的数组管理起来就很方便啦!按照这个思路实现看一下：</p>
+<pre><code>function Promise(fn) {
+  //订阅者回调函数数组
+  this.callBacks = [];
+  //promise的状态 一开始时必然是pending
+  this.status = &apos;pending&apos;;
+  //记录决议后的值 一开始默认为null
+  this._val = null;
+  //发布信息 调用订阅者的回调函数 使用箭头函数可以保证this的指向是此Promise实例
+  const resolve = val =&gt; {
+    //切换状态
+    this.status = &apos;fulfill&apos;;
+    //决议赋值
+    this._val = val;
+    //执行回调
+    this.callBacks.forEach(fn =&gt; {
+      fn(val);
+    })
+  };
+  //将resolve作为实参传入fn中，交由fn决定何时发布信息
+  fn(resolve);
+}
+
+Promise.prototype.then = function(successCallback) {
+  //新建一个高阶函数处理return出去promise的resolve
+  const _handleSuccessCallback = resolve =&gt; val =&gt; {
+    //successCallback是Promise实例调用then调用时传入的successCallback 不是return出去的Promise实例再调用then时候传入的successCallback哦
+    const result = successCallback(val);
+    //如果result的值是promise 那么就在加一个then进去 执行return出去promise的resolve
+    if (result &amp;&amp; result instanceof Promise) {
+      result.then(_val =&gt; {
+        resolve(_val);
+      })
+    } else {
+      resolve(result);
+    }
+  };
+  //为容易理解起见 缓存this
+  const that = this;
+  return new Promise(function(resolve) {
+    //如果promise已经决议 那么久立即执行回调 不然就先推入回调数组中
+    if (that.status === &apos;fulfill&apos;) {
+      _handleSuccessCallback(resolve)(that._val);
+    } else {
+      that.callBacks.push(_handleSuccessCallback(resolve));
+    }
+  })
+};
+</code></pre><p>虽然我注释写了不少，但估计有的同学会觉得比较绕，这版和之前唯一不同是在于 <code>then</code> 返回一个新的 <code>Promise</code>,这个之前解释过，问题还是不大，难点是在于里面的 <code>_handleSuccessCallback</code> 方法。</p>
+<p>先明确问题， <code>Promise.prototype.then</code> 接受一个函数，它既可以是同步的，处理完之后返回一个值（甚至不返还）,也可以是异步的，返回一个 <code>Promise</code> 实例，在合适的时机调用 <code>resolve</code>,异步传递值供后面的 <code>then</code> 使用。同步还好说，关键是如何如何解决异步问题呢？要知道返回的 <code>Promise</code> 实例是可以带很多 <code>then</code> 的哦！</p>
+<p>先解决后一个问题，其实无论带有多少个 <code>then</code>，根据我们的实现，都是返回<strong>最后一个</strong> <code>then</code> 调用后返回的 <code>Promise</code> 实例。至于其中如何调用，其实我们已经实现好了，这有点像递归，处理好逻辑后，让函数不断自己调用自己就好了。</p>
+<p>再来解决第一个问题，其实是通过 <code>_handleSuccessCallback</code> 这个函数实现。<code>_handleSuccessCallback</code> 接受一个参数，就是 <code>Promise</code> 构造函数内的 <code>resolve</code>，但请记住，这个 <code>resolve</code> 是 <code>then</code> 调用后返回的 <code>Promise</code> 实例的 <code>resolve</code>，后称为返回实例。</p>
+<p>传参调用后返回一个新的函数，这个新函数也接受一个参数 <code>val</code>,也就是 <code>Promise</code> 实例中决议了的值，这个实例是调用 <code>then</code> 方法的实例，后成为调用 <code>then</code> 实例。新函数在两种情况下会被调用，调用 <code>then</code> 实例状态是 <code>fulfill</code> 时，或是调用 <code>then</code> 实例从 <code>pending</code> 转为 <code>fulfill</code> 时调用构造函数内的 <code>resolve</code> 方法。</p>
+<p>当新函数调用时，先将调用 <code>then</code> 实例决议后的值作为参数传给 <code>successCallback</code> 执行，记录结果为 <code>result</code>。如果 <code>result</code> 是一个 <code>Promise</code> 实例,那就添加一个 <code>then</code> ，将 <code>result</code> 决议后的值传给返回实例的 <code>resolve</code> 执行即可。如若不是 <code>Promise</code> 实例，那就更好办了，直接将 <code>result</code> 作为实参传给返回实例的 <code>resolve</code> 调用即可。</p>
+<p>至此，两个问题都解决了，无论传入 <code>then</code> 中的函数是异步还是同步的，我们都可以将它调用返回的值或决议后的值传给后面的 <code>then</code> 执行。</p>
+<p>写个小例子测试一下：</p>
+<pre><code>const p = new Promise(function(res) {
+  setTimeout(() =&gt; {
+    res(123);
+  }, 1000);
+});
+
+p.then(function(val) {
+  console.log(val);
+  return new Promise(function(res) {
+    setTimeout(() =&gt; {
+      res(456);
+    }, 1000);
+  }).then(val =&gt; {
+    console.log(val);
+    return 789;
+  })
+}).then(val =&gt; console.log(val));
+</code></pre><p>浏览器跑一下这个例子，会在1秒后打印123，再1秒后打印出456，然后是789。逻辑整体是没有问题的。</p>
+<h2 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h2><p>至此，自己实现的 <code>Promise</code> 算是完成啦，当然这是最粗糙的实现，还缺少很多功能，如 <code>reject</code>，<code>Promise.resolve</code>，<code>Promise.reject</code> 等。然而通过参考上述的例子，相信看官大人你肯定很容易就能实现其他功能。由于篇幅关系，就不再实现近似的功能了。</p>
+<p>其实了解实现还是其次，主要是实现过程中用到的技巧是十分值得学习的。能熟练地异步编程是每一个前端都必须掌握的。感谢各位看官大人看到这里~希望本文对你有所帮助。谢谢！</p>
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><p><a href="http://v.youku.com/v_show/id_XMjY4MjM4MjA2MA==.html?spm=a2hzp.8244740.0.0" target="_blank" rel="noopener">Node.js 实践教程 - Promise 实现</a></p>
+<p><a href="https://juejin.im/post/59dd8b3851882578e04aa05e" target="_blank" rel="noopener">30分钟，让你彻底明白Promise原理</a></p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Javascript/" rel="tag"># Javascript</a>
+          
+            <a href="/tags/Promise/" rel="tag"># Promise</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/10/21/you-may-know-more-about-osi-model/" rel="next" title="或许这样能帮你了解  OSI 七层模型">
+                <i class="fa fa-chevron-left"></i> 或许这样能帮你了解  OSI 七层模型
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/11/19/know-more-about-webpack-s-CommonsChunkPlugin/" rel="prev" title="知多一点 webpack 的 CommonsChunkPlugin">
+                知多一点 webpack 的 CommonsChunkPlugin <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.jpg"
+               alt="Sea_ljf" />
+          <p class="site-author-name" itemprop="name">Sea_ljf</p>
+           
+              <p class="site-description motion-element" itemprop="description"></p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">24</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">4</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">15</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/ljf0113" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#发布-订阅-的简单实现"><span class="nav-number">1.</span> <span class="nav-text">发布/订阅 的简单实现</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#添加状态"><span class="nav-number">2.</span> <span class="nav-text">添加状态</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#链式调用"><span class="nav-number">3.</span> <span class="nav-text">链式调用</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#小结"><span class="nav-number">4.</span> <span class="nav-text">小结</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考资料"><span class="nav-number">5.</span> <span class="nav-text">参考资料</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Sea_ljf</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.1"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

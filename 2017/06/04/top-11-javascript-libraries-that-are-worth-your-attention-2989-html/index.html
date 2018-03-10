@@ -1,0 +1,772 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Javascript,Web," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.1" />
+
+
+
+
+
+
+<meta name="description" content="原文链接：https://hackernoon.com/top-11-javascript-libraries-that-are-worth-your-attention-d2f43d6acfb0 近些年来，诞生了不少优秀的前端开发工具（类库）。JS的库和框架能简化工作流程、提供开发效率并更好地进行响应式设计。 鉴于 JavaScript 的库实在太多了，就算你花很多时间和精力，也不一定能找到优秀">
+<meta name="keywords" content="Javascript,Web">
+<meta property="og:type" content="article">
+<meta property="og:title" content="十一个你值得关注的优秀 Javascript 库">
+<meta property="og:url" content="http://yoursite.com/2017/06/04/top-11-javascript-libraries-that-are-worth-your-attention-2989-html/index.html">
+<meta property="og:site_name" content="小白丰的Blog~">
+<meta property="og:description" content="原文链接：https://hackernoon.com/top-11-javascript-libraries-that-are-worth-your-attention-d2f43d6acfb0 近些年来，诞生了不少优秀的前端开发工具（类库）。JS的库和框架能简化工作流程、提供开发效率并更好地进行响应式设计。 鉴于 JavaScript 的库实在太多了，就算你花很多时间和精力，也不一定能找到优秀">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://p0.qhimg.com/t01e8e98375e3507bcd.png">
+<meta property="og:image" content="http://p0.qhimg.com/t019bfcef59e946e03d.png">
+<meta property="og:image" content="http://p0.qhimg.com/t0120b342894fe688a5.png">
+<meta property="og:image" content="http://p0.qhimg.com/t0113d3ca7a985eec87.jpg">
+<meta property="og:image" content="http://p0.qhimg.com/t014e3836f07fda83c7.png">
+<meta property="og:image" content="http://p0.qhimg.com/t01112dbdbf2e0f2bc1.png">
+<meta property="og:image" content="http://p0.qhimg.com/t01e321569fb52444a9.png">
+<meta property="og:image" content="http://p0.qhimg.com/t0176d985fc5a3704d0.png">
+<meta property="og:image" content="http://p0.qhimg.com/t01cdaf52e7789b4f7a.jpg">
+<meta property="og:image" content="http://p0.qhimg.com/t0154bdf99d6fef09cc.png">
+<meta property="og:image" content="http://p0.qhimg.com/t01093d4b8d039730a0.png">
+<meta property="og:updated_time" content="2017-06-04T03:30:20.747Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="十一个你值得关注的优秀 Javascript 库">
+<meta name="twitter:description" content="原文链接：https://hackernoon.com/top-11-javascript-libraries-that-are-worth-your-attention-d2f43d6acfb0 近些年来，诞生了不少优秀的前端开发工具（类库）。JS的库和框架能简化工作流程、提供开发效率并更好地进行响应式设计。 鉴于 JavaScript 的库实在太多了，就算你花很多时间和精力，也不一定能找到优秀">
+<meta name="twitter:image" content="http://p0.qhimg.com/t01e8e98375e3507bcd.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2017/06/04/top-11-javascript-libraries-that-are-worth-your-attention-2989-html/"/>
+
+
+
+
+
+  <title>十一个你值得关注的优秀 Javascript 库 | 小白丰的Blog~</title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">小白丰的Blog~</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">虽然我学的是心理学，但我会编程啊</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-tags " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/06/04/top-11-javascript-libraries-that-are-worth-your-attention-2989-html/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Sea_ljf">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="小白丰的Blog~">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">十一个你值得关注的优秀 Javascript 库</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-06-04T11:20:19+08:00">
+                2017-06-04
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/翻译/" itemprop="url" rel="index">
+                    <span itemprop="name">翻译</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>原文链接：<a href="https://hackernoon.com/top-11-javascript-libraries-that-are-worth-your-attention-d2f43d6acfb0" target="_blank" rel="noopener">https://hackernoon.com/top-11-javascript-libraries-that-are-worth-your-attention-d2f43d6acfb0</a></p>
+<p>近些年来，诞生了不少优秀的前端开发工具（类库）。JS的库和框架能简化工作流程、提供开发效率并更好地进行响应式设计。</p>
+<p>鉴于 JavaScript 的库实在太多了，就算你花很多时间和精力，也不一定能找到优秀而且适用（于项目）的库。 （之前）我们已经讨论过了 <a href="https://da-14.com/blog/5-best-javascript-frameworks-2017" target="_blank" rel="noopener">优秀的 JavaScript 框架</a> ，而今天我们会根据 Github 上 star 的增长数，筛选出出一些最好的 JavaScript 库。 你很可能已经听说过 jQuery 或者 <a href="https://da-14.com/blog/reactjs-vs-angular-comparison-which-better" target="_blank" rel="noopener">React</a> 的大名了，二者都是非常有用的 JavaScript 库。当然，还有其他很多优秀的类库。</p>
+<a id="more"></a>
+<p>其中一些库几乎是每个项目都会引入的，其他的一些（库）则是专注于某些方面，当你的应用需要支持特殊的功能时就可以引入它们。为了更好地说明，我们按照类型整理出最好的 JavaScript 库，现在就让我们进入正题吧。</p>
+<h3 id="图表-amp-图形"><a href="#图表-amp-图形" class="headerlink" title="图表 &amp; 图形"></a>图表 &amp; 图形</h3><h4 id="D3-js"><a href="#D3-js" class="headerlink" title="D3.js"></a><a href="https://d3js.org/" target="_blank" rel="noopener"><strong>D3.js</strong></a></h4><p><img src="http://p0.qhimg.com/t01e8e98375e3507bcd.png" alt=""></p>
+<p><strong>D3.js</strong> (Data-Driven Documents (译者注：即数据驱动文档)) 被誉为是在开源项目中最强大的数据可视化 JavaScript 库。它拥有完善的生态，基于 D3.js ，你能使用海量的插件与库。同时，社区的支持与大量的参考资料能使你轻易入门 D3.js 。</p>
+<p>D3.js遵从 W3C 标准，几乎支持所有的现代浏览器。尽管它没有预建任何图表，无法开箱即用，但它提供了非常多的例子与非常有用的特性，如：enter 与 exit 的选择，能让你非常容易定位 bug 与绘制图表。</p>
+<h4 id="Chart-js"><a href="#Chart-js" class="headerlink" title="Chart.js"></a><a href="http://www.chartjs.org/" target="_blank" rel="noopener"><strong>Chart.js</strong></a></h4><p><img src="http://p0.qhimg.com/t019bfcef59e946e03d.png" alt=""></p>
+<p><strong>Chart.js</strong>  是一个为小型项目提供绘制图表功能的开源类库。如果你需要简单快速地绘制一个图表，那个 Chart.js 可以帮到你。它拥有8种图表类型，也可以组合使用，并提供强大的动画功能。若你希望快速开展项目，我们推荐这个类库，尽管它的功能并不多。Chartist.js 的特性都是类似的功能，它是基于 SVG 构建的，而 Chart.js 是基于 canvas。</p>
+<h4 id="FusionCharts"><a href="#FusionCharts" class="headerlink" title="FusionCharts"></a><a href="http://www.fusioncharts.com/" target="_blank" rel="noopener"><strong>FusionCharts</strong></a></h4><p><img src="http://p0.qhimg.com/t0120b342894fe688a5.png" alt=""></p>
+<p><strong>FusionCharts</strong>  被认为是目前最好的 Javascript 制图库。它是最全面的绘制图表解决方案，包含超过90种表格与1000种图，远胜于Google Charts 和 MetricsGraphics。</p>
+<p>如今，FusionCharts 可以自豪地说，它的使用者超过24,000，不乏来自白宫、Oracle, IBM, Microsoft, Google 及其他大公司的客户。作为最流行的 JavaScript 库之一，FusionCharts 的扩展性良好，支持各种浏览器与设备，包括 IE6,7,8等。然而，在非商业项目与个人项目中，可以使用含有水印的版本，但若要使用不包含水印的版本，则需要<a href="http://www.fusioncharts.com/buy/" target="_blank" rel="noopener">购买许可</a>。</p>
+<h4 id="Google-Charts"><a href="#Google-Charts" class="headerlink" title="Google Charts"></a><a href="https://developers.google.com/chart/" target="_blank" rel="noopener"><strong>Google Charts</strong></a></h4><p><img src="http://p0.qhimg.com/t0113d3ca7a985eec87.jpg" alt=""></p>
+<p><strong>Google Charts</strong> 允许你构造任何东西，从普通线图到复杂的树状图都毫无问题。它配备了大量的预制图表、各种数据展示方式与多种自定义选项。（Google Charts）基于 HTML5 与 SVG 绘制图表，因而可以确保不同浏览器与平台之间的兼容性，为了兼顾老旧的 IE 版本，它还包含了 VML。</p>
+<p>Google Charts 拥有详尽的文档与代码注释，并提供了渐进式的指导工具，能使任何想要使用 JavaScript 绘制图表的开发者都可以很好地入门 Google Charts 。然而，由于文件都是由 Google 的服务器发送给你的应用，你必须在线才能看到绘制的图表。</p>
+<h3 id="动画"><a href="#动画" class="headerlink" title="动画"></a>动画</h3><h4 id="GSAP"><a href="#GSAP" class="headerlink" title="GSAP"></a><a href="https://greensock.com/gsap" target="_blank" rel="noopener"><strong>GSAP</strong></a></h4><p><img src="http://p0.qhimg.com/t014e3836f07fda83c7.png" alt=""></p>
+<p><strong>GSAP</strong> （GreenSock Animation Platform）是一个为大型企业便利地生成出色动画的优秀框架。超过两百万的网站使用（GSAP），其中包括福特、耐克、 Adobe 、微软、三星等大企业。</p>
+<p>GSAP 在不同平台（译者注：PC端与移动端）和不同浏览器之间都有着良好的兼容性。它的特性基于 SVG 构建，能高效地完成 DOM 元素的拖动、旋转、翻页等。GSAP 也支持旋转、3D转换、按需加载等功能。</p>
+<h4 id="Bounce-js"><a href="#Bounce-js" class="headerlink" title="Bounce.js"></a><a href="http://bouncejs.com/" target="_blank" rel="noopener"><strong>Bounce.js</strong></a></h4><p><img src="http://p0.qhimg.com/t01112dbdbf2e0f2bc1.png" alt=""></p>
+<p><strong>Bounce.js</strong> 是一个基于 CSS3 构建的精巧 JavaScript 动画库，（通过使用它）你能轻易地让创造出令人印象深刻的动画。它预设了10款动画，如rotate, swoosh, jelly, road runner（译者注：我没用过这个东东、不好翻译、有使用经验的同学麻烦告诉我一下应该如何翻译）等，（通过使用它们）可以创造出流畅的动画，你可以在任何项目中使用 Bounce.js 。</p>
+<p>这个库是 MIT 许可而且完全免费，当你不需要太多动画类型、进行实验项目或只是想尝试一下使用动画的时候，它是一个非常好的选择。</p>
+<h4 id="Animate-css"><a href="#Animate-css" class="headerlink" title="Animate.css"></a><a href="https://daneden.github.io/animate.css/" target="_blank" rel="noopener"><strong>Animate.css</strong></a></h4><p><img src="http://p0.qhimg.com/t01e321569fb52444a9.png" alt=""></p>
+<p><strong>Animate.css</strong> 是一个允许你对特定对象添加精巧动画的 CSS 库。它使用 CSS3 预设了超过50种动画，可添加到文本、表单、对象和图片中。由于 Animate.css 体积很小且跨浏览器支持，使得它在移动端项目、滑动条、首页等应用场景中大放异彩。</p>
+<h3 id="时间-amp-日期"><a href="#时间-amp-日期" class="headerlink" title="时间 &amp; 日期"></a>时间 &amp; 日期</h3><h4 id="Moment-js"><a href="#Moment-js" class="headerlink" title="Moment.js"></a><a href="https://momentjs.com/" target="_blank" rel="noopener"><strong>Moment.js</strong></a></h4><p><img src="http://p0.qhimg.com/t0176d985fc5a3704d0.png" alt=""></p>
+<p><strong>Moment.js</strong> 是一个轻量级的日期库，使得解析、操作、格式化日期和时间变得精确且简单。它提供了多语言支持、持续时间（统计）、日历表等，同时通过各种插件可以支持时区（切换）、整合 Twitter 等功能。但最重要的还是它可以让你避免直接操作原生的 JavaScript Date  对象（译者注：Date对象还真是挺反人类的，曾在国际项目中吃过大亏），其次是可以省略复杂的（时间）解析过程且减少（你分析时间的）代码量。</p>
+<h4 id="Date-fns"><a href="#Date-fns" class="headerlink" title="Date-fns"></a><a href="https://github.com/date-fns/date-fns" target="_blank" rel="noopener"><strong>Date-fns</strong></a></h4><p><img src="http://p0.qhimg.com/t01cdaf52e7789b4f7a.jpg" alt=""></p>
+<p><strong>Date-fns</strong> 是一个能在浏览器和 Node.js 中操作时间和日期的先进工具。Date-fns 拥有超过140种的特性，得益于 API 的简洁设计，它们使用起来十分简单。由于 Date-fns 是模块化构建的，你在项目中可以只使用你需要的那一部分功能（而不必加载全部）。</p>
+<h3 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h3><h4 id="Math-js"><a href="#Math-js" class="headerlink" title="Math.js"></a><a href="http://mathjs.org/" target="_blank" rel="noopener"><strong>Math.js</strong></a></h4><p><img src="http://p0.qhimg.com/t0154bdf99d6fef09cc.png" alt=""></p>
+<p><strong>Math.js</strong> 是一个为浏览器、Node.js及其他 JavaScript 引擎提供数学运算的开源库。它配备了许多（运算）功能与常量，能灵活地解析表达式，也提供了大数，单元，字符串，分数，矩阵，数组和符号的计算支持。</p>
+<h4 id="Handsontable"><a href="#Handsontable" class="headerlink" title="Handsontable"></a><a href="https://handsontable.com/" target="_blank" rel="noopener"><strong>Handsontable</strong></a></h4><p><img src="http://p0.qhimg.com/t01093d4b8d039730a0.png" alt=""></p>
+<p><strong>Handsontable</strong> 是一个可轻松地为 Web 应用提供表格的 JavaScript 表格库。它通过不同的插件能实现不同的延伸。Handsontable 基于模块化构造，入门简单且社区活跃。这个表格库在免费版本中包含了超过30特性，专业版本则额外增加十多种功能。目前， Handsontable 常用于销售报告，人力资源规划，数据合并，数据库编辑等领域。</p>
+<h3 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h3><p>JavaScript 库对于程序员或设计师而言，都是十分有用的工具。它们能为你的 Web 应用和网站添加很多强大的功能或提供更好的外观，这些都能提高用户体验。由于新的 JavaScript 库不断诞生，未来这篇文章会加入更多的推荐。</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Javascript/" rel="tag"># Javascript</a>
+          
+            <a href="/tags/Web/" rel="tag"># Web</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/05/20/head-Cheat-Sheet/" rel="next" title="head 速查表">
+                <i class="fa fa-chevron-left"></i> head 速查表
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/06/18/what-are-we-doing-when-we-are-coding-1/" rel="prev" title="当我们在写代码时，我们究竟在做什么？ 《代码大全》读书笔记 （一）">
+                当我们在写代码时，我们究竟在做什么？ 《代码大全》读书笔记 （一） <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.jpg"
+               alt="Sea_ljf" />
+          <p class="site-author-name" itemprop="name">Sea_ljf</p>
+           
+              <p class="site-description motion-element" itemprop="description"></p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">24</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">4</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">15</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/ljf0113" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#图表-amp-图形"><span class="nav-number">1.</span> <span class="nav-text">图表 &amp; 图形</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#D3-js"><span class="nav-number">1.1.</span> <span class="nav-text">D3.js</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Chart-js"><span class="nav-number">1.2.</span> <span class="nav-text">Chart.js</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#FusionCharts"><span class="nav-number">1.3.</span> <span class="nav-text">FusionCharts</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Google-Charts"><span class="nav-number">1.4.</span> <span class="nav-text">Google Charts</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#动画"><span class="nav-number">2.</span> <span class="nav-text">动画</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#GSAP"><span class="nav-number">2.1.</span> <span class="nav-text">GSAP</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Bounce-js"><span class="nav-number">2.2.</span> <span class="nav-text">Bounce.js</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Animate-css"><span class="nav-number">2.3.</span> <span class="nav-text">Animate.css</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#时间-amp-日期"><span class="nav-number">3.</span> <span class="nav-text">时间 &amp; 日期</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Moment-js"><span class="nav-number">3.1.</span> <span class="nav-text">Moment.js</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Date-fns"><span class="nav-number">3.2.</span> <span class="nav-text">Date-fns</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#其他"><span class="nav-number">4.</span> <span class="nav-text">其他</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Math-js"><span class="nav-number">4.1.</span> <span class="nav-text">Math.js</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Handsontable"><span class="nav-number">4.2.</span> <span class="nav-text">Handsontable</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#小结"><span class="nav-number">5.</span> <span class="nav-text">小结</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Sea_ljf</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.1"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

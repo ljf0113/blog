@@ -1,0 +1,767 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Javascript,Web,Node," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.1" />
+
+
+
+
+
+
+<meta name="description" content="hello~亲爱的看官老爷们大家好~有一段时间没写文章了，最近忙于为一个对内的数据可视化平台进行完全的前后端分离。原来的项目是一个基于 Vue 的单页应用，重构后接入 Node 作为中间层，达到完全的前后端分离。 由于项目相对简单，成本并不是太高。下文将简单介绍一下使用的技术栈与分离后的收益，重点是对基于 Node 做前后端分离的一点思考。">
+<meta name="keywords" content="Javascript,Web,Node">
+<meta property="og:type" content="article">
+<meta property="og:title" content="基于 Node.js 前后端分离的一点思考">
+<meta property="og:url" content="http://yoursite.com/2018/01/27/think-abort-node-js/index.html">
+<meta property="og:site_name" content="小白丰的Blog~">
+<meta property="og:description" content="hello~亲爱的看官老爷们大家好~有一段时间没写文章了，最近忙于为一个对内的数据可视化平台进行完全的前后端分离。原来的项目是一个基于 Vue 的单页应用，重构后接入 Node 作为中间层，达到完全的前后端分离。 由于项目相对简单，成本并不是太高。下文将简单介绍一下使用的技术栈与分离后的收益，重点是对基于 Node 做前后端分离的一点思考。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://user-gold-cdn.xitu.io/2018/1/25/1612c89b6c20170f?w=620&h=182&f=jpeg&s=25317">
+<meta property="og:image" content="https://user-gold-cdn.xitu.io/2018/1/25/1612c8d6587040ec?w=620&h=192&f=jpeg&s=28831">
+<meta property="og:image" content="https://user-gold-cdn.xitu.io/2018/1/25/1612c961c30f3bbc?w=839&h=81&f=jpeg&s=12072">
+<meta property="og:image" content="https://user-gold-cdn.xitu.io/2018/1/25/1612c97a61315ee6?w=844&h=50&f=jpeg&s=10248">
+<meta property="og:updated_time" content="2018-01-28T03:13:03.469Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="基于 Node.js 前后端分离的一点思考">
+<meta name="twitter:description" content="hello~亲爱的看官老爷们大家好~有一段时间没写文章了，最近忙于为一个对内的数据可视化平台进行完全的前后端分离。原来的项目是一个基于 Vue 的单页应用，重构后接入 Node 作为中间层，达到完全的前后端分离。 由于项目相对简单，成本并不是太高。下文将简单介绍一下使用的技术栈与分离后的收益，重点是对基于 Node 做前后端分离的一点思考。">
+<meta name="twitter:image" content="https://user-gold-cdn.xitu.io/2018/1/25/1612c89b6c20170f?w=620&h=182&f=jpeg&s=25317">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2018/01/27/think-abort-node-js/"/>
+
+
+
+
+
+  <title>基于 Node.js 前后端分离的一点思考 | 小白丰的Blog~</title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">小白丰的Blog~</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">虽然我学的是心理学，但我会编程啊</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-tags " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/01/27/think-abort-node-js/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Sea_ljf">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="小白丰的Blog~">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">基于 Node.js 前后端分离的一点思考</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-01-27T10:02:31+08:00">
+                2018-01-27
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>hello~亲爱的看官老爷们大家好~有一段时间没写文章了，最近忙于为一个对内的数据可视化平台进行完全的前后端分离。原来的项目是一个基于 <code>Vue</code> 的单页应用，重构后接入 <code>Node</code> 作为中间层，达到完全的前后端分离。</p>
+<p>由于项目相对简单，成本并不是太高。下文将简单介绍一下使用的技术栈与分离后的收益，重点是对基于 <code>Node</code> 做前后端分离的一点思考。</p>
+<a id="more"></a>
+<h2 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h2><p>大约是去年11月底入职新东家，接手一个仅 <strong>对内</strong> 的数据分析系统。新入职当然是希望做出点成绩，在更改部分 UI 与优化部分功能之后，发现页面性能还是比较低。排查后发现获取数据的接口没有缓存，也不是基于 <code>RESTful</code> 的，浏览器缓存完全不起作用。期间也经历了后端修改接口，前端代码大面积修改的情况。</p>
+<p>基于后端同学不熟悉前端机制，我也抱着方便日后搞事情的心态，<del>在多次滚地板</del>之后，部门 Leader 同意接入 <code>Node</code> 作为中间层。</p>
+<h2 id="技术选型"><a href="#技术选型" class="headerlink" title="技术选型"></a>技术选型</h2><p>在确定接入 <code>Node</code> 后，首先要做的就是技术选型。<code>Node</code> 一般就是在 <code>Epress</code>、<code>Koa</code> 与 <code>Egg</code> 中选。在中间件的使用上，个人偏好 <code>Koa</code> 的形式，因而只好和 <code>Express</code> 说再见了。Egg<code>是在</code>Koa` 上作了强约束，规定代码编写、目录结构等。</p>
+<p>选型时我与前端 Leader 讨论了无数次，他认为 <code>Egg</code> 约束太多，扩展性较差，如若出现框架底层的 Bug 则难于处理，因而偏向于使用 <code>Koa</code>。这样的顾虑十分合理，然而对于现在的项目而言，不太可能有功能会超出 <code>Egg</code> 所提供的，反而 <code>Egg</code> 所提供的功能能为项目搭建与维护减少不少的成本。至于约束，个人认为这反而是一件好事，一定程度上解决了多人开发时代码的组织问题。</p>
+<p>考虑再三后，决定使用 <code>Egg</code> 作为 <code>Node</code> 的框架。</p>
+<h2 id="分离收益"><a href="#分离收益" class="headerlink" title="分离收益"></a>分离收益</h2><p>由于项目不算十分复杂，接入的过程算是波澜不惊。唯一的麻烦是工期比较紧，因而分两步走：一期先接入 <code>Node</code>，所有页端请求原样转发 <code>Java</code>，返回的结果原样转发页端。二期对数据获取的接口进行整合与优化以提升性能。完成后收益还是客观的，贴两张图展示下成果。</p>
+<p>原来某页面的性能（所有请求都是 Post 的）：</p>
+<p><img src="https://user-gold-cdn.xitu.io/2018/1/25/1612c89b6c20170f?w=620&amp;h=182&amp;f=jpeg&amp;s=25317" alt=""></p>
+<p>接入 <code>Node</code> 相同页面的性能（转为方法为 Get）：</p>
+<p><img src="https://user-gold-cdn.xitu.io/2018/1/25/1612c8d6587040ec?w=620&amp;h=192&amp;f=jpeg&amp;s=28831" alt=""></p>
+<p>可以看到，不论是数据下载量还是响应时间等指标，耗时均有降低。当然，这是建立在接入 <code>Node</code> 后我对接口进行了整合与缓存优化等措施后的对比。如果都是首次访问，公司内网 WiFi 环境下与原来的性能会有稍差一点，整体加载时间略高于 <code>Java</code> 直出50ms不到。也用过 Chrome 模拟弱网环境，耗时与 <code>Java</code> 直出基本一致。</p>
+<p>而且开发体验上也比之前舒服得多，算是达到了接入 <code>Node</code> 前定下的目标：接入后在支持相同功能的情况下性能提高30%；在相同的开发时间内，完成相同的需求，但有更好的开发体验及更好的页端性能。</p>
+<p>小结一下，前端的一切优化都是在模板与获取模板所需数据上进行优化，使用 <code>Angular</code>、<code>React</code> 与 <code>Vue</code> 等框架构筑的单页应用，解决了模板的问题，可以不再让后端去动我们的模板。但是获取所需数据仍依赖于后端，不少单页应用交互上已经足够复杂，如果还需维护一套复杂的获取与整合数据的逻辑，还是十分头疼的。因而多接入一层 <code>Node</code> 处理数据的获取与整合，尽最大努力去优化页端的请求接口，让页端专注于交互，在条件成熟的情况下，是十分值得的。</p>
+<h2 id="思考"><a href="#思考" class="headerlink" title="思考"></a>思考</h2><p>如若就为了推广 <code>Node</code>，本文应该是把上面的步骤写详细，小结完就该结束了，这和很多大佬的实践文章一致（当然我写得不够好~）。然而和两位 Leader 的讨论过程中，感谢他们对 <code>Node</code> 技术抱有怀疑，提出了不少有意思的问题，结合我自己的思考，整理成提问形式呈现给大家。</p>
+<blockquote>
+<p>为何接入 <code>Node</code> 作为中间层，和公司现行的 <code>PHP</code> 有何区别？</p>
+</blockquote>
+<p>没有区别！事实说，<code>Node</code> 能做的 <code>PHP</code> 一样能做。那么问题就转换为 <code>Node</code> 的意义是什么，为何摈弃公司相对成熟的 <code>PHP</code> 方案而转向 <code>Node</code>？</p>
+<p>我认为后端服务主要是稳定为主，业务调整不会特别频繁。而对于前端而言，业务频繁调整简直司空见惯，如果前后端耦合在一起，频繁让后端发版不是可取之策。同时，前后端对数据结构的要求及对其控制的粒度也大不相同。写得好 <code>PHP</code> 的同学不一定写得好前端，写得好前端的同学不一定写得好 <code>PHP</code>。对于专业的领域，还是应该由专业的人去做，让前端控制整个模板及模板依赖的数据，对提高项目质量有很大的帮助。说句玩笑话，后端就搞搞数据库，吐吐 <code>json</code> 就好，前端就拿一下数据，切切页面就好。</p>
+<p>进一步而言，前端若要接入 <code>SSR</code> 之类的功能，<code>Node</code> 还真比 <code>PHP</code> 有优势得多，也算是为日后搞事情做铺垫吧。</p>
+<blockquote>
+<p>接入 <code>Node</code> 后性能会有多大提高？</p>
+</blockquote>
+<p>不一定有提高，甚至有下降。此问题是我一期完成之后，测试页端性能时发现的。测试时，<code>Node</code> 除了将所有的需求原样转发外，还加了协商缓存，然而响应时间却更慢了。</p>
+<p>接入前（为 Post 请求）：</p>
+<p><img src="https://user-gold-cdn.xitu.io/2018/1/25/1612c961c30f3bbc?w=839&amp;h=81&amp;f=jpeg&amp;s=12072" alt=""></p>
+<p>接入后（为 Get 请求）：</p>
+<p><img src="https://user-gold-cdn.xitu.io/2018/1/25/1612c97a61315ee6?w=844&amp;h=50&amp;f=jpeg&amp;s=10248" alt=""></p>
+<p>正常来说，获取 10k 左右的数据时，协商缓存如若命中即返回 304，省略了下载的过程，理应更快的。通过打点，发现 <code>Node</code> 转发请求耗时额外增加 10ms 左右，然而在全公司内网 WiFi 环境下，整体下载时间不到 160ms。</p>
+<p>因而引入 <code>Node</code> 不一定会有性能的提高，反而会因为多引入一层，而导致性能耗损。在对内的项目中或性能尚可的项目中，提高性能不足以成为接入 <code>Node</code>  的关键理由。换句话说，接入  <code>Node</code> 之后，在优化页端请求之前，并不可能为应用性能带来飞跃。</p>
+<p>这个问题也算是我对 <code>Node</code> 态度转变的起点，开始从无脑支持接入 <code>Node</code> 到辩证地推敲，也引出之后的的问题。</p>
+<blockquote>
+<p>接入 <code>Node</code> 有什么弊端？</p>
+</blockquote>
+<p>前端的能力越强，意味着责任越多。例如之前可能是 <code>Java</code> 做的安全防护，可能就会下沉到 <code>Node</code> 端，这对大多数前端同学而已都是比较陌生的领域。</p>
+<p>投入的成本与产出也是值得商榷的事情，毕竟 <code>Node</code> 再贴近前端，也始终是属于后端的领域。前后端思想不太一样，用前端的思维写后端，很可能写出十分糟糕的代码，轻则影响性能，重则内存泄漏。接入 <code>Node</code> 层后它反而成为拖累，相信大家也不愿看见。</p>
+<p>毕竟 <code>Node</code> 对于不少公司而言是比较新的领域。尽管可能知道接入 <code>Node</code> 好处不少，但如何接入，接入后它能做什么，大家可能比较模糊。如何花最少的代价，平滑地接入  <code>Node</code> 的同时，最大限度的复用现有架构，也是个不少的挑战。</p>
+<blockquote>
+<p>既然如此，没有 <code>Node</code> 适用的场景吗？</p>
+</blockquote>
+<p>有。正如前文所说，<code>Node</code> 的意义是在于让前端掌握模板与模板所依赖数据，不妨从这两方面去进行考虑。如若重 SEO 的同时，页面交互相对复杂，这时候接入 <code>Node</code> 作为中间层，我认为就是最佳实践。</p>
+<p>其次是后端架构不断演变，开始转向微服务化之后，前端感到接口碎片化开始带来不少麻烦后，就应该考虑接入 <code>Node</code> 整合接口了。</p>
+<p>总的来说，什么时候接入 <code>Node</code>， 有点像什么时候引入 <code>Redux</code> 或 <code>Vuex</code>。当你感觉到麻烦后，只要你知道还有这个选项，自然而言地就会想到用它。</p>
+<h2 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h2><p>综上所述，在以下场景中，我认为接入 <code>Node</code> 是最佳实践：</p>
+<ul>
+<li>重视 SEO 且交互复杂。</li>
+<li>后端微服务化，前端需要整合接口。</li>
+<li>前端主导的项目，需要用到最新技术，如 <code>SSR</code>、<code>PWA</code> 等。</li>
+</ul>
+<p>如若只是性能问题，引入 <code>Node</code> 不一定会有改善，需要根据实际情况进行分析。至于后端的接口设计太丑陋、返回的数据结构不符合前端使用等问题，在应用规模不大的情况下，其实都是可以和后端同学进行沟通的，以此接入 <code>Node</code> 不一定是最佳的实践，需要好好思量。</p>
+<p>但是，坚决反对只是因为现有架构比较熟悉而不愿改变，始终抱着错误的方案不去解决的做法，这绝对是舍本逐末。我始终认为，只要是对的事情，尽管过程再艰难，亦应该朝着对的方向前进。</p>
+<p>以上是个人的一点浅见，感谢各位看官大人看到这里。知易行难，希望本文对你有所帮助~谢谢！</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Javascript/" rel="tag"># Javascript</a>
+          
+            <a href="/tags/Web/" rel="tag"># Web</a>
+          
+            <a href="/tags/Node/" rel="tag"># Node</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/12/30/create-web-worker-dynamicly/" rel="next" title="动态创建 Web Worker">
+                <i class="fa fa-chevron-left"></i> 动态创建 Web Worker
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/02/10/record/" rel="prev" title="记一次 Node debug 过程">
+                记一次 Node debug 过程 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.jpg"
+               alt="Sea_ljf" />
+          <p class="site-author-name" itemprop="name">Sea_ljf</p>
+           
+              <p class="site-description motion-element" itemprop="description"></p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">24</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">4</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">15</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/ljf0113" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#背景"><span class="nav-number">1.</span> <span class="nav-text">背景</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#技术选型"><span class="nav-number">2.</span> <span class="nav-text">技术选型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#分离收益"><span class="nav-number">3.</span> <span class="nav-text">分离收益</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#思考"><span class="nav-number">4.</span> <span class="nav-text">思考</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#小结"><span class="nav-number">5.</span> <span class="nav-text">小结</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Sea_ljf</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.1"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

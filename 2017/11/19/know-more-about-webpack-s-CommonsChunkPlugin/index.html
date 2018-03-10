@@ -1,0 +1,882 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Javascript,Webpack," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.1" />
+
+
+
+
+
+
+<meta name="description" content="hello~亲爱的看官老爷们大家好~ 最近一直在学习 webpack 的相关知识。曾几何时我总觉得 webpack 的体系庞大而难以掌握，一直回避不愿去学。然而伟人鲁迅曾说过： 世上太多事会因无法掌握而使你狂躁不安，最好的解决方法就是硬着头皮开始做！ 因而就从比较简单的 CommonsChunkPlugin 开始学起吧~">
+<meta name="keywords" content="Javascript,Webpack">
+<meta property="og:type" content="article">
+<meta property="og:title" content="知多一点 webpack 的 CommonsChunkPlugin">
+<meta property="og:url" content="http://yoursite.com/2017/11/19/know-more-about-webpack-s-CommonsChunkPlugin/index.html">
+<meta property="og:site_name" content="小白丰的Blog~">
+<meta property="og:description" content="hello~亲爱的看官老爷们大家好~ 最近一直在学习 webpack 的相关知识。曾几何时我总觉得 webpack 的体系庞大而难以掌握，一直回避不愿去学。然而伟人鲁迅曾说过： 世上太多事会因无法掌握而使你狂躁不安，最好的解决方法就是硬着头皮开始做！ 因而就从比较简单的 CommonsChunkPlugin 开始学起吧~">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://user-gold-cdn.xitu.io/2017/11/19/15fd33852ccb8b67?w=620&h=312&f=jpeg&s=23931">
+<meta property="og:image" content="https://user-gold-cdn.xitu.io/2017/11/19/15fd34b116d97d88?w=620&h=306&f=jpeg&s=23071">
+<meta property="og:image" content="https://user-gold-cdn.xitu.io/2017/11/19/15fd34b971c42392?w=620&h=306&f=jpeg&s=23471">
+<meta property="og:image" content="https://user-gold-cdn.xitu.io/2017/11/19/15fd3c47094e5d54?w=620&h=305&f=jpeg&s=30395">
+<meta property="og:image" content="https://user-gold-cdn.xitu.io/2017/11/19/15fd3c36d7581ecb?w=620&h=304&f=jpeg&s=30928">
+<meta property="og:updated_time" content="2017-11-25T02:49:31.974Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="知多一点 webpack 的 CommonsChunkPlugin">
+<meta name="twitter:description" content="hello~亲爱的看官老爷们大家好~ 最近一直在学习 webpack 的相关知识。曾几何时我总觉得 webpack 的体系庞大而难以掌握，一直回避不愿去学。然而伟人鲁迅曾说过： 世上太多事会因无法掌握而使你狂躁不安，最好的解决方法就是硬着头皮开始做！ 因而就从比较简单的 CommonsChunkPlugin 开始学起吧~">
+<meta name="twitter:image" content="https://user-gold-cdn.xitu.io/2017/11/19/15fd33852ccb8b67?w=620&h=312&f=jpeg&s=23931">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2017/11/19/know-more-about-webpack-s-CommonsChunkPlugin/"/>
+
+
+
+
+
+  <title>知多一点 webpack 的 CommonsChunkPlugin | 小白丰的Blog~</title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">小白丰的Blog~</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">虽然我学的是心理学，但我会编程啊</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-tags " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/11/19/know-more-about-webpack-s-CommonsChunkPlugin/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Sea_ljf">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="小白丰的Blog~">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">知多一点 webpack 的 CommonsChunkPlugin</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-11-19T22:12:09+08:00">
+                2017-11-19
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/日常小结/" itemprop="url" rel="index">
+                    <span itemprop="name">日常小结</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>hello~亲爱的看官老爷们大家好~ 最近一直在学习 <code>webpack</code> 的相关知识。曾几何时我总觉得 <code>webpack</code> 的体系庞大而难以掌握，一直回避不愿去学。然而伟人鲁迅曾说过： <del>世上太多事会因无法掌握而使你狂躁不安，最好的解决方法就是硬着头皮开始做！</del> 因而就从比较简单的 <code>CommonsChunkPlugin</code> 开始学起吧~ </p>
+<a id="more"></a>
+<p>虽然本文比较简单，但还是需要一点 <code>webpack</code> 知识的，如若完全没接触过 <code>webpack</code> ，建议先移步 <a href="http://www.css88.com/doc/webpack/" target="_blank" rel="noopener">官方文档</a> 与 <a href="https://segmentfault.com/a/1190000010871559" target="_blank" rel="noopener">Webpack 3，从入门到放弃</a> 了解一下 <code>webpack</code> 基础为佳~</p>
+<h2 id="基础配置"><a href="#基础配置" class="headerlink" title="基础配置"></a>基础配置</h2><blockquote>
+<p><code>CommonsChunkPlugin</code> 插件，是一个可选的用于建立一个独立文件(又称作 chunk)的功能，这个文件包括多个入口 chunk 的公共模块。通过将公共模块拆出来，最终合成的文件能够在最开始的时候加载一次，便存起来到缓存中供后续使用。这个带来速度上的提升，因为浏览器会迅速将公共的代码从缓存中取出来，而不是每次访问一个新页面时，再去加载一个更大的文件。</p>
+</blockquote>
+<p>简单来说，这有点像封装函数。把不变的与变化的分开，使得不变的可以高效复用，变化的灵活配置。接下来会根据这个原则优化我们的项目，现在先看看虚拟的项目长成什么样吧~</p>
+<p>新建一个 <code>index.html</code> 模板与入口 <code>index.js</code>文件，简单配置如下：</p>
+<p><code>index.html</code> ： </p>
+<pre><code>&lt;!doctype html&gt;
+&lt;html lang=&quot;en&quot;&gt;
+&lt;head&gt;
+    &lt;meta charset=&quot;UTF-8&quot;&gt;
+    &lt;meta name=&quot;viewport&quot;
+          content=&quot;width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0&quot;&gt;
+    &lt;meta http-equiv=&quot;X-UA-Compatible&quot; content=&quot;ie=edge&quot;&gt;
+    &lt;title&gt;Document&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;div id=&quot;app&quot;&gt;
+        &lt;p&gt;{{ vue_test }}&lt;/p&gt;
+    &lt;/div&gt;
+    &lt;div class=&quot;jq_test&quot;&gt;&lt;/div&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+</code></pre><p><code>index.js</code>:</p>
+<pre><code>import Vue from &apos;vue&apos;;
+import $ from &apos;jquery&apos;;
+
+new Vue({
+  el: &apos;#app&apos;,
+  data: {
+    vue_test: &apos;vue is loaded!&apos;
+  }
+})
+
+$(function() {
+  $(&apos;.jq_test&apos;).html(&apos;jquery is loaded!&apos;)
+})
+</code></pre><p>为演示起见，代码十分简单，相信不用多加解释。接下来先简单配置一下 <code>webpack.config.js</code>,代码如下：</p>
+<pre><code>const path = require(&apos;path&apos;);
+const webpack = require(&apos;webpack&apos;);
+const HtmlWebpackPlugin = require(&apos;html-webpack-plugin&apos;);
+const CleanWebpackPlugin = require(&apos;clean-webpack-plugin&apos;);
+const BundleAnalyzerPlugin = require(&apos;webpack-bundle-analyzer&apos;).BundleAnalyzerPlugin;
+
+module.exports = {
+  entry: {
+    index: path.join(__dirname, &apos;index.js&apos;)
+  },
+  output: {
+    path: path.join(__dirname, &apos;/dist&apos;),
+    filename: &apos;js/[name].[chunkhash].js&apos;
+  },
+  resolve: { alias: { &apos;vue&apos;: &apos;vue/dist/vue.js&apos; } },
+  plugins: [
+    new CleanWebpackPlugin([&apos;./dist&apos;]),
+    new HtmlWebpackPlugin({
+      filename: &apos;index.html&apos;,
+      template: &apos;index.html&apos;,
+      inject: true
+    }),
+    new BundleAnalyzerPlugin(),
+  ]
+};
+</code></pre><p><code>CleanWebpackPlugin</code> 主要用于清除 <code>dist</code> 目录下的文件，这样每次打包就不必手动清除了。<code>HtmlWebpackPlugin</code> 则是为了在 <code>dist</code> 目录下新建 <code>html</code> 模板并自动插入依赖的 <code>js</code>。 <code>BundleAnalyzerPlugin</code> 主要是为了生成打包后的 <code>js</code> 文件包含的依赖，如此时进行打包，则生成：</p>
+<p><img src="https://user-gold-cdn.xitu.io/2017/11/19/15fd33852ccb8b67?w=620&amp;h=312&amp;f=jpeg&amp;s=23931" alt=""></p>
+<p>可以看到生成的 <code>index.js</code> 文件包含了 <code>vue</code> 与 <code>jquery</code>。</p>
+<h2 id="首次优化"><a href="#首次优化" class="headerlink" title="首次优化"></a>首次优化</h2><p>一般而言，我们项目中的类库变化较少，业务代码倒是多变的。需要想办法把类库抽离出来，把业务代码单独打包。这样加伤 <code>hash</code> 后浏览器就能缓存类库的 <code>js</code> 文件，优化用户体验。此时我们的主角 <code>CommonsChunkPlugin</code> 就正式登场了。我们在 <code>webpack.config.js</code> 文件的 <code>plugins</code> 中添加 <code>CommonsChunkPlugin</code>，配置如下：</p>
+<pre><code>plugins: [
+    //...此前的代码
+    new webpack.optimize.CommonsChunkPlugin({
+      name: &apos;vendor&apos;,
+      minChunks: function(module) {
+        return (
+          module.resource &amp;&amp;
+          /\.js$/.test(module.resource) &amp;&amp;
+          module.resource.indexOf(
+            path.join(__dirname, &apos;./node_modules&apos;)
+          ) === 0
+        )
+      }
+    }),
+]
+</code></pre><p>上述配置，是通过 <code>CommonsChunkPlugin</code> 生成一个名为 <code>vendor</code> 的 <code>js</code> 文件，它抽取入口文件也就是 <code>index.js</code> 中来源于 <code>node_modules</code> 的依赖组成。此例中就是 <code>vue</code> 与 <code>jquery</code>。打包出来画风是这样的：</p>
+<p><img src="https://user-gold-cdn.xitu.io/2017/11/19/15fd34b116d97d88?w=620&amp;h=306&amp;f=jpeg&amp;s=23071" alt=""></p>
+<p>此时看上去解决了我们的问题，将依赖的类库抽取抽来独立打包，加上缓存就能被浏览器缓存了。然而事情没那么简单，不行你随意改一下入口的  <code>index.js</code> 代码，再次打包：</p>
+<p><img src="https://user-gold-cdn.xitu.io/2017/11/19/15fd34b971c42392?w=620&amp;h=306&amp;f=jpeg&amp;s=23471" alt=""></p>
+<p> 绝望地发现 <code>vendor.js</code> 文件的 <code>hash</code> 改变了。简单说，这是因为模块标识产生了变化所导致的，更具体的原因可以查看<a href="http://www.css88.com/doc/webpack/concepts/manifest/" target="_blank" rel="noopener">相关的中文文档</a>~修正的方法其实也挺简单，就是再使用 <code>CommonsChunkPlugin</code> 抽取一次模块，将不变的类库沉淀下来，将变化的抽离出去。因而添如下代码：</p>
+<pre><code>plugins: [
+    //...此前的代码
+    new webpack.optimize.CommonsChunkPlugin({
+      name: &apos;vendor&apos;,
+      minChunks: function(module) {
+        return (
+          module.resource &amp;&amp;
+          /\.js$/.test(module.resource) &amp;&amp;
+          module.resource.indexOf(
+            path.join(__dirname, &apos;./node_modules&apos;)
+          ) === 0
+        )
+      }
+    }),
+    new webpack.optimize.CommonsChunkPlugin({
+      name: &apos;manifest&apos;,
+      chunks: [&apos;vendor&apos;, &apos;index&apos;]
+    })
+]
+</code></pre><p>打包后， <code>dist/js</code> 目录下多出一个名为 <code>manifest</code> 的 <code>js</code> 文件，此时你无论如何改变 <code>index.js</code> 的代码，打包后的 <code>vendor.js</code> 的 <code>hash</code> 都不再会改变了。</p>
+<p>然而稍等，当你想拍拍手收工的时候，思考一下这样的场景：随着项目不断迭代，<code>vendor</code> 中的依赖不断被添加与删除，使得它的 <code>hash</code> 会不断变化，这显然不符合我们的利益，这到底如何解决呢？</p>
+<h2 id="再次优化"><a href="#再次优化" class="headerlink" title="再次优化"></a>再次优化</h2><p>既然 <code>CommonsChunkPlugin</code> 是可以按照我们的需求抽取模块，而依赖的外部模块可能是不断变化的，那么为何不将基础的依赖模块抽取出来作为一个文件，其他的依赖如插件等作为另一个文件呢？</p>
+<p>简单说，如我们的项目中 <code>vue</code> 是基本的依赖，必须用到它，而 <code>jquery</code> 等则是后加的类库，之后可能变更。那么将 <code>vue</code> 独立打包一个文件，有利于浏览器缓存，因为无论此后添加更多的类库或删去 <code>jquery</code> 时， <code>vue</code> 文件的缓存依然是生效的。因而我们可以这么做，首先新建一个入口：</p>
+<pre><code>entry: {
+    index: path.join(__dirname, &apos;index.js&apos;),
+    vendor: [&apos;vue&apos;],
+},
+</code></pre><p>此处主要是用于指明需要独立打包的依赖有哪些。之后在 <code>plugins</code> 中做如下修改：</p>
+<pre><code>plugins: [
+    //...此前的代码
+    new webpack.HashedModuleIdsPlugin(),
+    new webpack.optimize.CommonsChunkPlugin({
+      name: &apos;vendor&apos;,
+      minChunks: Infinity,
+    }),
+    new webpack.optimize.CommonsChunkPlugin({
+      name: &apos;common&apos;,
+      minChunks: function(module) {
+        return (
+          module.resource &amp;&amp;
+          /\.js$/.test(module.resource) &amp;&amp;
+          module.resource.indexOf(
+            path.join(__dirname, &apos;./node_modules&apos;)
+          ) === 0
+        )
+      },
+      chunks: [&apos;index&apos;],
+    }),
+    new webpack.optimize.CommonsChunkPlugin({
+      name: &apos;manifest&apos;,
+      chunks: [&apos;vendor&apos;, &apos;common&apos;, &apos;index&apos;]
+    })
+]
+</code></pre><p>插件 <code>HashedModuleIdsPlugin</code>，是用于保持模块引用的 <code>module id</code> 不变。而 <code>CommonsChunkPlugin</code> 则提取入口指定的依赖独立打包，<code>minChunks: Infinity,</code>的用意是让插件别管其他，就按照设置的数组提取文件就好。之后修改一下原来的 <code>vendor</code>，重命名为 <code>common</code>，指定它从入口 <code>index.js</code> 中抽取来自 <code>node_modules</code> 的依赖。最后就是抽取 <code>webpack</code> 运行时的函数及其模块标识组成 <code>manifest</code>。运行一下 <code>webpack</code>，构建出来如图：</p>
+<p><img src="https://user-gold-cdn.xitu.io/2017/11/19/15fd3c47094e5d54?w=620&amp;h=305&amp;f=jpeg&amp;s=30395" alt=""></p>
+<p>可以看到 <code>vue</code> 与 <code>jquery</code> 被分开打包成了两个文件，我们尝试添加一下新的依赖 <code>vuex</code>,打包后结果如下：</p>
+<p><img src="https://user-gold-cdn.xitu.io/2017/11/19/15fd3c36d7581ecb?w=620&amp;h=304&amp;f=jpeg&amp;s=30928" alt=""></p>
+<p>如此一来，我们的优化目的就达到了，不变的都提取出来，变化的可以动态配置~</p>
+<h2 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h2><p><code>webpack</code> 插件 <code>CommonsChunkPlugin</code> 就介绍到这里了，然而优化还是有很多的，比如开启压缩，去除注释等。而当项目体积逐渐增大时，<code>CommonsChunkPlugin</code> 就不一定是提取代码的最优解了。在打包速度与控制构建的精细程度来说，结合 <code>DLLPlugin</code> 会有更好的表现。根据不同的场景组合不同的插件以达到我们的目的，本来就是 <code>webpack</code> 的魅力之一。</p>
+<p>感谢各位看官大人看到这里，知易行难，希望本文对你有所帮助，所有的代码均会被上传到 <a href="https://github.com/ljf0113/know-more-about-webpack-s-CommonsChunkPlugin" target="_blank" rel="noopener">github</a> 上，滚求 <code>star</code> ~谢谢！</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Javascript/" rel="tag"># Javascript</a>
+          
+            <a href="/tags/Webpack/" rel="tag"># Webpack</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/11/12/how-to-make-a-Promise/" rel="next" title="实现一个玩具 Promise ~">
+                <i class="fa fa-chevron-left"></i> 实现一个玩具 Promise ~
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/12/09/how-webpack-load-js-file/" rel="prev" title="简单易懂的 webpack 打包后 JS 的运行过程">
+                简单易懂的 webpack 打包后 JS 的运行过程 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.jpg"
+               alt="Sea_ljf" />
+          <p class="site-author-name" itemprop="name">Sea_ljf</p>
+           
+              <p class="site-description motion-element" itemprop="description"></p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">24</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">4</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">15</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/ljf0113" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#基础配置"><span class="nav-number">1.</span> <span class="nav-text">基础配置</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#首次优化"><span class="nav-number">2.</span> <span class="nav-text">首次优化</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#再次优化"><span class="nav-number">3.</span> <span class="nav-text">再次优化</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#小结"><span class="nav-number">4.</span> <span class="nav-text">小结</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Sea_ljf</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.1"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

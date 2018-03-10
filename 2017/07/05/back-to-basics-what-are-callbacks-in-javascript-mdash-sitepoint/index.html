@@ -1,0 +1,775 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Javascript,Web," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.1" />
+
+
+
+
+
+
+<meta name="description" content="原文链接：https://www.sitepoint.com/callbacks-javascript/ 当我们刚开始学习JavaScript的时候，很快就会碰到回调函数。这对初学者来说，回调函数既陌生又神秘。然而掌握它的原理，是掌握（JavaScript）这门语言的关键之一。在这篇文章中，通过简单易懂的例子，希望能让你掌握回调函数的基础。">
+<meta name="keywords" content="Javascript,Web">
+<meta property="og:type" content="article">
+<meta property="og:title" content="回归基础：在JavaScript中回调函数是什么？ — SitePoint">
+<meta property="og:url" content="http://yoursite.com/2017/07/05/back-to-basics-what-are-callbacks-in-javascript-mdash-sitepoint/index.html">
+<meta property="og:site_name" content="小白丰的Blog~">
+<meta property="og:description" content="原文链接：https://www.sitepoint.com/callbacks-javascript/ 当我们刚开始学习JavaScript的时候，很快就会碰到回调函数。这对初学者来说，回调函数既陌生又神秘。然而掌握它的原理，是掌握（JavaScript）这门语言的关键之一。在这篇文章中，通过简单易懂的例子，希望能让你掌握回调函数的基础。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://p0.qhimg.com/t0144a99b3641c5ce60.jpg">
+<meta property="og:updated_time" content="2017-07-09T03:11:11.588Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="回归基础：在JavaScript中回调函数是什么？ — SitePoint">
+<meta name="twitter:description" content="原文链接：https://www.sitepoint.com/callbacks-javascript/ 当我们刚开始学习JavaScript的时候，很快就会碰到回调函数。这对初学者来说，回调函数既陌生又神秘。然而掌握它的原理，是掌握（JavaScript）这门语言的关键之一。在这篇文章中，通过简单易懂的例子，希望能让你掌握回调函数的基础。">
+<meta name="twitter:image" content="http://p0.qhimg.com/t0144a99b3641c5ce60.jpg">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2017/07/05/back-to-basics-what-are-callbacks-in-javascript-mdash-sitepoint/"/>
+
+
+
+
+
+  <title>回归基础：在JavaScript中回调函数是什么？ — SitePoint | 小白丰的Blog~</title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">小白丰的Blog~</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">虽然我学的是心理学，但我会编程啊</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-tags " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/07/05/back-to-basics-what-are-callbacks-in-javascript-mdash-sitepoint/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Sea_ljf">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="小白丰的Blog~">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">回归基础：在JavaScript中回调函数是什么？ — SitePoint</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-07-05T21:31:09+08:00">
+                2017-07-05
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/翻译/" itemprop="url" rel="index">
+                    <span itemprop="name">翻译</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>原文链接：<a href="https://www.sitepoint.com/callbacks-javascript/" target="_blank" rel="noopener">https://www.sitepoint.com/callbacks-javascript/</a></p>
+<p>当我们刚开始学习JavaScript的时候，很快就会碰到回调函数。这对初学者来说，回调函数既陌生又神秘。然而掌握它的原理，是掌握（JavaScript）这门语言的关键之一。在这篇文章中，通过简单易懂的例子，希望能让你掌握回调函数的基础。</p>
+<a id="more"></a>
+<p><img src="http://p0.qhimg.com/t0144a99b3641c5ce60.jpg" alt="最基础的问题: 在JavaScript中，什么是回调函数？"></p>
+<p>电话（译者注：这个真是一语相关，原文是Callbacks，指回拨的电话号码之类，也是回调的一种） — 图片由<a href="https://unsplash.com/search/call?photo=qXn5L9BqRbE" target="_blank" rel="noopener">unsplash</a>提供</p>
+<h2 id="什么是回调"><a href="#什么是回调" class="headerlink" title="什么是回调?"></a>什么是回调?</h2><p><strong>简单地说:</strong> 一个回调函数，就是在另外一个函数（通常是异步的）执行完之后再执行的函数，因而被命名为——回调。</p>
+<p><strong>更进一步地说:</strong> 在JavaScript中，函数是对象。正因如此，一个函数可以被其他函数作为参数（传入），也能被其他函数作为返回值返回。这种函数（译者注：起码要满足如下条件之一：1.接受一个或多个函数作为参数，2.将一个函数作为返回值返回）被称为高阶函数。任何函数，只要它作为参数传入且随后被调用，都可称之为回调函数。</p>
+<p>看起来很复杂的样子，但别急，让我们往下看一些例子。</p>
+<blockquote>
+<p>这篇文章首发于<a href="https://codeburst.io/javascript-what-the-heck-is-a-callback-aba4da2deced" target="_blank" rel="noopener">codeburst.io</a>且获得了作者授权转载。如果你喜欢阅读， 为什么不去看看Brandon的<a href="https://codeburst.io/@bmorelli25" target="_blank" rel="noopener">其他文章</a>呢？如果你想提高你的JavaScript技巧，可以前往SitePoint Premium参加我们的<a href="https://www.sitepoint.com/premium/courses/introduction-to-javascript-2908" target="_blank" rel="noopener">JavaScript入门</a>课程。</p>
+</blockquote>
+<h2 id="为什么需要回调函数"><a href="#为什么需要回调函数" class="headerlink" title="为什么需要回调函数?"></a>为什么需要回调函数?</h2><p>这是由于一个十分重要的原因 —— JavaScript是一门事件驱动的语言。这就意味着，JavaScript会持续监听事件且一直往下执行，而不会在事件响应前一直挂起。让我们一起看看下面这个简单的例子：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">function first()&#123;</span><br><span class="line">  console.log(1);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">function second()&#123;</span><br><span class="line">  console.log(2);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">first();</span><br><span class="line">second();</span><br></pre></td></tr></table></figure>
+<p>正如你所料，函数first会首先执行，函数second会在之后执行——控制台会打印如下结果：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">// 1</span><br><span class="line">// 2</span><br></pre></td></tr></table></figure>
+<p>看起来是符合我们的预期。</p>
+<p>但如果函数first包含有一些不会立即执行的代码呢？例如，我们需要发送一个请求并等待它的响应呢？我们使用<code>setTimeout</code>去模拟这种场景，<code>setTimeout</code>是原生JavaScript方法，允许你在特定时间后调用一个函数。我们通过延迟500毫秒后再执行函数来模拟发送请求。代码如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">function first()&#123;</span><br><span class="line">  // Simulate a code delay</span><br><span class="line">  setTimeout( function()&#123;</span><br><span class="line">    console.log(1);</span><br><span class="line">  &#125;, 500 );</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">function second()&#123;</span><br><span class="line">  console.log(2);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">first();</span><br><span class="line">second();</span><br></pre></td></tr></table></figure>
+<p>你现在不太需要立即搞懂<code>setTimeout()</code>的原理（如果你很好奇，我们有这<a href="https://www.sitepoint.com/jquery-settimeout-function-examples/" target="_blank" rel="noopener">主题相关的文章</a>）。（现在）最重要的是我们将<code>console.log(1);</code> 延迟500毫秒执行。那么，当我们执行这两个函数（<code>first</code>和<code>second</code>）时，会发生什么呢？</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">first();</span><br><span class="line">second();</span><br><span class="line">// 2</span><br><span class="line">// 1</span><br></pre></td></tr></table></figure>
+<p>尽管我们先调用函数first，但会先打印出<code>2</code>。</p>
+<p>这并不是JavaScript不按照我们的想法去顺序执行函数，而是JavaScript会继续执行函数second,而不是等待函数fitst执行完（再去执行函数second）。</p>
+<p>那么为何让你看这个（例子）呢？是因为你不能期望Javascript都是执行完一个函数后再去执行下一个函数。而回调函数是确保代码按次序正确执行的一种方法。</p>
+<h2 id="创造一个回调函数"><a href="#创造一个回调函数" class="headerlink" title="创造一个回调函数"></a>创造一个回调函数</h2><p>好了，让我们少啰嗦，一起来创造一个回调函数吧！</p>
+<p>首先，打开你浏览器的控制台（Windows/Linux和系统可以按下Ctrl + Shift + J，Mac则按下Cmd + Option + J）。然后把以下的函数输入到控制台内：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">function doHomework(subject) &#123;</span><br><span class="line">  alert(`Starting my $&#123;subject&#125; homework.`);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>我们创建了一个名为<code>doHomework</code>的函数。而我们的函数需要传入一个变量才能工作。可以往控制台中输入以下代码调用（该函数）。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">doHomework(&apos;math&apos;);</span><br><span class="line">// Alerts: Starting my math homework.</span><br></pre></td></tr></table></figure>
+<p>现在我们把回调函数添加进去吧。<code>doHomework</code>需要添加多一个参数，回调函数会作为最后一个参数传入，并在执行<code>doHomework</code>时调用。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">function doHomework(subject, callback) &#123;</span><br><span class="line">  alert(`Starting my $&#123;subject&#125; homework.`);</span><br><span class="line">  callback();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">doHomework(&apos;math&apos;, function() &#123;</span><br><span class="line">  alert(&apos;Finished my homework&apos;);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<h3 id="试着在JS-Bin上执行上述代码"><a href="#试着在JS-Bin上执行上述代码" class="headerlink" title="试着在JS Bin上执行上述代码"></a>试着在JS Bin上执行上述代码</h3><p><a href="https://jsbin.com/xedeyuc/2/embed?js,console" target="_blank" rel="noopener">JS Bin</a></p>
+<p>正如你所看到的，当你在控制台输入上述代码后，陆续会有两个告示框弹出：首先是：‘Starting homework’，然后是‘Finished homework’。</p>
+<p>然而回调函数不一定要在函数调用时完整传入。你可以将回调函数定义在其他地方，如以下代码所示：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">function doHomework(subject, callback) &#123;</span><br><span class="line">  alert(`Starting my $&#123;subject&#125; homework.`);</span><br><span class="line">  callback();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">function alertFinished()&#123;</span><br><span class="line">  alert(&apos;Finished my homework&apos;);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">doHomework(&apos;math&apos;, alertFinished);</span><br></pre></td></tr></table></figure>
+<h3 id="在JS-Bin上执行上述例子"><a href="#在JS-Bin上执行上述例子" class="headerlink" title="在JS Bin上执行上述例子"></a>在JS Bin上执行上述例子</h3><p><a href="https://jsbin.com/hagaqiy/embed?js,console" target="_blank" rel="noopener">JavaScript中什么是回调函数？</a></p>
+<p>执行的结果与之前的例子是完全一致的，但代码的组织却有一点不同。正如你所见，在<code>doHomework</code>函数调用时，<code>alertFinished</code>作为它的一个参数被传入！</p>
+<h2 id="一个真实的例子"><a href="#一个真实的例子" class="headerlink" title="一个真实的例子"></a>一个真实的例子</h2><p>上星期，我发布了一篇名为<a href="https://codeburst.io/build-a-simple-twitter-bot-with-node-js-in-just-38-lines-of-code-ed92db9eb078" target="_blank" rel="noopener">《如何用38行代码创造一个推特机器人》</a>的文章。那篇文章中，代码是通过使用推特的API来工作的。当你发请求去一个API时，你必须等待响应内容返回后才能继续工作。这是一个说明如何使用回调函数的很好例子。请求API时发送的请求代码如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">T.get(&apos;search/tweets&apos;, params, function(err, data, response) &#123;</span><br><span class="line">  if(!err)&#123;</span><br><span class="line">    // This is where the magic will happen</span><br><span class="line">  &#125; else &#123;</span><br><span class="line">    console.log(err);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<ul>
+<li><p><code>T.get</code> 的意思只是往推特发送一个GET请求。</p>
+</li>
+<li><p>当发送请求去<code>‘search/tweets’</code>时，（请求函数）接受三个参数，第一个参数是请求地址，<code>params</code>是第二个参数，代表搜索相关的参数，而最后一个则是一个匿名的回调函数。</p>
+</li>
+</ul>
+<p>在这里，回调函数是十分重要的，因为我们需要等待服务器返回数据后，才能继续执行余下代码。我们并不知道我们请求API后，服务器是否成功地返回数据。因此，当我们通过GET请求请求<code>search/tweets</code>后，会等待服务器返回信息。一旦推特（的服务器）返回相应数据，我们的回调函数将会执行。推特服务器会返回一个<code>err</code> (error) 对象或一个<code>response</code>对象给我们。在我们的回调函数中，我们使用条件判断语句<code>if()</code>（判断是否有错误对象存在）来确定请求是否成功，（判断成功）之后再根据返回的数据进行下一步操作。</p>
+<h2 id="初战告捷"><a href="#初战告捷" class="headerlink" title="初战告捷"></a>初战告捷</h2><p>干得漂亮！你现在应该初步理解回调函数是什么和它是如何工作的了，但这只是（回调函数知识中）的冰山一角，你仍有很多东西需要学习！如果你有任何问题或想法，请在评论中告诉我，我很乐意与你们分享和交流。</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Javascript/" rel="tag"># Javascript</a>
+          
+            <a href="/tags/Web/" rel="tag"># Web</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/06/18/what-are-we-doing-when-we-are-coding-1/" rel="next" title="当我们在写代码时，我们究竟在做什么？ 《代码大全》读书笔记 （一）">
+                <i class="fa fa-chevron-left"></i> 当我们在写代码时，我们究竟在做什么？ 《代码大全》读书笔记 （一）
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/07/09/making-touch-scrolling-fast-by-default-nbsp-nbsp-web-nbsp-nbsp-google-developers/" rel="prev" title="让 touch 系列事件触发的滚动响应更快  |  Web  |  Google Developers">
+                让 touch 系列事件触发的滚动响应更快  |  Web  |  Google Developers <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.jpg"
+               alt="Sea_ljf" />
+          <p class="site-author-name" itemprop="name">Sea_ljf</p>
+           
+              <p class="site-description motion-element" itemprop="description"></p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">24</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">4</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">15</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/ljf0113" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#什么是回调"><span class="nav-number">1.</span> <span class="nav-text">什么是回调?</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#为什么需要回调函数"><span class="nav-number">2.</span> <span class="nav-text">为什么需要回调函数?</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#创造一个回调函数"><span class="nav-number">3.</span> <span class="nav-text">创造一个回调函数</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#试着在JS-Bin上执行上述代码"><span class="nav-number">3.1.</span> <span class="nav-text">试着在JS Bin上执行上述代码</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#在JS-Bin上执行上述例子"><span class="nav-number">3.2.</span> <span class="nav-text">在JS Bin上执行上述例子</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#一个真实的例子"><span class="nav-number">4.</span> <span class="nav-text">一个真实的例子</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#初战告捷"><span class="nav-number">5.</span> <span class="nav-text">初战告捷</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Sea_ljf</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.1"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

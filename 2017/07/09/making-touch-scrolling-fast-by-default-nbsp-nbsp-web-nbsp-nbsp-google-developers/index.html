@@ -1,0 +1,762 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Javascript,Web,CSS," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.1" />
+
+
+
+
+
+
+<meta name="description" content="原文链接：https://developers.google.com/web/updates/2017/01/scrolling-intervention 我们都知道，对于移动端的网页而言，滚动是十分重要的交互，然而 touch 系列事件触发（滚动后）经常会引发严重的性能问题。为了解决这问题，Chrome （通过允许往addEventListener()中传入{passive: true}）让to">
+<meta name="keywords" content="Javascript,Web,CSS">
+<meta property="og:type" content="article">
+<meta property="og:title" content="让 touch 系列事件触发的滚动响应更快  |  Web  |  Google Developers">
+<meta property="og:url" content="http://yoursite.com/2017/07/09/making-touch-scrolling-fast-by-default-nbsp-nbsp-web-nbsp-nbsp-google-developers/index.html">
+<meta property="og:site_name" content="小白丰的Blog~">
+<meta property="og:description" content="原文链接：https://developers.google.com/web/updates/2017/01/scrolling-intervention 我们都知道，对于移动端的网页而言，滚动是十分重要的交互，然而 touch 系列事件触发（滚动后）经常会引发严重的性能问题。为了解决这问题，Chrome （通过允许往addEventListener()中传入{passive: true}）让to">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://p0.qhimg.com/t014ac88e865223c670.png">
+<meta property="og:updated_time" content="2017-07-09T03:09:36.192Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="让 touch 系列事件触发的滚动响应更快  |  Web  |  Google Developers">
+<meta name="twitter:description" content="原文链接：https://developers.google.com/web/updates/2017/01/scrolling-intervention 我们都知道，对于移动端的网页而言，滚动是十分重要的交互，然而 touch 系列事件触发（滚动后）经常会引发严重的性能问题。为了解决这问题，Chrome （通过允许往addEventListener()中传入{passive: true}）让to">
+<meta name="twitter:image" content="http://p0.qhimg.com/t014ac88e865223c670.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2017/07/09/making-touch-scrolling-fast-by-default-nbsp-nbsp-web-nbsp-nbsp-google-developers/"/>
+
+
+
+
+
+  <title>让 touch 系列事件触发的滚动响应更快  |  Web  |  Google Developers | 小白丰的Blog~</title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">小白丰的Blog~</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">虽然我学的是心理学，但我会编程啊</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-tags " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/07/09/making-touch-scrolling-fast-by-default-nbsp-nbsp-web-nbsp-nbsp-google-developers/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Sea_ljf">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="小白丰的Blog~">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">让 touch 系列事件触发的滚动响应更快  |  Web  |  Google Developers</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-07-09T11:03:22+08:00">
+                2017-07-09
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/翻译/" itemprop="url" rel="index">
+                    <span itemprop="name">翻译</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>原文链接：<a href="https://developers.google.com/web/updates/2017/01/scrolling-intervention" target="_blank" rel="noopener">https://developers.google.com/web/updates/2017/01/scrolling-intervention</a></p>
+<p>我们都知道，对于移动端的网页而言，滚动是十分重要的交互，然而 touch 系列事件触发（滚动后）经常会引发严重的性能问题。为了解决这问题，Chrome （通过允许往<code>addEventListener()</code>中传入<code>{passive: true}</code>）让touch系列事件的事件监听器变为“被动”（译者注：其实就是touch之后，不再是执行完事件函数后再滚动）,同时<a href="https://developers.google.com/web/updates/2016/10/pointer-events" target="_blank" rel="noopener"> pointer<br>事件</a>相关的API（也支持相关参数）。这些都是很有用的特性，能使处理（ touch 系列）事件的过程中，不会妨碍页面的正常滚动，然而开发者们有时候会觉得它们难以理解，更不会去使用。</p>
+<a id="more"></a>
+<p>我们相信，即使开发者们完全参透浏览器（各种）复杂的细节，也不会使网站性能提高多少。因而在 Chrome 56中，我们将touch系列事件的监听器默认设为“被动”，大多数情况下这正是前端所需要的。我们相信这会极大地提高用户体验，也不会网站造成多大的影响。</p>
+<p>在极个别例子下，这会导致意外的滚动。可以通过在（意外滚动发生的）元素上添加CSS<a href="https://developer.mozilla.org/en-US/docs/Web/CSS/touch-action" target="_blank" rel="noopener">touch-action</a>:<br>none（来阻止滚动发生）。继续阅读，你可以了解到更多相关技术的细节。</p>
+<h2 id="背景：-取消默认时事件会降低页面性能"><a href="#背景：-取消默认时事件会降低页面性能" class="headerlink" title="背景： 取消默认时事件会降低页面性能"></a>背景： 取消默认时事件会降低页面性能</h2><p>如果你在<code>touchstart</code>或<code>touchmove</code>事件处理函数中调用<a href="https://developer.mozilla.org/en-US/docs/Web/API/Event/preventDefault" target="_blank" rel="noopener">preventDefault()</a>，这将会阻止（页面）滚动。然而，问题是大多说情况下是不会在事件处理函数中调用<code>preventDefault()</code>，但浏览器需要等到事件处理函数执行完之后才能确定这点。因而开发者可以定义“被动的事件监听器”去解决这问题。当你注册 touch 系列事件的监听器时，加入<code>{passive: true}</code>对象作为第三个参数后，浏览器就认为你不会在事件处理函数中调用 <code>preventDefault()</code>，它就可以安全地让页面滚动，不再等待事件处理函数执行完（再判断）。例子如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">`window.addEventListener(&quot;touchstart&quot;, func, &#123;passive: true&#125; );`</span><br></pre></td></tr></table></figure>
+<h2 id="优化"><a href="#优化" class="headerlink" title="优化"></a>优化</h2><p>我们主要的目的是为了降低用户触摸屏幕后，内容（滚动）更新的响应时间。为了解 touchstart 和 touchmove 的使用（情况），我们添加了对这两个事件阻止滚动（发生）频率的监控。</p>
+<p>我们看到，其中大约80%表现上都是“被动（译者注：也就是并未调用 preventDefault() ）”的，但（开发者）却基本没将该事件的监听器注册为“被动”。鉴于此问题的严重性，我们意识到可以通过默认将这些事件（的监听器）设置为“被动”来提高滚动的性能，而且基本不需要任何开发者修改代码。</p>
+<p>因而我们做出以下优化：只要 touchstart 或者 touchmove 事件的事件监听器是注册在<code>window</code>, <code>document</code>或<code>body</code>上的时候，我们会将<code>passive</code>默认为<code>true</code>，也就是说代码是这样的：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">`window.addEventListener(&quot;touchstart&quot;, func);`</span><br></pre></td></tr></table></figure>
+<p>等同于：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">`window.addEventListener(&quot;touchstart&quot;, func, &#123;passive: true&#125; );`</span><br></pre></td></tr></table></figure>
+<p>现在，在事件处理函数中，调用<code>preventDefault()</code>会变为无效。</p>
+<p>下图展示了用户触发滚动后到真正滚动期间，耗时最长的前百分之一案例中所耗费的时间。这些数据是由安卓上的 Chrome 访问任意网页后采集的。在优化（ passive ）之前，平均耗时是超过400ms，优化后降低到250ms，时间降低了38%。在未来，我们希望默认为所有<code>touchstart</code>和<code>touchmove</code>的事件监听器的<code>passive</code>设置为<code>true</code>，并优化到（滚动响应）低于50ms。</p>
+<p><img src="http://p0.qhimg.com/t014ac88e865223c670.png" alt=""></p>
+<h2 id="问题与修复"><a href="#问题与修复" class="headerlink" title="问题与修复"></a>问题与修复</h2><p>大部分情况下，（我们的优化）不会导致任何 BUG 。但是如果 BUG 真的出现了，最常见问题是当你不希望页面发生滚动时却发生了。极个别的例子是，开发者发现（如果不在<code>touchend</code>事件处理函数中调用<code>preventDefault()</code>） <strong>click</strong> 事件会被触发了。</p>
+<p>在 Chrome 56版本及其之后的版本，如果触发了优化，而你又在事件处理函数中调用了<code>preventDefault()</code>，在 DevTools 中会打印一条警告（作为提示）。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">`touch-passive.html:19 Unable to preventDefault inside passive event listener due to target being treated as passive. See https://www.chromestatus.com/features/5093566007214080`</span><br></pre></td></tr></table></figure>
+<p>你可以直接在应用中，通过<a href="https://developer.mozilla.org/en-US/docs/Web/API/Event/defaultPrevented" target="_blank" rel="noopener"><code>defaultPrevented</code></a>属性检查<code>preventDefault</code>的调用是否生效。</p>
+<p>我们发现大量受影响的页面，通过使用<a href="https://developer.mozilla.org/en-US/docs/Web/CSS/touch-action" target="_blank" rel="noopener">touch-action</a>这个CSS属性就能轻松修复（问题）。如果你希望某个元素（无论进行任何 touch 操作都）不会使浏览器发生滚动或缩放，可以往该元素的CSS中加入<code>touch-action: none</code>。如果想某个元素只可以水平滚动或缩放，可以使用<code>touch-action: pan-y pinch-zoom</code>。在浏览器中正确地使用 touch-action 是已经是非常重要了，如 PC 端中 Edge 支持 Pointer 事件，不支持 Touch 事件。可惜的是，移动端 Safari 和一些旧的浏览器不支持 touch-action，因此你仍然需要在事件处理函数中调用<code>preventDefault</code>，尽管 Chrome 会忽略它。</p>
+<p>在更复杂的例子中，你可能需要参考下面的其中一条（来解决问题）：</p>
+<ul>
+<li><p>如果你的<code>touchstart</code>事件的监听器中，调用了<code>preventDefault()</code>，为阻止触发<code>click</code>事件和浏览器的默认行为，请确保<code>preventDefault()</code>在相关的<code>touchend</code>事件的监听器中也被调用。</p>
+</li>
+<li><p>如果需要往<code>addEventListener()</code>中传入<code>{passive: false}</code>来覆盖浏览器默认行为，请确保该浏览器支持<a href="https://github.com/WICG/EventListenerOptions" target="_blank" rel="noopener">EventListenerOptions</a>属性。</p>
+</li>
+</ul>
+<h2 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h2><p>开发者通常只会察觉到，通过优化后的 Chrome 56中访问大多数网页时，滚动响应会更快。而在个别的例子中，开发者可能会发现一些意外的滚动。</p>
+<p>虽然仍需要为移动端的 Safari 调用<code>preventDefault()</code>，然而 Chrome 已经不再推荐网站依靠在<code>touchstart</code> 和 <code>touchmove</code> 事件处理函数中调用<code>preventDefault()</code>（来阻止浏览器默认行为）。开发者在需要时，应该在 touch 系列事件发生前，使用<code>touch-action</code>这一 CSS 属性去阻止某元素滚动或缩放。只有在为了阻止之后的默认行为（如将要触发的click事件）时，才应该在<code>touchend</code>的事件处理函数中调用<code>preventDefault()</code>。</p>
+<p>除非另有声明，此文章采用<a href="http://creativecommons.org/licenses/by/3.0/" target="_blank" rel="noopener">Creative Commons Attribution 3.0 License</a>许可，示例代码采用<a href="http://www.apache.org/licenses/LICENSE-2.0" target="_blank" rel="noopener">Apache 2.0 License</a>许可。如需了解更多，请查阅我们的<a href="https://developers.google.com/terms/site-policies" target="_blank" rel="noopener">网站政策</a>。</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Javascript/" rel="tag"># Javascript</a>
+          
+            <a href="/tags/Web/" rel="tag"># Web</a>
+          
+            <a href="/tags/CSS/" rel="tag"># CSS</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/07/05/back-to-basics-what-are-callbacks-in-javascript-mdash-sitepoint/" rel="next" title="回归基础：在JavaScript中回调函数是什么？ — SitePoint">
+                <i class="fa fa-chevron-left"></i> 回归基础：在JavaScript中回调函数是什么？ — SitePoint
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/07/22/subtle-difference-between-es6-Class-and-es5-prototype/" rel="prev" title="构造函数与ES6 class之间的一点微妙区别">
+                构造函数与ES6 class之间的一点微妙区别 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.jpg"
+               alt="Sea_ljf" />
+          <p class="site-author-name" itemprop="name">Sea_ljf</p>
+           
+              <p class="site-description motion-element" itemprop="description"></p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">24</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">4</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">15</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/ljf0113" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#背景：-取消默认时事件会降低页面性能"><span class="nav-number">1.</span> <span class="nav-text">背景： 取消默认时事件会降低页面性能</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#优化"><span class="nav-number">2.</span> <span class="nav-text">优化</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#问题与修复"><span class="nav-number">3.</span> <span class="nav-text">问题与修复</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#小结"><span class="nav-number">4.</span> <span class="nav-text">小结</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Sea_ljf</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.1"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
