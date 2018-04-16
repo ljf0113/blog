@@ -1,0 +1,774 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Javascript,Web," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.1" />
+
+
+
+
+
+
+<meta name="description" content="hello~亲爱的看官老爷们大家好~最近沉迷于学习其他语言，有一段时间没写文章了。时间一晃就到了4月，再不写就怕彻底懒下去了。这次给大家分享 toLocaleString 的一点技巧，如果需要初始化数字或日期时，不妨考虑一下，会有偷懒奇效哦！ 注意！一般而言，数字与日期的显示是有要求的，样式方面需要统一。但如果是内部项目或者是 pm 允许，那么使用 toLocaleString 格式化数字与日期是">
+<meta name="keywords" content="Javascript,Web">
+<meta property="og:type" content="article">
+<meta property="og:title" content="想偷懒的话，toLocaleString 了解一下？">
+<meta property="og:url" content="http://yoursite.com/2018/04/06/know-more-about-toLocaleString/index.html">
+<meta property="og:site_name" content="小白丰的Blog~">
+<meta property="og:description" content="hello~亲爱的看官老爷们大家好~最近沉迷于学习其他语言，有一段时间没写文章了。时间一晃就到了4月，再不写就怕彻底懒下去了。这次给大家分享 toLocaleString 的一点技巧，如果需要初始化数字或日期时，不妨考虑一下，会有偷懒奇效哦！ 注意！一般而言，数字与日期的显示是有要求的，样式方面需要统一。但如果是内部项目或者是 pm 允许，那么使用 toLocaleString 格式化数字与日期是">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://user-gold-cdn.xitu.io/2018/4/4/1628f81ddcf88280?w=1037&h=156&f=png&s=13004">
+<meta property="og:updated_time" content="2018-04-16T03:00:06.910Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="想偷懒的话，toLocaleString 了解一下？">
+<meta name="twitter:description" content="hello~亲爱的看官老爷们大家好~最近沉迷于学习其他语言，有一段时间没写文章了。时间一晃就到了4月，再不写就怕彻底懒下去了。这次给大家分享 toLocaleString 的一点技巧，如果需要初始化数字或日期时，不妨考虑一下，会有偷懒奇效哦！ 注意！一般而言，数字与日期的显示是有要求的，样式方面需要统一。但如果是内部项目或者是 pm 允许，那么使用 toLocaleString 格式化数字与日期是">
+<meta name="twitter:image" content="https://user-gold-cdn.xitu.io/2018/4/4/1628f81ddcf88280?w=1037&h=156&f=png&s=13004">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2018/04/06/know-more-about-toLocaleString/"/>
+
+
+
+
+
+  <title>想偷懒的话，toLocaleString 了解一下？ | 小白丰的Blog~</title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">小白丰的Blog~</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">虽然我学的是心理学，但我会编程啊</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-tags " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/04/06/know-more-about-toLocaleString/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Sea_ljf">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="小白丰的Blog~">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">想偷懒的话，toLocaleString 了解一下？</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-04-06T10:56:55+08:00">
+                2018-04-06
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>hello~亲爱的看官老爷们大家好~最近沉迷于学习其他语言，有一段时间没写文章了。时间一晃就到了4月，再不写就怕彻底懒下去了。这次给大家分享 <code>toLocaleString</code> 的一点技巧，如果需要初始化数字或日期时，不妨考虑一下，会有<del>偷懒</del>奇效哦！</p>
+<p>注意！一般而言，数字与日期的显示是有要求的，样式方面需要统一。但如果是内部项目或者是 pm 允许，那么使用 <code>toLocaleString</code> 格式化数字与日期是相当好的，不然还是建议自己写正则或函数转换。毕竟每个 <code>API</code> 都有局限性。</p>
+<a id="more"></a>
+<p>本文参考自 MDN 的文档与日常使用所得，如果你对这个 <code>API</code> 已经相当熟悉，请帮我看下是否有遗漏（笑）；不了解的同学可以浏览一下，应该会对你有所帮助。</p>
+<h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p><code>toLocaleString</code> 方法是用于返回格式化对象后的字符串，该字符串格式因不同语言而不同。可以通过传参决定返回的语言与具体的表现，某些场景下相当有用，语法如下：</p>
+<pre><code>object.toLocaleString([locales [, options]]);
+</code></pre><p><code>locales</code> 参数用于指定格式化对象时使用的语言环境，默认为当前环境的语言，可以不传。该参数具体可选的值可以参考 <a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Intl#Locale_identification_and_negotiation" target="_blank" rel="noopener">这里</a>，一般而言使用 <code>en</code> 或 <code>zh</code> 即可应付绝大多数情况。例子如下：</p>
+<pre><code>const date = new Date();
+date.toLocaleString(&apos;zh&apos;);    // 2018/4/4 下午15:08:38
+date.toLocaleString(&apos;en&apos;);    // 4/4/2018, 3:08:38 PM
+</code></pre><p>顺带一提，此参数大小写不敏感，已经在浏览器与 Node 验证过。</p>
+<p><code>options</code> 参数为输出样式的配置项，根据 <code>object</code> 类型不同会有不同选项，下文会仔细解释这个参数。但需要注意的是如果不传 <code>locales</code> 参数，那么 <code>options</code> 参数是不会生效的，其实上面的语法其实已经显现出这点。</p>
+<p>最后则是兼容性问题，具体如下图：</p>
+<p><img src="https://user-gold-cdn.xitu.io/2018/4/4/1628f81ddcf88280?w=1037&amp;h=156&amp;f=png&amp;s=13004" alt=""></p>
+<p>使用参数的情况下兼容性稍差，这比较可惜，但总体而言还是比较乐观的。</p>
+<h2 id="Number-prototype-toLocaleString"><a href="#Number-prototype-toLocaleString" class="headerlink" title="Number.prototype.toLocaleString"></a>Number.prototype.toLocaleString</h2><p>先介绍 <code>toLocaleString</code> 在数字类型上的使用。面试偶尔会问到如何格式化数字，使整数部分每三位加一个逗号，这时不妨：</p>
+<pre><code>const num = 2333333;
+num.toLocaleString();   // 2,333,333
+</code></pre><p>其实是不需要任何正则的~打完出题者的脸后，我们一起看看 <code>toLocaleString</code> 在数字类型的 <code>options</code> 参数有好用属性，以方便我们<del>偷懒</del>使用。注意，本文不是翻译文档，因而只会介绍一些常用的属性，更具体的选项请查阅 <a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Number/toLocaleString" target="_blank" rel="noopener">MDN</a>相关文档。</p>
+<p><code>style</code> 表示格式化时使用的样式，默认值是 <code>decimal</code> 也就是纯数字，也可为 <code>percent</code> 百分比显示与 <code>currency</code> 货币显示。值为 <code>currency</code> 时必须同时指定 <code>options</code> 中的 <code>currency</code> 属性，否则报错。具体例子如下：</p>
+<pre><code>const num = 2333333;
+num.toLocaleString(&apos;zh&apos;, { style: &apos;decimal&apos; });   //2,333,333
+num.toLocaleString(&apos;zh&apos;, { style: &apos;percent&apos; });   //233,333,300%
+num.toLocaleString(&apos;zh&apos;, { style: &apos;currency&apos; });    //报错
+</code></pre><p>接下来的两个属性是 <code>style</code> 设为 <code>currency</code> 时才有用的，它们分别是 <code>currency</code> 与 <code>currencyDisplay</code>，前者指定对应的货币，如 <code>USD</code>、<code>EUR</code> 与 <code>CNY</code> 等，实测也是不区分大小写的。后者是货币符号的展示样式，默认值是 <code>symbol</code>，即对应的符号，如 <code>CNY</code> 是 ￥。该属性的值也可以是 <code>code</code> 与 <code>name</code>，只是用得比较少，看看例子就好了~具体如下：</p>
+<pre><code>const num = 2333333;
+num.toLocaleString(&apos;zh&apos;, { style: &apos;currency&apos;, currency: &apos;CNY&apos; });    //￥2,333,333.00
+num.toLocaleString(&apos;zh&apos;, { style: &apos;currency&apos;, currency: &apos;cny&apos;, currencyDisplay: &apos;code&apos; });      //CNY2,333,333.00
+num.toLocaleString(&apos;zh&apos;, { style: &apos;currency&apos;, currency: &apos;cny&apos;, currencyDisplay: &apos;name&apos; });      //2,333,333.00人民币
+</code></pre><p>最后是两组相当强大的属性，某些场景下能带来极大的便利。第一组是 <code>minimumIntegerDigits</code>、 <code>minimumFractionDigits</code> 与  <code>maximumFractionDigits</code>，用于指定整数最少位数与小数的最少和最多位数，不够则用0去凑。简单说，自动补0！具体例子如下：</p>
+<pre><code>let num = 2333.3;
+num.toLocaleString(&apos;zh&apos;, { minimumIntegerDigits: 5 });        //02,333.3
+//如果不想有分隔符，可以指定useGrouping为false
+num.toLocaleString(&apos;zh&apos;, { minimumIntegerDigits: 5, useGrouping: false });        //02333.3
+num.toLocaleString(&apos;zh&apos;, { minimumFractionDigits: 2, useGrouping: false });     //2333.30
+
+num = 666.666
+num.toLocaleString(&apos;zh&apos;, { maximumFractionDigits: 2, useGrouping: false });     //666.67
+</code></pre><p>从此之后，补0与控制位数再也不愁~</p>
+<p>另一组是 <code>minimumSignificantDigits</code> 与 <code>maximumSignificantDigits</code>，用于控制有效数字位数，只要设置了这一组属性，第一组属性全部忽略不算，具体如下：</p>
+<pre><code>const num = 1234.5;
+num.toLocaleString(&apos;zh&apos;, { minimumSignificantDigits: 6, useGrouping: false });      //1234.50
+num.toLocaleString(&apos;zh&apos;, { maximumSignificantDigits: 4, useGrouping: false });      //1235
+</code></pre><p>注意，<code>maximumFractionDigits</code> 与 <code>maximumSignificantDigits</code> 均是四舍五入，使用时需要注意。数字类型的 <code>toLocaleString</code> 介绍就告一段落，下面让我们看看日期类型的 <code>toLocaleString</code> 的 <code>options</code> 有什么好用的属性。</p>
+<h2 id="Date-prototype-toLocaleString"><a href="#Date-prototype-toLocaleString" class="headerlink" title="Date.prototype.toLocaleString"></a>Date.prototype.toLocaleString</h2><p>与数字类型不同，日期类型的 <code>locales</code> 对输出的影响十分之大（其实数字类型影响也大，只是一般用不到），因而应该根据实际情况选择合适的语言环境。与数字类型一样，只介绍常用属性，详细的属性介绍请查阅<a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Date/toLocaleString" target="_blank" rel="noopener">MDN</a>文档。</p>
+<p><code>hour12</code> 表示是使用十二小时制还是二十四小时制，默认值视 <code>locales</code> 而定。例子如下：</p>
+<pre><code>const date = new Date();
+date.toLocaleString(&apos;zh&apos;, { hour12: true });        //2018/4/4 下午6:57:36
+date.toLocaleString(&apos;zh&apos;, { hour12: false });       //2018/4/4 18:57:36
+</code></pre><p>之后就是格式化年月日时分秒星期等选项了，<a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Date/toLocaleString" target="_blank" rel="noopener">MDN</a> 文档说必须按照一定的分组设置属性，实际使用中发现每个属性单独使用并不报错，因而按属性的值分开介绍会比较好理解。</p>
+<p>具体的属性一共有 9 个，分别是 <code>weekday</code>、<code>era</code>、<code>year</code>、<code>month</code>、<code>day</code>、<code>hour</code>、<code>minute</code>、<code>second</code> 与 <code>timeZoneName</code>。具体的意思，看单词估计就能秒懂，不作过多解释。然而需要留意的是他们的可选值。先讨论<code>weekday</code> 与 <code>era</code>，它们均可以取值为 <code>narrow</code>、<code>short</code> 或 <code>long</code>，简单说就是能有多短多短，缩写与正常表现，具体表现如下：</p>
+<pre><code>const date = new Date();
+date.toLocaleString(&apos;en&apos;, { weekday: &apos;narrow&apos;, era: &apos;narrow&apos; });        //W A
+date.toLocaleString(&apos;en&apos;, { weekday: &apos;short&apos;, era: &apos;short&apos; });      //Wed AD
+date.toLocaleString(&apos;en&apos;, { weekday: &apos;long&apos;, era: &apos;long&apos; });        //Wednesday Anno Domini
+</code></pre><p>跟着是 <code>timeZoneName</code> 属性，这个属性只有<code>short</code> 或 <code>long</code> 两个值，表现如下：</p>
+<pre><code>const date = new Date();
+date.toLocaleString(&apos;zh&apos;, { timeZoneName: &apos;short&apos; });   //2018/4/5 GMT+8 下午7:18:26
+date.toLocaleString(&apos;zh&apos;, { timeZoneName: &apos;long&apos; });    //2018/4/5 中国标准时间 下午7:18:26
+</code></pre><p>剩下的属性，均可以取值为 <code>numeric</code> 与 <code>2-digit</code>，简单说就是否仅用两位数字表示，看码说话：</p>
+<pre><code>const date = new Date();
+date.toLocaleString(&apos;zh&apos;, { year: &apos;numeric&apos;,  month: &apos;numeric&apos;,  day: &apos;numeric&apos;,  hour: &apos;numeric&apos;,  minute: &apos;numeric&apos;,  second: &apos;numeric&apos;, });   //2018/4/5 下午7:30:17
+date.toLocaleString(&apos;zh&apos;, { year: &apos;2-digit&apos;,  month: &apos;2-digit&apos;,  day: &apos;2-digit&apos;,  hour: &apos;2-digit&apos;,  minute: &apos;2-digit&apos;,  second: &apos;2-digit&apos;  });   //18/04/05 下午7:30:17
+</code></pre><p>（比较奇怪的是 <code>hour</code>、<code>minute</code> 与 <code>second</code> 三个属性，无论设置为何值，表现都是一样的，希望有大佬告知原因，我换成 <code>en</code> 环境也是一样的。）</p>
+<p>最后是 <code>month</code> 这个属性，语言对月份有不同的展现，除去 <code>numeric</code> 与 <code>2-digit</code> 外，它额外多三个属性，分别是 <code>narrow</code>、<code>short</code> 与 <code>long</code>。展示如下：</p>
+<pre><code>const date = new Date();
+date.toLocaleString(&apos;en&apos;, { month: &apos;narrow&apos; });     //A
+date.toLocaleString(&apos;en&apos;, { month: &apos;short&apos; });     //Apr
+date.toLocaleString(&apos;en&apos;, { month: &apos;long&apos; });     //April
+</code></pre><h2 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h2><p>至此，关于 <code>toLocaleString</code> 的介绍就暂告一段落了。可以看到，在某些场景下需要格式化对象成字符串时，可以发挥极大的作用，不再需要自己苦兮兮地写函数做转换。尽管这个 <code>API</code> 稍微冷门一点，但还是很有意思的。</p>
+<p>感谢各位看官大人看到这里，知易行难，希望本文对你有所帮助~谢谢！</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Javascript/" rel="tag"># Javascript</a>
+          
+            <a href="/tags/Web/" rel="tag"># Web</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/03/03/know-more-about-sse/" rel="next" title="服务器推送 SSE 了解一下？">
+                <i class="fa fa-chevron-left"></i> 服务器推送 SSE 了解一下？
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.jpg"
+               alt="Sea_ljf" />
+          <p class="site-author-name" itemprop="name">Sea_ljf</p>
+           
+              <p class="site-description motion-element" itemprop="description"></p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">25</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">4</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">15</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/ljf0113" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#概述"><span class="nav-number">1.</span> <span class="nav-text">概述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Number-prototype-toLocaleString"><span class="nav-number">2.</span> <span class="nav-text">Number.prototype.toLocaleString</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Date-prototype-toLocaleString"><span class="nav-number">3.</span> <span class="nav-text">Date.prototype.toLocaleString</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#小结"><span class="nav-number">4.</span> <span class="nav-text">小结</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Sea_ljf</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.1"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
