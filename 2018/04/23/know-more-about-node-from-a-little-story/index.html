@@ -74,7 +74,7 @@
 <link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="Javascript,Web," />
+  <meta name="keywords" content="Javascript,Node," />
 
 
 
@@ -90,20 +90,18 @@
 
 
 
-<meta name="description" content="前几天去面试，面试官提出了这么一个问题：有A和B两个类，a和b分别继承前者，如何让b也继承A。 那时候我可是一脸懵逼，想了下回答了b = Object.create(A.prototype)，面试官不置可否，当时我心里窃喜，以为蒙对了。回家之后越想越不对，于是有了这篇文章。">
-<meta name="keywords" content="Javascript,Web">
+<meta name="description" content="hello~亲爱的看官老爷们大家好~最近身体抱怨，只好宅居家中天天啃书，将 Java 基础啃完一大部分。通过学习新语言，算是对以前 Node 底层部分一知半解的知识，有了较为全面的了解，因而有了这个可爱的小故事。">
+<meta name="keywords" content="Javascript,Node">
 <meta property="og:type" content="article">
-<meta property="og:title" content="构造函数与ES6 class之间的一点微妙区别">
-<meta property="og:url" content="http://yoursite.com/2017/07/22/subtle-difference-between-es6-Class-and-es5-prototype/index.html">
+<meta property="og:title" content="通过小故事，了解多一点何谓 Node 高性能">
+<meta property="og:url" content="http://yoursite.com/2018/04/23/know-more-about-node-from-a-little-story/index.html">
 <meta property="og:site_name" content="小白丰的Blog~">
-<meta property="og:description" content="前几天去面试，面试官提出了这么一个问题：有A和B两个类，a和b分别继承前者，如何让b也继承A。 那时候我可是一脸懵逼，想了下回答了b = Object.create(A.prototype)，面试官不置可否，当时我心里窃喜，以为蒙对了。回家之后越想越不对，于是有了这篇文章。">
+<meta property="og:description" content="hello~亲爱的看官老爷们大家好~最近身体抱怨，只好宅居家中天天啃书，将 Java 基础啃完一大部分。通过学习新语言，算是对以前 Node 底层部分一知半解的知识，有了较为全面的了解，因而有了这个可爱的小故事。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="http://yoursite.com/images/subtle-difference-between-es6-Class-and-es5-prototype/1.jpg">
-<meta property="og:updated_time" content="2017-07-22T08:05:19.952Z">
+<meta property="og:updated_time" content="2018-05-12T02:54:48.092Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="构造函数与ES6 class之间的一点微妙区别">
-<meta name="twitter:description" content="前几天去面试，面试官提出了这么一个问题：有A和B两个类，a和b分别继承前者，如何让b也继承A。 那时候我可是一脸懵逼，想了下回答了b = Object.create(A.prototype)，面试官不置可否，当时我心里窃喜，以为蒙对了。回家之后越想越不对，于是有了这篇文章。">
-<meta name="twitter:image" content="http://yoursite.com/images/subtle-difference-between-es6-Class-and-es5-prototype/1.jpg">
+<meta name="twitter:title" content="通过小故事，了解多一点何谓 Node 高性能">
+<meta name="twitter:description" content="hello~亲爱的看官老爷们大家好~最近身体抱怨，只好宅居家中天天啃书，将 Java 基础啃完一大部分。通过学习新语言，算是对以前 Node 底层部分一知半解的知识，有了较为全面的了解，因而有了这个可爱的小故事。">
 
 
 
@@ -131,13 +129,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2017/07/22/subtle-difference-between-es6-Class-and-es5-prototype/"/>
+  <link rel="canonical" href="http://yoursite.com/2018/04/23/know-more-about-node-from-a-little-story/"/>
 
 
 
 
 
-  <title>构造函数与ES6 class之间的一点微妙区别 | 小白丰的Blog~</title>
+  <title>通过小故事，了解多一点何谓 Node 高性能 | 小白丰的Blog~</title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
@@ -256,7 +254,7 @@
   
 
   <article class="post post-type-tags " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/07/22/subtle-difference-between-es6-Class-and-es5-prototype/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/04/23/know-more-about-node-from-a-little-story/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Sea_ljf">
@@ -273,7 +271,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">构造函数与ES6 class之间的一点微妙区别</h1>
+          <h1 class="post-title" itemprop="name headline">通过小故事，了解多一点何谓 Node 高性能</h1>
         
 
         <div class="post-meta">
@@ -285,8 +283,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-07-22T11:12:46+08:00">
-                2017-07-22
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-04-23T21:14:53+08:00">
+                2018-04-23
               </time>
             
 
@@ -295,28 +293,6 @@
             
           </span>
 
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/日常小结/" itemprop="url" rel="index">
-                    <span itemprop="name">日常小结</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
           
 
           
@@ -342,63 +318,34 @@
       
 
       
-        <p>前几天去面试，面试官提出了这么一个问题：有A和B两个类，a和b分别继承前者，如何让b也继承A。</p>
-<p>那时候我可是一脸懵逼，想了下回答了<code>b = Object.create(A.prototype)</code>，面试官不置可否，当时我心里窃喜，以为蒙对了。回家之后越想越不对，于是有了这篇文章。</p>
+        <p>hello~亲爱的看官老爷们大家好~最近身体抱怨，只好宅居家中天天啃书，将 <code>Java</code> 基础啃完一大部分。通过学习新语言，算是对以前 <code>Node</code> 底层部分一知半解的知识，有了较为全面的了解，因而有了这个可爱的小故事。</p>
 <a id="more"></a>
-<h2 id="基础代码"><a href="#基础代码" class="headerlink" title="基础代码"></a>基础代码</h2><p>为了可以愉快地<code>console.log</code>东西，需要先以以下代码作为基础：</p>
-<pre><code>class A {
-  a() {
-    console.log(&apos;a&apos;);
-  }
-}
-
-class B {
-  b() {
-    console.log(&apos;b&apos;);
-  }
-}
-
-let a = new A();
-let b = new B();
-</code></pre><p>挺简单的对吧？</p>
-<h2 id="Object-create"><a href="#Object-create" class="headerlink" title="Object.create()"></a>Object.create()</h2><p>首先试下自己的想法，输入<code>b = Object.create(A.prototype)</code>，看看会有什么结果：</p>
-<p><img src="/images/subtle-difference-between-es6-Class-and-es5-prototype/1.jpg" alt=""></p>
-<p>结果很残酷，整个b都继承A了，其实文档写的蛮清楚的：<code>Object.create() 方法使用指定的原型对象和其属性创建了一个新的对象。</code>因而<code>b = Object.create(A.prototype)</code>约等于<code>b.__proto__ = A.prototype</code>，都是看文档囫囵吞枣的锅啊！</p>
-<p>（写完文章后，发现其实为了答题的话，想到一个黑科技：<code>b.__proto__.__proto__ = Object.create(A.prototype)</code>，<code>b.b</code>和<code>b.a</code>都能打印出来，但我看起来真的好奇怪，求dalao打醒。）</p>
-<h2 id="for-in-遍历"><a href="#for-in-遍历" class="headerlink" title="for in 遍历"></a>for in 遍历</h2><p>既然<code>Object.create()</code>此路不通，那么我换一个，我遍历<code>A.prototype</code>，再一个个添加到<code>b.__proto__</code>里面总可以了吧？于是我喜滋滋地写下了以下代码：</p>
-<pre><code>for(let key in A.prototype){
-    b.__proto__[key] = A.prototype[key]
-}
-console.log(b.a());
-</code></pre><p>之后脸就被打得啪啪响了，Chrome报错：<code>Uncaught TypeError: b.a is not a function</code>，这是什么鬼？为毛<code>b.a</code>不是函数，再三检查不是语法错误之后，我在<code>b.__proto__[key] = A.prototype[key]</code>前多加了一句<code>console.log(key)</code>，结果是什么都没打印出来。然而，当我打印<code>console.log(A.prototype)</code>时，明显是一个对象，里面有key为a！</p>
-<h3 id="解释"><a href="#解释" class="headerlink" title="解释"></a>解释</h3><blockquote>
-<p>When you have eliminated the impossible, whatever remains, however improbable, must be the truth.</p>
+<p>故事主要是简单地讲述何谓 <code>Node</code> 高性能，或者更应该说的是它低消耗，即同样硬件条件下能承载更多请求，由于能力所限，难免有错，还望不吝赐教。下面开始讲故事~希望你们喜欢:）</p>
+<h2 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h2><p>某天，CPU 大表弟与 CPU 小表妹来到网关大表哥家做客，三人决定玩过家家打发时间。然而大表哥家并没有对应的玩具，于是，他们就地取材，找出了些玩具，并作出了如下规定：</p>
+<ul>
+<li>小熊玩偶是服务员，负责纪录客人，传递订单和提供菜品等服务。</li>
+<li>能上发条，到一定时间就会敲鼓的机器人是厨师。收到服务员送来的订单后上发条，上一半表示做雪糕，上全部表示煮汤，敲鼓后说明菜做好了。</li>
+<li>有一张名为资源的小桌子（最多容纳10只玩偶），只要是工作的服务员或厨师，就得放在小桌子上，反之则离开桌子。</li>
+<li>这是一间福利快餐店，客人不入店不给钱，服务更多客人才是目标，而客人则由网关大表哥看心情生成（即可能偶尔很多，偶尔根本就没有）。</li>
+</ul>
+<p>设定完成，三人可以正式开始玩过家家啦！</p>
+<h2 id="各自的设计"><a href="#各自的设计" class="headerlink" title="各自的设计"></a>各自的设计</h2><blockquote>
+<p>大表弟选择提供 VIP 服务，每个客人来都提供一只小熊服务员为他服务，当客人来时只需在不同的小熊上身上贴上上当前客人的编号与菜式即可。</p>
+<p>小表妹则用了不同的方案，她觉得大表弟的太浪费资源小桌子的位置了，只需要为所有客人都提供一个常驻的小熊服务员即可，客人来时在小熊那记录好不同客人的编号与菜式，多放厨师才能服务更多的客人。</p>
 </blockquote>
-<p>造成这样的结果，只有一个原因，<code>A.prototype.a</code>不可枚举，因而<code>for in</code>不能遍历。不过我怎么觉得以前是可以的，于是我在Chrome中输入以下代码：</p>
-<pre><code>function C() {
-
-}
-
-C.prototype.c = function() {
-  console.log(&apos;c&apos;)
-}
-
-for(let key in C.prototype){
-  console.log(key);
-}
-</code></pre><p>结果是能打印出a的，这就尴尬了，这到底是怎么一回事呢？难道ES6的class语法糖，它的prototype里的方法是不可枚举，而原来构造函数prototype里的方法确实可以枚举的？赶紧验证一下：</p>
-<pre><code>cDescriptor = Object.getOwnPropertyDescriptor(c,&apos;c&apos;);
-aDescriptor = Object.getOwnPropertyDescriptor(a,&apos;a&apos;);
-</code></pre><p>打印出来，发现cDescriptor的<code>enumerable</code>是<code>false</code>，而aDescriptor的<code>enumerable</code>是<code>true</code>，所以，原因一目了然，<strong>ES6中的class，它的方法默认是不可枚举的，而构造函数默认是可枚举的</strong>。细想一下，这其实是个优化，让你在遍历时候，不需要再判断<code>hasOwnProperty</code>了。（后面查资料发现，其实阮一峰老师的文章早就介绍过了，当时看的时候不认真啊！）</p>
-<h2 id="解决问题"><a href="#解决问题" class="headerlink" title="解决问题"></a>解决问题</h2><p>那么，那道面试题应该如何解呢？如果使用构造函数，那倒是可以<code>for in</code>遍历塞进去，但如果是ES6的class呢？<br>查阅<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/getOwnPropertyNames" target="_blank" rel="noopener">文档</a>发现，使用<code>Object.getOwnPropertyNames()</code>方法，就可以拿到我所需要的<code>prototype</code>对象的key，代码如下：</p>
-<pre><code>let keys = Object.getOwnPropertyNames(A.prototype);
-for(let key of keys){
-    if(key !== &apos;constructor&apos;){
-        b.__proto__[key] = A.prototype[key];
-    }
-}
-</code></pre><p>如此一来，<code>b.a</code>与<code>b.b</code>都能打印出来了！</p>
-<h2 id="小结与思考"><a href="#小结与思考" class="headerlink" title="小结与思考"></a>小结与思考</h2><p>总的来是，是复习了一些<code>prototype</code>相关API，希望对大家有帮助。<br>另外，如此解题，我感觉是十分古怪的，因为b的<code>constructor</code>指向B，然而它却有<code>B.prototype</code>没有的方法，现在代码简单是无所谓，然而复杂起来的时候，debug绝对是个深坑。希望有dalao指导如何优雅的实现。</p>
+<p>在这样的场景下，你认为哪个设计更好呢？</p>
+<p>相信大家都会认为小表妹的设计会更好。由于资源小桌子面积有限，表弟的设计，同时只能服务 5 位客人（5 只小熊与 5 只机器人）；而表妹的设计则能服务 9 位客人（1 只小熊与 9 只机器人）。而从客人等待的时间上说，是相差无几的（慢的是厨师，而不是服务员）。</p>
+<p>现在让我们回到编程的世界，厨师上发条炒菜即 <code>I/O</code> 操作，一般是新开一个线程。可以看到，<code>CPU</code> 很快，但 <code>I/O</code> 很慢（可以想象到，必然是表弟表妹在等待发条机器人敲鼓）。 表弟的设计其实是粗略的 <code>Java</code> 模型，每个请求到来之际则开出一个新线程（新的小熊）进行处理，碰到 <code>I/O</code> 操作则原地等待，但仍占着资源。而表妹的设计则是粗略的 <code>Node</code> 模型，无论多少个请求到来，均只有一个执行线程（只有唯一一只小熊）。当等待一个请求的 <code>I/O</code> 操作结果时，可以处理另一个请求的的 <code>I/O</code> 操作结果，能更充分地利用资源。</p>
+<p>简而言之，在相同的硬件资源下（服务器配置、带宽等），<code>Node</code> 能用更少的资源（线程）处理相同数量的请求。也就是说，同样的硬件资源下 <code>Node</code> 能承载更多的请求。单个请求的响应时间也不会比 <code>Java</code> 慢。</p>
+<h2 id="不同的规则"><a href="#不同的规则" class="headerlink" title="不同的规则"></a>不同的规则</h2><blockquote>
+<p>表弟为此结果愤愤不平，于是他提议修改一下规则。如果客人要吃的是雪糕，那么用做一道加法作业题取代上发条的厨师如何。表妹表示同意，之后欢声笑语中打出GG。因为她发现，只要有客人点了雪糕，她就得停下来数手指，什么都干不了。而可恶的表弟虽然也是数手指，但只要有煮汤的请求，他能先停下来，新找一只小熊玩偶传递订单后再回去数手指，处理客人订单比她快。</p>
+</blockquote>
+<p>如果说之前的规矩是 <code>I/O</code> 密集型的话，那么修改后处理雪糕订单就是 <code>CPU</code> 密集型了。可以看到，一旦 <code>Node</code> 涉及较为耗时的运算，处理请求的速度将直线下降。即使是不同的请求（如煮汤的），由于只有一个执行线程，都得等待运算完成后才能处理。而 <code>Java</code> 则不一样，尽管还是得等待运算结果，但由于它自身是多线程的，阻塞了做雪糕请求，并不影响煮汤请求的响应。忽略语言本身的运算能力，<code>Node</code> 的模型导致它在处理 <code>CPU</code> 密集型业务时不如 <code>Java</code>。</p>
+<p>值得一提的是，不用过分担心运算的问题。服务器的 <code>CPU</code> 相当快，正常业务逻辑，就算是套了两三层循环也不是特别大的问题，不一定就是性能瓶颈，不要未发现问题而先优化。一般而言，不涉及图形运算或大数据处理等业务，<code>Node</code> 处理起来还是没问题的。</p>
+<h2 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h2><p>至此，煮家家的故事就讲得差不多了，希望让你明白到为何 <code>Node</code> 在处理 <code>I/O</code> 密集型业务时，显现出极高的性能，或者说更低的消耗。小故事有部分细节尚未展示出来，比如不为每个新请求创建线程，可以省下线程创建与销毁的开销。尽管可以通过线程池解决，但 <code>Node</code> 在负荷大量请求的情况下，较少地切换线程，减少上下文切换带来的开销，也是它高性能的一个原因。</p>
+<p>但要注意，使用任何一种语言编写的服务器，在性能到达瓶颈之前，响应请求的速度都不会显著地快于其他语言。所谓 <code>Node</code> 高性能，其实更应该说的是它的低消耗。</p>
+<p>而最后一点，<code>Javascript</code> 是单线程，但 <code>Node</code> 是多线程，它采用多进程的方式充分利用 <code>CPU</code>。这点不少同学都有点糊涂的~</p>
+<p>感谢各位看官大人看到这里，知易行难，希望本文对你有所帮助~谢谢！</p>
 
       
     </div>
@@ -430,7 +377,7 @@ for(let key of keys){
           
             <a href="/tags/Javascript/" rel="tag"># Javascript</a>
           
-            <a href="/tags/Web/" rel="tag"># Web</a>
+            <a href="/tags/Node/" rel="tag"># Node</a>
           
         </div>
       
@@ -443,8 +390,8 @@ for(let key of keys){
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2017/07/09/making-touch-scrolling-fast-by-default-nbsp-nbsp-web-nbsp-nbsp-google-developers/" rel="next" title="让 touch 系列事件触发的滚动响应更快  |  Web  |  Google Developers">
-                <i class="fa fa-chevron-left"></i> 让 touch 系列事件触发的滚动响应更快  |  Web  |  Google Developers
+              <a href="/2018/04/06/know-more-about-toLocaleString/" rel="next" title="想偷懒的话，toLocaleString 了解一下？">
+                <i class="fa fa-chevron-left"></i> 想偷懒的话，toLocaleString 了解一下？
               </a>
             
           </div>
@@ -453,8 +400,8 @@ for(let key of keys){
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2017/07/29/quick-sort/" rel="prev" title="大白话说快速排序">
-                大白话说快速排序 <i class="fa fa-chevron-right"></i>
+              <a href="/2018/05/10/scroll-to-the-future-modern-javascript-css-scrolling-implementations/" rel="prev" title="滑向未来（现代 JavaScript 与 CSS 滚动实现指南）">
+                滑向未来（现代 JavaScript 与 CSS 滚动实现指南） <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -595,7 +542,7 @@ for(let key of keys){
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#基础代码"><span class="nav-number">1.</span> <span class="nav-text">基础代码</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Object-create"><span class="nav-number">2.</span> <span class="nav-text">Object.create()</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#for-in-遍历"><span class="nav-number">3.</span> <span class="nav-text">for in 遍历</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#解释"><span class="nav-number">3.1.</span> <span class="nav-text">解释</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#解决问题"><span class="nav-number">4.</span> <span class="nav-text">解决问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#小结与思考"><span class="nav-number">5.</span> <span class="nav-text">小结与思考</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#背景"><span class="nav-number">1.</span> <span class="nav-text">背景</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#各自的设计"><span class="nav-number">2.</span> <span class="nav-text">各自的设计</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#不同的规则"><span class="nav-number">3.</span> <span class="nav-text">不同的规则</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#小结"><span class="nav-number">4.</span> <span class="nav-text">小结</span></a></li></ol></div>
             
 
           </div>
